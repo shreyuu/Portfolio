@@ -1,37 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link
+	href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css"
+	rel="stylesheet"
+	/>
+	<link rel="stylesheet" href="styles.css" />
+	<title>Shreyash Meshram</title>
 </head>
-    <nav>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+<body>
+	<nav>
+		<div class="nav__content">
+			<div class="logo"><a href="#">Shreyash</a></div>
+			<label for="check" class="checkbox">
+				<i class="ri-menu-line"></i>
+			</label>
+			<input type="checkbox" name="check" id="check" />
+			<ul>
+				<!-- <li><a href="#">Home</a></li> -->
+				<li><a href="#">About</a></li>
+				<li><a href="#work">Work</a></li>
+				<li><a href="#contact">Contact</a></li>
 
-    <div class="container">
-        <div class="left-column">
-            <h2>Left Column</h2>
-            <p>This is the content of the left column.</p>
-        </div>
-        <div class="right-column">
-            <h2>Right Column</h2>
-            <div class="image-container">
-                <div class="custom-shape"></div>
-                <img src="images/profile.png" alt="@shreyashmeshram">
-            </div>
-            <p>This is the content of the right column.</p>
-        </div>
+			</ul>
+		</div>
+	</nav>
+	<section class="main">
+		<div class="main__container">
+			<div class="content">
+				<!-- <p class="subtitle">HELLO</p> -->
+				<h1 class="title">
+					I'm <span>Shreyash<br />a</span> Programming Student
+				</h1>
+				<p class="description">
+					A Tech Enthusiast. You'll often find me diving deep into the worlds of AI and ML, exploring the endless possibilities they offer. When I'm not buried in lines of code, I love getting creative with Photoshop and Premiere Pro. 
+				</p>
+				<div class="action__btns">
+					<button class="hire__me">
+						<a href="mailto:shreyashmeshram0031@gmail.com">Hire Me</a>
+					</button>
+					<button class="Resume">Resume</button>
+				</div>
+			</div>
+			<div class="image">
+				<img src="asset/profile.jpeg" alt="Profile Picture">
+			</div>
+		</div>
+	</section>
+
+	<section class="work" id="work">
+		<div class="workhead">
+			<h2>Projects</h2>
+		</div>
+		<div class="work_gallery">
+			<div class="work_item">
+				<img src="asset/work1.jpg" alt="Work 1">
+				<h3><a href="https://github.com/shreyuu/Hand-Gesture-Recognition">Sign Language Recognition</a></h3>
+				<p>A Python script that uses the MediaPipe library and TensorFlow to recognize hand gestures from a webcam feed. It also utilizes the gTTS library to convert the recognized gestures into speech feedback.</p>
+			</div>
+			<div class="work_item">
+				<img src="asset/work2.jpg" alt="Work 2">
+				<h3><a href="https://github.com/shreyuu/RideCounter">Ride Counter</a></h3>
+				<p>A simple Android application designed to help users keep track of their entries in the format of date and time.</p>
+			</div>
+			<!-- Add more work items as needed -->
+		</div>
+	</section>
+
+		</section>
+	<section class="contact" id="contact">
+    <div class="contact_container">
+        <h2>Contact Me</h2>
+        <form id="contact-form" method="post" action="send_email.php">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
     </div>
+</section>
 
-
-    <footer>
-        <p>&copy; 2023 Shreyash Meshram</p>
-    </footer>
 </body>
 </html>
