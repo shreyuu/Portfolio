@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Sun, Moon } from "lucide-react";
 
 const Navbar = () => {
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    // Theme effect
     useEffect(() => {
         document.documentElement.classList.toggle("dark", theme === "dark");
         localStorage.setItem("theme", theme);
     }, [theme]);
 
+    // Scroll effect
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
@@ -39,28 +42,32 @@ const Navbar = () => {
                     </motion.h1>
 
                     <div className="flex items-center space-x-6">
-                        {/* Desktop Menu */}
                         <div className="hidden sm:flex space-x-6">
                             <NavLink href="#about">About</NavLink>
                             <NavLink href="#projects">Projects</NavLink>
                             <NavLink href="#contact">Contact</NavLink>
                         </div>
 
-                        {/* Theme Toggle */}
                         <motion.button
                             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                            className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                            className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
+                            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
                         >
-                            {theme === "light" ? "🌙" : "☀️"}
+                            {theme === "light" ? (
+                                <Moon className="w-5 h-5 text-gray-800" />
+                            ) : (
+                                <Sun className="w-5 h-5 text-yellow-400" />
+                            )}
                         </motion.button>
 
-                        {/* Mobile Menu Button */}
                         <motion.button
                             className="sm:hidden p-2"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             whileTap={{ scale: 0.95 }}
+                            aria-expanded={isMobileMenuOpen}
+                            aria-label="Toggle navigation menu"
                         >
                             <span className="sr-only">Open menu</span>
                             <svg
@@ -82,21 +89,20 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
                 <AnimatePresence>
                     {isMobileMenuOpen && (
                         <motion.div
-                            className="sm:hidden"
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
+                            className="sm:hidden absolute left-0 right-0 bg-white dark:bg-gray-900 shadow-lg"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
                         >
-                            <div className="px-2 pt-2 pb-3 space-y-1">
+                            <nav className="px-2 pt-2 pb-3 space-y-1">
                                 <MobileNavLink href="#about">About</MobileNavLink>
                                 <MobileNavLink href="#projects">Projects</MobileNavLink>
                                 <MobileNavLink href="#contact">Contact</MobileNavLink>
-                            </div>
+                            </nav>
                         </motion.div>
                     )}
                 </AnimatePresence>
