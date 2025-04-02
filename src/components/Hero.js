@@ -33,7 +33,7 @@ const Hero = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
                 >
-                    I love building cool projects using React & Tailwind CSS.
+                    Experience in developing user-centric applications and collaborative teamwork in Agile environments is emphasized.
                 </motion.p>
                 <motion.div
                     className="flex gap-4 justify-center"
