@@ -7,7 +7,7 @@ const Projects = () => {
 
             <div className="bg-[#1a1a1a] p-4 rounded-xl mb-4">
                 <h4 className="text-white text-lg font-medium">Rubiklog</h4>
-                <p className="text-gray-400 text-sm">Rubix Cube Timer</p>
+                <p className="text-gray-400 text-sm">Rubik's Cube Timer</p>
             </div>
 
             <div className="bg-[#1a1a1a] p-4 rounded-xl">
