@@ -5,28 +5,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          light: "#60A5FA", // blue-400
-          DEFAULT: "#3B82F6", // blue-500
-          dark: "#2563EB", // blue-600
-        },
+        primary: "#3B82F6",
+        secondary: "#60A5FA",
         background: {
-          light: "#F3F4F6", // gray-100
-          dark: "#111827", // gray-900
+          light: "#F3F4F6",
+          dark: "#0e0e0e",
         },
-      },
-      animation: {
-        "fade-in": "fadeIn 0.5s ease-in-out",
-        "slide-up": "slideUp 0.5s ease-out",
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        slideUp: {
-          "0%": { transform: "translateY(20px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
+        accent: {
+          cyan: "#22D3EE",
+          green: "#10B981",
         },
       },
     },
