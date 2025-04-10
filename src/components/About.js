@@ -1,25 +1,28 @@
+import React from "react";
+import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
+
 const About = () => {
     return (
-        <div className="mt-10">
-            <h2 className="text-2xl font-semibold mb-4">About me</h2>
-            <p className="text-gray-400 leading-relaxed">
-                I'm a CS student from India 🇮🇳 who enjoys building apps & all sorts of interesting and crazy ideas.
-                I love tech, AI, and clean design. In my free time, I enjoy watching anime, reading manga, and exploring new tools.
+        <div className="text-gray-300 mt-6">
+            <h2 className="text-2xl font-bold mb-4">About me</h2>
+            <p className="mb-4 leading-relaxed">
+                I'm a CS student from India 🇮🇳 who enjoys building apps & exploring AI/ML projects. I love playing with frameworks 🖥️ and in my free time, I enjoy watching anime 🎥 or solving Rubik's Cubes.
             </p>
-
-            <div className="mt-6">
-                <p className="text-sm text-gray-400 mb-1">FIND ME AT</p>
-                <a href="mailto:shreyash@gmail.com" className="text-green-400 hover:underline text-sm">shreyash@gmail.com</a>
-                <div className="flex space-x-4 mt-4 text-2xl">
+            <div>
+                <p className="text-sm text-white mb-2">FIND ME AT</p>
+                <a href="mailto:your.email@example.com" className="text-green-400 hover:underline block mb-4">
+                    shreyashmeshram0031@gmail.com
+                </a>
+                <div className="flex space-x-4 text-xl">
                     <a href="https://github.com/shreyuu" target="_blank" rel="noreferrer">
-                        <i className="fab fa-github"></i>
+                        <FaGithub />
                     </a>
-                    <a href="https://linkedin.com/in/shreyuu" target="_blank" rel="noreferrer">
-                        <i className="fab fa-linkedin"></i>
+                    <a href="https://www.linkedin.com/in/shreyuu/" target="_blank" rel="noreferrer">
+                        <FaLinkedin />
                     </a>
-                    <button className="hover:text-gray-400">
-                        <i className="fab fa-discord"></i>
-                    </button>
+                    <a href="mailto:shreyash.meshram@example.com">
+                        <FaEnvelope />
+                    </a>
                 </div>
             </div>
         </div>
