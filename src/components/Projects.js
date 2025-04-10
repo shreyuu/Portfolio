@@ -1,18 +1,20 @@
+import React from "react";
+
 const Projects = () => {
     return (
-        <div className="mt-10">
-            <h3 className="text-green-500 text-sm font-semibold flex items-center gap-1 mb-4">
-                Projects
-            </h3>
+        <div className="text-gray-300">
+            <h2 className="text-green-500 font-semibold mb-4">Projects</h2>
 
-            <div className="bg-[#1a1a1a] p-4 rounded-xl mb-4">
-                <h4 className="text-white text-lg font-medium">Rubiklog</h4>
-                <p className="text-gray-400 text-sm">Rubik's Cube Timer</p>
-            </div>
+            <div className="space-y-4">
+                <div className="p-4 bg-[#161616] rounded-lg border border-[#2c2c2c]">
+                    <h3 className="text-lg font-bold">Rubiklog</h3>
+                    <p className="text-sm text-gray-400">Rubik's Cube Timer</p>
+                </div>
 
-            <div className="bg-[#1a1a1a] p-4 rounded-xl">
-                <h4 className="text-white text-lg font-medium">Hand Gesture Recognition</h4>
-                <p className="text-gray-400 text-sm">Identify hand signs using webcam</p>
+                <div className="p-4 bg-[#161616] rounded-lg border border-[#2c2c2c]">
+                    <h3 className="text-lg font-bold">Hand Gesture Recognition</h3>
+                    <p className="text-sm text-gray-400">Identify hand signs using webcam</p>
+                </div>
             </div>
         </div>
     );
