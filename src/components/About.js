@@ -11,7 +11,6 @@ const About = () => {
             <div>
                 <p className="text-sm text-white mb-2">FIND ME AT</p>
                 <a href="mailto:your.email@example.com" className="text-green-400 hover:underline block mb-4">
-                    shreyashmeshram0031@gmail.com
                 </a>
                 <div className="flex space-x-4 text-xl">
                     <a href="https://github.com/shreyuu" target="_blank" rel="noreferrer">
@@ -20,7 +19,7 @@ const About = () => {
                     <a href="https://www.linkedin.com/in/shreyuu/" target="_blank" rel="noreferrer">
                         <FaLinkedin />
                     </a>
-                    <a href="mailto:shreyash.meshram@example.com">
+                    <a href="mailto:shreyashmeshram0031@gmail.com">
                         <FaEnvelope />
                     </a>
                 </div>
