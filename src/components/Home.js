@@ -3,6 +3,9 @@ import Hero from "./Hero";
 import About from "./About";
 import ProfileCard from "./ProfileCard";
 import Projects from "./Projects";
+import Skills from "./Skills";
+import Experience from "./Experience";
+import Education from "./Education";
 // import Navbar from "./Navbar";
 import Footer from "./Footer";
 
@@ -20,8 +23,15 @@ const Home = () => {
                         <ProfileCard />
                     </div>
                     <div className="col-span-1">
-                        <Projects />
+                        <Skills />
                     </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-12 max-w-7xl mx-auto">
+                    <Experience />
+                    <Education />
+                </div>
+                <div className="max-w-7xl mx-auto my-12">
+                    <Projects />
                 </div>
             </main>
             <Footer />

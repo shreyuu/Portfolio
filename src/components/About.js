@@ -4,7 +4,7 @@ import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 const About = () => {
     return (
         <div className="text-gray-300 mt-6">
-            <h2 className="text-2xl font-bold mb-4">About me</h2>
+            <h2 className="text-xl font-bold text-purple-400 mb-4">ABOUT ME</h2>
             <p className="mb-4 leading-relaxed">
                 I'm a CS student from India 🇮🇳 who enjoys building apps & exploring AI/ML projects. I love playing with frameworks 🖥️ and in my free time, I enjoy watching anime 🎥 or solving Rubik's Cubes.
             </p>
