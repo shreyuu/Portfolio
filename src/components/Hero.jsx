@@ -15,9 +15,9 @@ const Hero = () => {
       opacity: 1,
       transition: {
         delayChildren: 0.3,
-        staggerChildren: 0.05,
-      },
-    },
+        staggerChildren: 0.05
+      }
+    }
   };
 
   const letterAnimation = {
@@ -27,17 +27,17 @@ const Hero = () => {
       opacity: 1,
       transition: {
         duration: 0.5,
-        ease: "easeOut",
-      },
-    },
+        ease: "easeOut"
+      }
+    }
   };
 
   const name = "Shreyash Meshram".split("");
 
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-12 px-2 xs:px-4 sm:px-6">
-      <div className="col-span-12 flex items-center sm:flex-wrap md:flex-wrap p-6 dark:border-gray-500">
-        <div className="flex items-center gap-4">
+      <div className="col-span-12 flex sm:flex-wrap md:flex-wrap p-6 dark:border-gray-500">
+        <div className="relative w-fit">
           <motion.div
             className="flex flex-wrap overflow-hidden"
             variants={containerAnimation}
@@ -59,23 +59,20 @@ const Hero = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               delay: 1,
               duration: 0.6,
-              ease: "easeOut",
+              ease: "easeOut"
             }}
-            className="rounded-full bg-purple-500 px-4 py-3 text-base md:text-lg font-bold leading-none text-white dark:text-gray-100"
-            role="status"
-            aria-label={getGreeting()}
+            className="absolute right-0 top-0 -translate-y-14 translate-x-12 rounded-full bg-purple-500 px-4 py-3 text-lg font-bold leading-none text-white dark:text-gray-1000 xs:inline-block lg:translate-x-full lg:translate-y-0"
           >
             <span className="inline-block">{getGreeting()}</span>
             <svg
               viewBox="0 0 22 18"
               fill="none"
-              className="absolute -left-[9px] top-1/2 -translate-y-1/2 w-5 text-purple-500 rotate-[270deg]"
-              aria-hidden="true"
+              className="absolute -bottom-[9px] left-[7px] w-5 text-purple-500"
             >
               <path
                 d="M20.9991 8C17.4991 12.5 13.4991 16 7.69476 17.4776C8.49908 10.5 6.99908 8 0.939453 3.39334L1.79694 0L21.1874 4.8999L20.9991 8Z"
