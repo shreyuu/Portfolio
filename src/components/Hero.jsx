@@ -15,19 +15,24 @@ const Hero = () => {
       opacity: 1,
       transition: {
         delayChildren: 0.3,
-        staggerChildren: 0.05
+        staggerChildren: 0.08
       }
     }
   };
 
   const letterAnimation = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: {
+      y: 50,
+      opacity: 0,
+      rotateX: -45
+    },
     visible: {
       y: 0,
       opacity: 1,
+      rotateX: 0,
       transition: {
-        duration: 0.5,
-        ease: "easeOut"
+        duration: 0.6,
+        ease: [0.215, 0.61, 0.355, 1]
       }
     }
   };
@@ -35,40 +40,41 @@ const Hero = () => {
   const name = "Shreyash Meshram".split("");
 
   return (
-    <div className="mx-auto grid max-w-7xl grid-cols-12 px-2 xs:px-4 sm:px-6">
-      <div className="col-span-12 flex sm:flex-wrap md:flex-wrap p-6 dark:border-gray-500">
-        <div className="relative w-fit">
+    <div className="mx-auto grid max-w-7xl grid-cols-12 px-4 sm:px-6 lg:px-8">
+      <div className="col-span-12 flex items-center justify-start p-6 sm:p-8 lg:p-10">
+        <div className="relative">
           <motion.div
-            className="flex flex-wrap overflow-hidden"
+            className="flex flex-wrap"
             variants={containerAnimation}
             initial="hidden"
             animate="visible"
           >
             {name.map((letter, index) => (
-              <motion.div
+              <motion.span
                 key={index}
                 variants={letterAnimation}
-                className="overflow-hidden"
-                aria-hidden="true"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold 
+                          bg-gradient-to-r from-white to-gray-400 bg-clip-text 
+                          text-transparent transform-gpu"
               >
-                <span className="text-3xl sm:text-4xl md:text-5xl lg:text-[4.5rem] font-bold inline-block whitespace-pre">
-                  {letter}
-                </span>
-              </motion.div>
+                {letter === " " ? "\u00A0" : letter}
+              </motion.span>
             ))}
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{
-              delay: 1,
-              duration: 0.6,
+              delay: 1.2,
+              duration: 0.8,
               ease: "easeOut"
             }}
-            className="absolute right-0 top-0 -translate-y-14 translate-x-12 rounded-full bg-purple-500 px-4 py-3 text-lg font-bold leading-none text-white dark:text-gray-1000 xs:inline-block lg:translate-x-full lg:translate-y-0"
+            className="absolute -top-16 right-0 lg:right-[-50px] 
+                       bg-purple-500 px-4 py-3 rounded-full 
+                       shadow-lg transform-gpu"
           >
-            <span className="inline-block">{getGreeting()}</span>
+            <span className="text-lg font-bold text-white">{getGreeting()}</span>
             <svg
               viewBox="0 0 22 18"
               fill="none"
