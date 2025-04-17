@@ -13,7 +13,7 @@ const Home = () => {
         <>
             <main className="min-h-screen bg-background-dark text-white px-4 sm:px-6 lg:px-20 py-8 sm:py-12">
                 <Hero />
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10 max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10 max-w-7xl mx-auto pb-10">
                     <div className="lg:col-span-1">
                         <About />
                     </div>
@@ -31,8 +31,8 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto">
                     <Projects />
                 </div>
+                <Footer />
             </main>
-            <Footer />
         </>
     );
 };
