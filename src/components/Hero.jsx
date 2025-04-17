@@ -51,7 +51,7 @@ const Hero = () => {
             animate="visible"
           >
             {/* First Name */}
-            <div className="flex flex-wrap justify-start">
+            <div className="flex flex-wrap justify-start h-[65px]">
               {firstName.map((letter, index) => (
                 <motion.span
                   key={`first-${index}`}
@@ -66,7 +66,7 @@ const Hero = () => {
             </div>
 
             {/* Last Name */}
-            <div className="flex flex-wrap justify-start xs:ml-2">
+            <div className="flex flex-wrap justify-start xs:ml-2 h-[65px]">
               {lastName.map((letter, index) => (
                 <motion.span
                   key={`last-${index}`}
