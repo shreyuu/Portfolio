@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+jest.mock('@vercel/analytics', () => ({
+  inject: jest.fn(),
+}));
+
+test('renders portfolio app', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  // Check for the presence of main content
+  const mainElement = screen.getByRole('main');
+  expect(mainElement).toBeInTheDocument();
 });

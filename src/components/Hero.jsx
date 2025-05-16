@@ -1,11 +1,11 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React from 'react';
+import { motion } from 'framer-motion';
 
 const getGreeting = () => {
   const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return "Good Morning!";
-  if (hour >= 12 && hour < 18) return "Good Afternoon!";
-  return "Good Evening!";
+  if (hour >= 5 && hour < 12) return 'Good Morning!';
+  if (hour >= 12 && hour < 18) return 'Good Afternoon!';
+  return 'Good Evening!';
 };
 
 const Hero = () => {
@@ -37,8 +37,8 @@ const Hero = () => {
     },
   };
 
-  const firstName = "Shreyash".split("");
-  const lastName = "Meshram".split("");
+  const firstName = 'Shreyash'.split('');
+  const lastName = 'Meshram'.split('');
 
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-12 p-0">
@@ -87,7 +87,7 @@ const Hero = () => {
             transition={{
               delay: 1.2,
               duration: 0.8,
-              ease: "easeOut",
+              ease: 'easeOut',
             }}
             className="absolute -top-12 sm:right-[-150px] [right:-120px]
            bg-purple-500 px-4 py-3 rounded-full 
@@ -100,7 +100,7 @@ const Hero = () => {
             <svg
               viewBox="0 0 22 18"
               fill="none"
-              className="absolute -bottom-[7px] left-[7px] w-5 text-purple-500"
+              className="absolute -bottom-[10px] w-5 text-purple-500"
             >
               <path
                 d="M20.9991 8C17.4991 12.5 13.4991 16 7.69476 17.4776C8.49908 10.5 6.99908 8 0.939453 3.39334L1.79694 0L21.1874 4.8999L20.9991 8Z"
@@ -115,4 +115,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
