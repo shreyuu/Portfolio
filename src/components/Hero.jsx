@@ -1,11 +1,11 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React from 'react';
+import { motion } from 'framer-motion';
 
 const getGreeting = () => {
   const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return "Good Morning!";
-  if (hour >= 12 && hour < 18) return "Good Afternoon!";
-  return "Good Evening!";
+  if (hour >= 5 && hour < 12) return 'Good Morning!';
+  if (hour >= 12 && hour < 18) return 'Good Afternoon!';
+  return 'Good Evening!';
 };
 
 const Hero = () => {
@@ -37,8 +37,8 @@ const Hero = () => {
     },
   };
 
-  const firstName = "Shreyash".split("");
-  const lastName = "Meshram".split("");
+  const firstName = 'Shreyash'.split('');
+  const lastName = 'Meshram'.split('');
 
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-12 p-0">
@@ -87,7 +87,7 @@ const Hero = () => {
             transition={{
               delay: 1.2,
               duration: 0.8,
-              ease: "easeOut",
+              ease: 'easeOut',
             }}
             className="absolute -top-12 sm:right-[-150px] [right:-120px]
            bg-purple-500 px-4 py-3 rounded-full 
@@ -115,4 +115,3 @@ const Hero = () => {
 };
 
 export default Hero;
-

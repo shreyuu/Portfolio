@@ -1,21 +1,21 @@
-import React, { Suspense, lazy } from "react";
-import "./App.css";
-import { inject } from "@vercel/analytics";
-import { Helmet } from "react-helmet";
-import * as Sentry from "@sentry/react";
+import React, { Suspense, lazy } from 'react';
+import './App.css';
+import { inject } from '@vercel/analytics';
+import { Helmet } from 'react-helmet';
+import * as Sentry from '@sentry/react';
 
 // Initialize Vercel Analytics
 inject();
 
 // Initialize Sentry
 Sentry.init({
-  dsn: "YOUR_SENTRY_DSN", // Replace with your Sentry DSN
+  dsn: 'YOUR_SENTRY_DSN', // Replace with your Sentry DSN
   integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
   tracesSampleRate: 1.0,
 });
 
 // Lazy load the Home component
-const Home = lazy(() => import("./components/Home.jsx"));
+const Home = lazy(() => import('./components/Home.jsx'));
 
 // Skip link component for accessibility
 const SkipLink = () => (
@@ -48,12 +48,12 @@ class ErrorBoundary extends React.Component {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("Error:", error, errorInfo);
+    console.error('Error:', error, errorInfo);
     Sentry.captureException(error, { extra: errorInfo });
   }
 
@@ -66,9 +66,7 @@ class ErrorBoundary extends React.Component {
           aria-live="assertive"
         >
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">
-              Oops! Something went wrong.
-            </h1>
+            <h1 className="text-2xl font-bold mb-4">Oops! Something went wrong.</h1>
             <p className="mb-4">Please try refreshing the page.</p>
             <button
               onClick={() => window.location.reload()}
@@ -89,24 +87,15 @@ class ErrorBoundary extends React.Component {
 function App() {
   // JSON-LD structured data
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Shreyash Meshram",
-    jobTitle: "Full Stack Developer",
-    url: "https://your-portfolio-domain.com",
-    sameAs: [
-      "https://github.com/yourusername",
-      "https://linkedin.com/in/yourusername",
-    ],
-    knowsAbout: [
-      "Web Development",
-      "React",
-      "JavaScript",
-      "Python",
-      "Machine Learning",
-    ],
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Shreyash Meshram',
+    jobTitle: 'Full Stack Developer',
+    url: 'https://your-portfolio-domain.com',
+    sameAs: ['https://github.com/yourusername', 'https://linkedin.com/in/yourusername'],
+    knowsAbout: ['Web Development', 'React', 'JavaScript', 'Python', 'Machine Learning'],
     description:
-      "Full-stack developer and CS student passionate about building apps and exploring AI/ML projects.",
+      'Full-stack developer and CS student passionate about building apps and exploring AI/ML projects.',
   };
 
   return (
@@ -132,10 +121,7 @@ function App() {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://your-portfolio-domain.com" />
-        <meta
-          property="og:image"
-          content="https://your-portfolio-domain.com/og-image.jpg"
-        />
+        <meta property="og:image" content="https://your-portfolio-domain.com/og-image.jpg" />
         <meta property="og:site_name" content="Shreyash Meshram Portfolio" />
 
         {/* Twitter Card Meta Tags */}
@@ -147,10 +133,7 @@ function App() {
           name="twitter:description"
           content="Full-stack developer and CS student passionate about building apps and exploring AI/ML projects."
         />
-        <meta
-          name="twitter:image"
-          content="https://your-portfolio-domain.com/twitter-image.jpg"
-        />
+        <meta name="twitter:image" content="https://your-portfolio-domain.com/twitter-image.jpg" />
 
         {/* Security Headers */}
         <meta
@@ -160,10 +143,7 @@ function App() {
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta httpEquiv="X-Frame-Options" content="DENY" />
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
-        <meta
-          httpEquiv="Referrer-Policy"
-          content="strict-origin-when-cross-origin"
-        />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
 
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
