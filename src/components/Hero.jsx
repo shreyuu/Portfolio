@@ -100,7 +100,7 @@ const Hero = () => {
             <svg
               viewBox="0 0 22 18"
               fill="none"
-              className="absolute -bottom-[7px] left-[7px] w-5 text-purple-500"
+              className="absolute -bottom-[10px] w-5 text-purple-500"
             >
               <path
                 d="M20.9991 8C17.4991 12.5 13.4991 16 7.69476 17.4776C8.49908 10.5 6.99908 8 0.939453 3.39334L1.79694 0L21.1874 4.8999L20.9991 8Z"
