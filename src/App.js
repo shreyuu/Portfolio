@@ -2,17 +2,9 @@ import React, { Suspense, lazy } from 'react';
 import './App.css';
 import { inject } from '@vercel/analytics';
 import { Helmet } from 'react-helmet';
-import * as Sentry from '@sentry/react';
 
 // Initialize Vercel Analytics
 inject();
-
-// Initialize Sentry
-Sentry.init({
-  dsn: 'YOUR_SENTRY_DSN', // Replace with your Sentry DSN
-  integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
-  tracesSampleRate: 1.0,
-});
 
 // Lazy load the Home component
 const Home = lazy(() => import('./components/Home.jsx'));
@@ -54,7 +46,6 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('Error:', error, errorInfo);
-    Sentry.captureException(error, { extra: errorInfo });
   }
 
   render() {
