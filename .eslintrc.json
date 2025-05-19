@@ -11,8 +11,10 @@
     "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:import/recommended",
+    "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -25,6 +27,7 @@
     "react-hooks",
     "jsx-a11y",
     "import",
+    "@typescript-eslint",
     "prettier"
   ],
   "rules": {
@@ -43,7 +46,14 @@
     "import/no-unresolved": "error",
     "import/named": "error",
     "import/default": "error",
-    "import/namespace": "error"
+    "import/namespace": "error",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-debugger": "warn",
+    "no-duplicate-imports": "error",
+    "no-var": "error",
+    "prefer-const": "warn",
+    "prefer-arrow-callback": "warn",
+    "prefer-template": "warn"
   },
   "settings": {
     "react": {
@@ -51,8 +61,26 @@
     },
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "warn",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-unused-vars": "warn"
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off"
+      }
+    }
+  ]
 } 
