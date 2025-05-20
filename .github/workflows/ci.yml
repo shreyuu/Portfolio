@@ -55,6 +55,25 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Debug Secrets
+        run: |
+          echo "Checking if secrets are set..."
+          if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "VERCEL_TOKEN is set"
+          else
+            echo "VERCEL_TOKEN is not set"
+          fi
+          if [ -n "${{ secrets.VERCEL_ORG_ID }}" ]; then
+            echo "VERCEL_ORG_ID is set"
+          else
+            echo "VERCEL_ORG_ID is not set"
+          fi
+          if [ -n "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "VERCEL_PROJECT_ID is set"
+          else
+            echo "VERCEL_PROJECT_ID is not set"
+          fi
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
