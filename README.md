@@ -11,7 +11,6 @@ A modern, responsive portfolio website built with React and Tailwind CSS.
 - 🔍 SEO friendly
 - 📊 Analytics integration
 - 🛡️ Security best practices
-- 📝 Contact form with rate limiting
 - 🎭 Smooth animations and transitions
 
 ## Tech Stack
@@ -19,55 +18,52 @@ A modern, responsive portfolio website built with React and Tailwind CSS.
 - React 18
 - Tailwind CSS
 - Framer Motion
-- EmailJS
-- Vercel Analytics
-- Sentry Error Tracking
-- ESLint & Prettier
+- Vercel Analytics & Speed Insights
+- React Helmet
+- Lucide React Icons
+- CRACO (Create React App Configuration Override)
+- Husky & lint-staged
+- Lighthouse CI
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16 or higher)
 - npm or yarn
 
 ## Getting Started
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/shreyuu/Portfolio.git
    cd portfolio
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    # or
    yarn install
    ```
 
-3. Create a `.env` file in the root directory and add your environment variables:
-   ```
-   REACT_APP_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
-   REACT_APP_EMAILJS_TEMPLATE_ID=your_emailjs_template_id
-   REACT_APP_EMAILJS_SERVICE_ID=your_emailjs_service_id
-   REACT_APP_SENTRY_DSN=your_sentry_dsn
-   ```
+3. Start the development server:
 
-4. Start the development server:
    ```bash
    npm start
    # or
    yarn start
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Available Scripts
 
-- `npm start` - Runs the app in development mode
-- `npm test` - Launches the test runner
-- `npm run build` - Builds the app for production
-- `npm run lint` - Runs ESLint
-- `npm run lint:fix` - Fixes ESLint errors
+- `npm start` - Runs the app in development mode using CRACO
+- `npm test` - Launches the test runner using CRACO
+- `npm run build` - Builds the app for production using CRACO
+- `npm run lint` - Runs ESLint on source files
+- `npm run lint:fix` - Fixes ESLint errors automatically
 - `npm run format` - Formats code with Prettier
 
 ## Project Structure
@@ -82,16 +78,46 @@ portfolio/
 │   ├── components/
 │   │   ├── Home.jsx
 │   │   ├── About.jsx
-│   │   ├── Projects.jsx
-│   │   └── Contact.jsx
+│   │   └── Projects.jsx
 │   ├── App.js
 │   ├── index.js
 │   └── index.css
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── .husky/
+├── .vscode/
 ├── .eslintrc.json
 ├── .prettierrc
+├── craco.config.js
+├── jest.config.js
+├── lighthouse.config.js
+├── postcss.config.js
+├── tailwind.config.js
 ├── package.json
 └── README.md
 ```
+
+## Development Tools
+
+### Code Quality
+
+- ESLint with TypeScript support
+- Prettier for code formatting
+- Husky for git hooks
+- lint-staged for pre-commit checks
+
+### Performance
+
+- Lighthouse CI for performance monitoring
+- Vercel Analytics for real-time analytics
+- Vercel Speed Insights for performance metrics
+
+### Build Tools
+
+- CRACO for Create React App configuration override
+- PostCSS for CSS processing
+- Tailwind CSS for styling
 
 ## Contributing
 
@@ -107,6 +133,7 @@ This project uses ESLint and Prettier for code formatting. The configuration fil
 
 - ESLint rules are defined in `.eslintrc.json`
 - Prettier configuration is in `.prettierrc`
+- TypeScript support is configured in ESLint
 
 ## Accessibility
 
@@ -129,6 +156,8 @@ The project is optimized for performance with:
 - Caching strategies
 - Minification
 - Compression
+- Lighthouse CI integration
+- Vercel Speed Insights
 
 ## Security
 
@@ -137,14 +166,14 @@ Security measures implemented:
 - Content Security Policy (CSP)
 - Security headers
 - Input sanitization
-- Rate limiting
 - XSS protection
 - CSRF protection
 
 ## Analytics and Monitoring
 
 - Vercel Analytics for performance monitoring
-- Sentry for error tracking
+- Vercel Speed Insights for detailed performance metrics
+- Lighthouse CI for automated performance checks
 - Custom event tracking
 
 ## License
