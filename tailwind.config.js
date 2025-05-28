@@ -68,7 +68,7 @@ module.exports = {
         },
         background: {
           light: '#F9FAFB', // Gray 50
-          dark: '#111827', // Gray 900
+          dark: '#050608', // Changed to the requested color
         },
         text: {
           light: {

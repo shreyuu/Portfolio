@@ -27,7 +27,7 @@ const Education = () => {
             <p className="text-sm text-gray-400">
               Diploma | Computer Engineering
               <br />
-              2020 – 2022
+              2019 – 2022
             </p>
             {/* <p className="text-xs text-gray-500 mt-1">Grade: A</p> */}
           </div>
