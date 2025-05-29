@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import useResponsive from '../hooks/useResponsive';
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -9,6 +10,8 @@ const getGreeting = () => {
 };
 
 const Hero = () => {
+  const { getResponsiveValue } = useResponsive();
+
   const containerAnimation = {
     hidden: { opacity: 0 },
     visible: {
@@ -37,15 +40,47 @@ const Hero = () => {
     },
   };
 
+  // Responsive text sizes using the hook
+  const textSize = getResponsiveValue({
+    mobile: 'text-3xl',
+    tablet: 'text-4xl',
+    desktop: 'text-5xl',
+    largeDesktop: 'text-6xl'
+  });
+
+  // Responsive spacing
+  const spacing = getResponsiveValue({
+    mobile: 'gap-1',
+    tablet: 'gap-2',
+    desktop: 'gap-4',
+    largeDesktop: 'gap-4'
+  });
+
+  // Responsive greeting position
+  const greetingPosition = getResponsiveValue({
+    mobile: 'right-[-100px]',
+    tablet: 'right-[-120px]',
+    desktop: 'right-[-150px]',
+    largeDesktop: 'right-[-150px]'
+  });
+
+  // Responsive greeting text size
+  const greetingTextSize = getResponsiveValue({
+    mobile: 'text-xs',
+    tablet: 'text-sm',
+    desktop: 'text-md',
+    largeDesktop: 'text-lg'
+  });
+
   const firstName = 'Shreyash'.split('');
   const lastName = 'Meshram'.split('');
 
   return (
-    <div className="mx-auto grid max-w-7xl grid-cols-12 p-0">
+    <section id="hero" className="mx-auto grid max-w-7xl grid-cols-12 p-0">
       <div className="col-span-12 w-full flex items-center justify-start p-6 !pl-0 sm:p-8 lg:p-10">
         <div className="relative">
           <motion.div
-            className="flex flex-col md:flex-row flex-wrap xs:flex-nowrap md:gap-4"
+            className={`flex flex-col md:flex-row flex-wrap xs:flex-nowrap ${spacing}`}
             variants={containerAnimation}
             initial="hidden"
             animate="visible"
@@ -56,9 +91,9 @@ const Hero = () => {
                 <motion.span
                   key={`first-${index}`}
                   variants={letterAnimation}
-                  className="sm:text-5xl md:text-6xl lg:text-6xl text-4xl font-bold 
+                  className={`${textSize} font-bold 
                             bg-gradient-to-r from-white to-gray-400 bg-clip-text 
-                            text-transparent transform-gpu"
+                            text-transparent transform-gpu`}
                 >
                   {letter}
                 </motion.span>
@@ -71,9 +106,9 @@ const Hero = () => {
                 <motion.span
                   key={`last-${index}`}
                   variants={letterAnimation}
-                  className="sm:text-5xl md:text-6xl lg:text-6xl text-4xl font-bold 
+                  className={`${textSize} font-bold 
                             bg-gradient-to-r from-white to-gray-400 bg-clip-text 
-                            text-transparent transform-gpu"
+                            text-transparent transform-gpu`}
                 >
                   {letter}
                 </motion.span>
@@ -89,11 +124,11 @@ const Hero = () => {
               duration: 0.8,
               ease: 'easeOut',
             }}
-            className="absolute -top-12 sm:right-[-150px] [right:-120px]
+            className={`absolute -top-12 ${greetingPosition}
            bg-purple-500 px-4 py-3 rounded-full 
-           shadow-lg transform-gpu"
+           shadow-lg transform-gpu`}
           >
-            <span className="text-sm sm:text-md md:text-lg lg:text-xl font-bold text-white">
+            <span className={`${greetingTextSize} font-bold text-white`}>
               {getGreeting()}
             </span>
 
@@ -110,7 +145,7 @@ const Hero = () => {
           </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

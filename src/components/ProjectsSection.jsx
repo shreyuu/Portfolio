@@ -38,21 +38,21 @@ const ProjectsSection = () => {
   }, []);
 
   return (
-    <motion.section
+    <motion.section 
       ref={ref}
-      id="projects"
+      id="projects" 
       className="text-gray-300 my-12"
       variants={staggerContainer}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
     >
-      <motion.h2
+      <motion.h2 
         className="text-xl font-bold text-purple-400 mb-4"
         variants={fadeInUp}
       >
         💻 PROJECTS
       </motion.h2>
-
+      
       <div className="grid md:grid-cols-3 gap-6">
         {loading ? (
           // Show skeleton loading state
@@ -66,8 +66,8 @@ const ProjectsSection = () => {
               key={index}
               className="bg-[#0f0f0f] border border-gray-700 p-5 rounded-xl hover:scale-[1.02] transition duration-200 relative overflow-hidden"
               variants={fadeInUp}
-              whileHover={{
-                scale: 1.05,
+              whileHover={{ 
+                scale: 1.05, 
                 boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
                 transition: { duration: 0.3 }
               }}

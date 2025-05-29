@@ -7,18 +7,21 @@ import Skills from './Skills';
 import Experience from './Experience';
 import Education from './Education';
 import Footer from './Footer';
+import ThemeToggle from './ThemeToggle';
+import Navigation from './Navigation';
 
 const Home = () => {
   return (
     <>
+      <ThemeToggle />
+      <Navigation />
       <main
-        className="min-h-screen bg-background-dark text-white px-4 sm:px-6 lg:px-20 py-8 sm:py-12"
-        role="main"
+        className="min-h-screen bg-background-dark dark:bg-background-dark text-white px-4 sm:px-6 lg:px-20 py-8 sm:py-12 transition-colors duration-300"
       >
         <Hero />
-        <div
+        <section
+          id="about"
           className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10 max-w-7xl mx-auto pb-10"
-          role="region"
           aria-label="About and Skills"
         >
           <div className="lg:col-span-1">
@@ -30,19 +33,21 @@ const Home = () => {
           <div className="lg:col-span-1">
             <Skills />
           </div>
-        </div>
-        <div
+        </section>
+        <section
+          id="experience"
           className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8 sm:my-12 max-w-7xl mx-auto"
-          role="region"
           aria-label="Experience and Education"
         >
           <Experience />
           <Education />
-        </div>
+        </section>
         <div className="max-w-7xl mx-auto" role="region" aria-label="Projects">
           <Projects />
         </div>
-        <Footer />
+        <section id="contact">
+          <Footer />
+        </section>
       </main>
     </>
   );
