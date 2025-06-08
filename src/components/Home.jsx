@@ -7,16 +7,14 @@ import Skills from './Skills';
 import Experience from './Experience';
 import Education from './Education';
 import Footer from './Footer';
-import ThemeToggle from './ThemeToggle';
 import Navigation from './Navigation';
 
 const Home = () => {
   return (
     <>
-      <ThemeToggle />
       <Navigation />
       <main
-        className="min-h-screen bg-background-dark dark:bg-background-dark text-white px-4 sm:px-6 lg:px-20 py-8 sm:py-12 transition-colors duration-300"
+        className="min-h-screen bg-background-dark text-white px-4 sm:px-6 lg:px-20 py-8 sm:py-12 transition-colors duration-300"
       >
         <Hero />
         <section
