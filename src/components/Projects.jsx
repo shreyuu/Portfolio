@@ -1,33 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SkeletonProject } from './Skeleton';
+import ProjectDetails from './ProjectDetails';
 import useAnimations from '../hooks/useAnimations';
 
 const ProjectsSection = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [selectedProject, setSelectedProject] = useState(null);
   const { ref, isInView, fadeInUp, staggerContainer } = useAnimations();
 
   const projects = [
     {
       title: 'Rubiklog',
-      description: "Rubik's Cube Timer",
-      technologies: ['Python 3.10+', 'Node.js 18+', 'PostgreSQL 14+'],
+      description: "Rubik's Cube Timer with Computer Vision",
+      technologies: ['Django', 'React.js', 'PostgreSQL', 'TailwindCSS', 'OpenCV', 'TensorFlow'],
       link: 'https://github.com/shreyuu/RubikLog',
       category: 'web',
     },
     {
+      title: 'AmazeBot 🤖',
+      description: "AI-powered chatbot with Hugging Face's Blenderbot model",
+      technologies: ['Django', 'React.js', 'Tailwind CSS', 'Hugging Face API', 'REST API'],
+      link: 'https://github.com/shreyuu/AmazeBot',
+      category: 'web',
+    },
+    {
+      title: 'DjangoChatify',
+      description: 'Real-Time WebSocket Chat Application',
+      technologies: ['Django Channels', 'React.js', 'WebSockets', 'Tailwind CSS', 'PostgreSQL', 'Docker'],
+      link: 'https://github.com/shreyuu/DjangoChatify',
+      category: 'web',
+    },
+    {
       title: 'Hand Gesture Recognition',
-      description: 'Identify hand signs using webcam',
-      technologies: ['Python', 'TensorFlow', 'MediaPipe', 'OpenCV', 'Jupyter Notebook'],
+      description: 'Real-time hand sign detection with audio feedback',
+      technologies: ['Python', 'TensorFlow', 'MediaPipe', 'OpenCV', 'gTTS'],
       link: 'https://github.com/shreyuu/Hand-Gesture-Recognition',
       category: 'ml',
     },
     {
-      title: 'DjangoChatify',
-      description: 'Real-Time Chat Application',
-      technologies: ['React.js', 'Tailwind CSS', 'Django', 'WebSockets', 'MongoDB'],
-      link: 'https://github.com/shreyuu/DjangoChatify',
+      title: 'Posture Recognition',
+      description: 'CNN-Based Sitting and Standing Detection',
+      technologies: ['Python', 'TensorFlow', 'CNN', 'scikit-learn', 'matplotlib'],
+      link: 'https://github.com/shreyuu/ml-models/tree/main/Posture%20Recognition%3A%20CNN-Based%20Sitting%20and%20Standing%20Detection',
+      category: 'ml',
+    },
+    {
+      title: 'Expense Analytics React',
+      description: 'Simple and user-friendly Expense Tracker',
+      technologies: ['React.js', 'Tailwind CSS', 'MongoDB', 'Express.js'],
+      link: 'https://github.com/shreyuu/expense-analytics-react',
+      category: 'web',
+    },
+    {
+      title: 'TempTracker',
+      description: 'Current Temperature Web App',
+      technologies: ['Django', 'React.js', 'TailwindCSS', 'OpenWeatherMap API'],
+      link: 'https://github.com/shreyuu/TempTracker',
       category: 'web',
     },
   ];
@@ -40,6 +70,26 @@ const ProjectsSection = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Close project details when Escape key is pressed
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && selectedProject) {
+        setSelectedProject(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedProject]);
+
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+  };
+
+  const closeProjectDetails = () => {
+    setSelectedProject(null);
+  };
 
   return (
     <motion.section
@@ -106,13 +156,14 @@ const ProjectsSection = () => {
             .map((project, index) => (
               <motion.div
                 key={index}
-                className="bg-[#0f0f0f] border border-gray-700 p-5 rounded-xl hover:scale-[1.02] transition duration-200 relative overflow-hidden"
+                className="bg-[#0f0f0f] border border-gray-700 p-5 rounded-xl hover:scale-[1.02] transition duration-200 relative overflow-hidden cursor-pointer"
                 variants={fadeInUp}
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
                   transition: { duration: 0.3 }
                 }}
+                onClick={() => handleProjectClick(project)}
               >
                 <h3 className="text-2xl font-bold text-white mb-3">{project.title}</h3>
 
@@ -132,20 +183,31 @@ const ProjectsSection = () => {
 
                 <p className="text-sm text-gray-400 mb-4">{project.description}</p>
 
-                <motion.a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <motion.button
                   className="inline-flex items-center gap-2 text-white font-medium text-sm bg-gray-800 px-3 py-1.5 rounded hover:bg-gray-700 transition"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent opening the modal
+                    window.open(project.link, '_blank', 'noopener,noreferrer');
+                  }}
                 >
-                  View more →
-                </motion.a>
+                  View code →
+                </motion.button>
               </motion.div>
             ))
         )}
       </div>
+
+      {/* Project Details Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectDetails
+            project={selectedProject}
+            onClose={closeProjectDetails}
+          />
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 };
