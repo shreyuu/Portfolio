@@ -9,17 +9,24 @@ const Experience = () => {
     {
       role: 'Python Developer Intern',
       company: 'Arohi Softwares',
-      period: 'Nov 2024 – Feb 2025 · 6mo',
-      description: 'Add details about your responsibilities and achievements...',
-      skills: ['Python', 'Flask', 'SQL', 'API Development'],
+      period: 'Aug 2024 – Feb 2025 · 7mo',
+      description: 'Constructed responsive UIs with Python/Django and integrated REST APIs while managing databases. Executed full-stack development with cross-functional teams using Agile practices.',
+      skills: ['Python', 'Django', 'REST API', 'Database Management', 'UI/UX', 'Agile'],
     },
     {
       role: 'Software Developer Intern',
       company: 'NerdTech',
-      period: 'Mar 2024 – Apr 2024 · 1mo',
-      description: 'Add details about your responsibilities and achievements...',
-      skills: ['JavaScript', 'React', 'Node.js'],
+      period: 'Mar 2024 – Apr 2024 · 2mo',
+      description: 'Developed client software solutions with focus on user-centric design and backend systems. Reduced runtime errors by 30% through debugging and testing.',
+      skills: ['Software Development', 'Debugging', 'Testing', 'Agile'],
     },
+    {
+      role: 'Machine Learning with AI Using Python Trainee',
+      company: 'Knowledge Solutions India',
+      period: 'Dec 2021 – Feb 2022 · 3mo',
+      description: 'Collaborated on "Heart Disease Predictor" project and deployed ML pipeline using scikit-learn and Pandas, reducing inventory costs by 15%.',
+      skills: ['Python', 'Machine Learning', 'scikit-learn', 'Pandas', 'Model Deployment'],
+    }
   ];
 
   return (
@@ -34,7 +41,7 @@ const Experience = () => {
         className="text-xl font-bold text-purple-400 mb-6"
         variants={fadeInUp}
       >
-        EXPERIENCE
+        🏢 EXPERIENCE
       </motion.h2>
 
       <div className="relative">
