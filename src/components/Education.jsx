@@ -23,13 +23,39 @@ const Education = () => {
     'Object-Oriented Programming',
     'Python',
     'Java & Adv. Java',
+    'Business Analytics',
+    'Big Data',
+    'Supply Chain Management',
+    'Digital Marketing'
   ];
 
   const educations = [
     {
+      institution: 'University of Nottingham',
+      degree: 'Master of Science | Business Analytics',
+      period: 'Sep 2025 – Sep 2026',
+      location: 'Jubilee Campus, Nottingham, UK',
+      achievements: [
+        'Full-time MSc programme (RQF Level 7)',
+        'IELTS Overall Score: 6.5 (B2 CEFR equivalent)',
+        'CAS Number: E4G8II9N54O0E7'
+      ],
+      skills: [
+        'Analytics Specializations',
+        'Foundational Business Analytics',
+        'Leading Big Data Business Projects',
+        'Data at Scale: Management & Processing',
+        'Data Driven Dissertation Project',
+        'Supply Chain Planning & Management',
+        'Digital Marketing',
+        'Machine Learning and Predictive Analytics'
+      ],
+    },
+    {
       institution: 'Sandip Institute of Technology & Research Centre',
       degree: 'Bachelor of Engineering | Computer Engineering',
       period: '2022 – 2025',
+      location: 'Nashik, Maharashtra, India',
       achievements: [
 
       ],
@@ -52,6 +78,7 @@ const Education = () => {
       institution: "Sandip Foundation's Sandip Polytechnic",
       degree: 'Diploma | Computer Engineering',
       period: '2019 – 2022',
+      location: 'Nashik, Maharashtra, India',
       achievements: [
 
       ],
@@ -114,12 +141,14 @@ const Education = () => {
             >
               <div className="flex flex-wrap justify-between items-center">
                 <h3 className="font-semibold text-white text-lg">{edu.institution}</h3>
-
               </div>
               <p className="text-purple-400">{edu.degree}</p>
               <p className="text-xs text-gray-500 mb-2">{edu.period}</p>
+              {edu.location && (
+                <p className="text-xs text-gray-400 mb-2">📍 {edu.location}</p>
+              )}
 
-              {/* {edu.achievements && edu.achievements.length > 0 && (
+              {edu.achievements && edu.achievements.length > 0 && (
                 <div className="mb-3 mt-2">
                   <p className="text-sm font-medium text-gray-300 mb-1">Achievements:</p>
                   <ul className="list-disc list-inside text-xs text-gray-400 pl-2 space-y-0.5">
@@ -128,11 +157,13 @@ const Education = () => {
                     ))}
                   </ul>
                 </div>
-              )} */}
+              )}
 
               <div className="mt-3">
                 <div className="flex justify-between items-center mb-1">
-                  <p className="text-sm font-medium text-gray-300">Skills & Coursework:</p>
+                  <p className="text-sm font-medium text-gray-300">
+                    {index === 0 ? 'Core Modules:' : 'Skills & Coursework:'}
+                  </p>
                   {edu.skills.length > 6 && (
                     <button
                       onClick={() => toggleSkills(index)}
