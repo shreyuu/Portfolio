@@ -8,6 +8,42 @@ const ProjectDetails = ({ project, onClose }) => {
     // Extended project details based on the title
     const getExtendedDetails = () => {
         switch (project.title) {
+            case 'ZenSpend':
+                return {
+                    fullDescription: "ZenSpend is a privacy-first, AI-powered expense tracker. It parses natural language (via Ollama + LangChain) into structured expense entries, stores them in PostgreSQL with pgvector for semantic memory, and provides a React + Tailwind UI.",
+                    features: [
+                        "Natural language logging powered by a local LLM (Ollama)",
+                        "FastAPI backend with API-first architecture",
+                        "PostgreSQL + pgvector for embeddings and memory",
+                        "React frontend with Tailwind UI and visual breakdowns",
+                        "PWA-ready for mobile install",
+                    ],
+                    challenges: "Ensuring robust LLM parsing and maintaining privacy with fully local inference. Addressed via prompt design, schema validation (Pydantic), and fallback parsing."
+                };
+            case 'FENgine':
+                return {
+                    fullDescription: "FENgine converts a chessboard image into FEN and PGN. It detects the board with OpenCV, classifies each square with a CNN, maps to algebraic notation, and generates FEN/PGN via python-chess.",
+                    features: [
+                        "Board detection and perspective warp (OpenCV)",
+                        "64-cell slicing and CNN-based piece classification",
+                        "Algebraic coordinate mapping to build positions",
+                        "FEN and PGN generation with python-chess",
+                        "Interactive review UI (grid overlay and corrections)"
+                    ],
+                    challenges: "Handling real-world image variance (lighting, rotation, occlusions). Mitigated with augmentation and careful preprocessing."
+                };
+            case 'Stock Market Analysis Platform':
+                return {
+                    fullDescription: "A full-stack stock analysis app combining technical indicators, ML-based price prediction (SVM), and FinBERT sentiment, with a React + TypeScript dashboard.",
+                    features: [
+                        "Real-time and historical price data visualization",
+                        "Technical indicators: SMA, EMA, RSI, MACD, Bollinger Bands",
+                        "SVM-based predictive modeling",
+                        "FinBERT for financial sentiment analysis",
+                        "FastAPI backend with typed endpoints"
+                    ],
+                    challenges: "Synchronizing multi-source data and ensuring performant computations. Solved via caching layers and async endpoints."
+                };
             case 'AmazeBot 🤖':
                 return {
                     fullDescription: "AmazeBot is an AI-powered chatbot built with Django (Backend), React.js (Frontend), and Tailwind CSS. It leverages Hugging Face's Blenderbot model to provide intelligent and engaging conversations.",
