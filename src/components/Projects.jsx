@@ -12,6 +12,27 @@ const ProjectsSection = () => {
 
   const projects = [
     {
+      title: 'ZenSpend',
+      description: 'Privacy-first, AI-powered expense tracker (FastAPI, LangChain, React, PostgreSQL) running locally via Ollama.',
+      technologies: ['FastAPI', 'PostgreSQL', 'LangChain', 'pgvector', 'Ollama', 'React', 'Tailwind CSS'],
+      link: 'https://github.com/shreyuu/ZenSpend',
+      category: 'web',
+    },
+    {
+      title: 'FENgine',
+      description: 'Chess OCR pipeline to convert a board image into FEN and PGN using CV and a CNN classifier.',
+      technologies: ['FastAPI', 'OpenCV', 'CNN', 'TensorFlow/PyTorch', 'Uvicorn', 'React', 'Tailwind CSS'],
+      link: 'https://github.com/shreyuu/FENgine',
+      category: 'ml',
+    },
+    {
+      title: 'Stock Market Analysis Platform',
+      description: 'Full‑stack platform with technical indicators, SVM price prediction, and FinBERT sentiment.',
+      technologies: ['FastAPI', 'React', 'TypeScript', 'Pandas', 'NumPy', 'scikit-learn', 'FinBERT', 'Vite'],
+      link: 'https://github.com/shreyuu/FinCastAI',
+      category: 'ml',
+    },
+    {
       title: 'Rubiklog',
       description: "Rubik's Cube Timer with Computer Vision",
       technologies: ['Django', 'React.js', 'PostgreSQL', 'TailwindCSS', 'OpenCV', 'TensorFlow'],
