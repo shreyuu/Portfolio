@@ -1,187 +1,300 @@
 # Personal Portfolio Website
 
-A modern, responsive portfolio website built with React and Tailwind CSS.
+A modern, responsive portfolio website showcasing my journey as a Full Stack Developer and Computer Science student. Built with React and Tailwind CSS, featuring smooth animations and excellent performance.
 
-## Features
+## ✨ Features
 
-- 🎨 Modern and clean design
-- 📱 Fully responsive
-- ♿ Accessibility compliant
-- 🚀 Performance optimized
-- 🔍 SEO friendly
-- 📊 Analytics integration
-- 🛡️ Security best practices
-- 🎭 Smooth animations and transitions
+-   🎨 **Modern Design** - Clean, professional UI with dark theme
+-   📱 **Fully Responsive** - Optimized for mobile, tablet, and desktop
+-   ♿ **Accessibility First** - WCAG 2.1 compliant with keyboard navigation
+-   🚀 **Performance Optimized** - Lazy loading, code splitting, and caching
+-   🔍 **SEO Friendly** - Meta tags, Open Graph, and structured data
+-   📊 **Analytics Integration** - Vercel Analytics and Speed Insights
+-   🎭 **Smooth Animations** - Framer Motion for engaging interactions
+-   🛡️ **Security Hardened** - CSP headers and security best practices
+-   🎯 **Scroll Progress** - Visual scroll indicator and back-to-top button
+-   🔄 **Filter System** - Filter projects by category (Web Dev, ML)
+-   📄 **Project Modals** - Detailed project information with features and challenges
+-   🌐 **Navigation** - Smooth scroll navigation with active section indicators
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- React 18
-- Tailwind CSS
-- Framer Motion
-- Vercel Analytics & Speed Insights
-- React Helmet
-- Lucide React Icons
-- CRACO (Create React App Configuration Override)
-- Husky & lint-staged
-- Lighthouse CI
+### Core
 
-## Prerequisites
+-   **React 18** - Modern React with hooks and suspense
+-   **Tailwind CSS** - Utility-first CSS framework
+-   **Framer Motion** - Animation library for React
+-   **React Helmet** - Document head management
+-   **React Icons** - Popular icon library
 
-- Node.js (v16 or higher)
-- npm or yarn
+### Development Tools
 
-## Getting Started
+-   **CRACO** - Create React App Configuration Override
+-   **ESLint** - Code quality and consistency
+-   **Prettier** - Code formatting
+-   **Husky** - Git hooks for quality checks
+-   **lint-staged** - Pre-commit linting
 
-1. Clone the repository:
+### Testing & CI/CD
 
-   ```bash
-   git clone https://github.com/shreyuu/Portfolio.git
-   cd portfolio
-   ```
+-   **Jest** - Testing framework
+-   **React Testing Library** - Component testing
+-   **Lighthouse CI** - Automated performance auditing
+-   **GitHub Actions** - Continuous integration
 
-2. Install dependencies:
+### Analytics & Monitoring
 
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+-   **Vercel Analytics** - Real-time analytics
+-   **Vercel Speed Insights** - Performance metrics
+-   **Web Vitals** - Core Web Vitals monitoring
 
-3. Start the development server:
+## 📋 Prerequisites
 
-   ```bash
-   npm start
-   # or
-   yarn start
-   ```
+-   Node.js (v16 or higher)
+-   npm or yarn
+-   Git
 
-4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Getting Started
 
-## Available Scripts
+1. **Clone the repository:**
 
-- `npm start` - Runs the app in development mode using CRACO
-- `npm test` - Launches the test runner using CRACO
-- `npm run build` - Builds the app for production using CRACO
-- `npm run lint` - Runs ESLint on source files
-- `npm run lint:fix` - Fixes ESLint errors automatically
-- `npm run format` - Formats code with Prettier
+    ```bash
+    git clone https://github.com/shreyuu/Portfolio.git
+    cd Portfolio
+    ```
 
-## Project Structure
+2. **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3. **Start the development server:**
+
+    ```bash
+    npm start
+    ```
+
+4. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📜 Available Scripts
+
+| Command            | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| `npm start`        | Start development server with CRACO                |
+| `npm test`         | Run tests with CRACO                               |
+| `npm run build`    | Create production build                            |
+| `npm run lint`     | Run ESLint checks                                  |
+| `npm run lint:fix` | Fix ESLint errors automatically                    |
+| `npm run eject`    | Eject from Create React App (⚠️ one-way operation) |
+
+## 📁 Project Structure
 
 ```
-portfolio/
-├── public/
-│   ├── index.html
-│   ├── robots.txt
-│   └── sitemap.xml
-├── src/
-│   ├── components/
-│   │   ├── Home.jsx
-│   │   ├── About.jsx
-│   │   └── Projects.jsx
-│   ├── App.js
-│   ├── index.js
-│   └── index.css
+Portfolio/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml
-├── .husky/
+│       └── ci.yml              # GitHub Actions CI/CD
+├── .husky/                      # Git hooks configuration
 ├── .vscode/
-├── .eslintrc.json
-├── .prettierrc
-├── craco.config.js
-├── jest.config.js
-├── lighthouse.config.js
-├── postcss.config.js
-├── tailwind.config.js
-├── package.json
-└── README.md
+│   └── settings.json           # VS Code settings
+├── public/
+│   ├── icons/                  # App icons
+│   ├── index.html              # HTML template
+│   ├── manifest.json           # PWA manifest
+│   ├── robots.txt              # SEO robots file
+│   └── sitemap.xml             # SEO sitemap
+├── src/
+│   ├── components/
+│   │   ├── About.jsx           # About section
+│   │   ├── Education.jsx       # Education timeline
+│   │   ├── Experience.jsx      # Work experience timeline
+│   │   ├── Footer.jsx          # Footer with contact
+│   │   ├── Hero.jsx            # Animated hero section
+│   │   ├── Home.jsx            # Main page layout
+│   │   ├── Navigation.jsx      # Scroll navigation
+│   │   ├── ProfileCard.jsx     # Daily.dev card
+│   │   ├── ProjectDetails.jsx  # Project modal
+│   │   ├── Projects.jsx        # Projects grid with filters
+│   │   ├── ProjectsSection.jsx # Projects section
+│   │   ├── ScrollProgress.jsx  # Scroll indicator
+│   │   ├── Skills.jsx          # Skills grid
+│   │   ├── Skeleton.jsx        # Loading skeletons
+│   │   └── ThemeToggle.jsx     # Theme switcher
+│   ├── hooks/
+│   │   ├── useAnimations.js    # Animation variants
+│   │   ├── useKeyboardNavigation.js # Keyboard controls
+│   │   ├── useResponsive.js    # Responsive utilities
+│   │   └── useTheme.js         # Theme management
+│   ├── App.css                 # App styles
+│   ├── App.js                  # Root component
+│   ├── App.test.js             # App tests
+│   ├── index.css               # Global styles
+│   ├── index.js                # Entry point
+│   ├── reportWebVitals.js      # Web Vitals
+│   └── setupTests.js           # Test configuration
+├── .eslintrc.json              # ESLint configuration
+├── .gitignore                  # Git ignore rules
+├── .prettierrc                 # Prettier configuration
+├── craco.config.js             # CRACO configuration
+├── jest.config.js              # Jest configuration
+├── lighthouse.config.js        # Lighthouse CI config
+├── package.json                # Dependencies
+├── postcss.config.js           # PostCSS configuration
+├── tailwind.config.js          # Tailwind configuration
+└── README.md                   # This file
 ```
 
-## Development Tools
+## 🎨 Customization
 
-### Code Quality
+### Theme Configuration
 
-- ESLint with TypeScript support
-- Prettier for code formatting
-- Husky for git hooks
-- lint-staged for pre-commit checks
+Edit [`tailwind.config.js`](tailwind.config.js) to customize:
 
-### Performance
+-   Colors (primary, secondary, accent)
+-   Theme variants (ocean, forest, sunset, rose)
+-   Typography
+-   Animations
+-   Breakpoints
 
-- Lighthouse CI for performance monitoring
-- Vercel Analytics for real-time analytics
-- Vercel Speed Insights for performance metrics
+### Animations
 
-### Build Tools
+Modify [`src/hooks/useAnimations.js`](src/hooks/useAnimations.js) for:
 
-- CRACO for Create React App configuration override
-- PostCSS for CSS processing
-- Tailwind CSS for styling
+-   Fade effects (up, down, left, right)
+-   Scale animations
+-   Letter animations
+-   Stagger containers
+-   Hover/tap effects
 
-## Contributing
+## ♿ Accessibility
+
+This portfolio follows WCAG 2.1 Level AA standards:
+
+-   ✅ Semantic HTML structure
+-   ✅ ARIA labels and roles
+-   ✅ Keyboard navigation support
+-   ✅ Skip links for screen readers
+-   ✅ Sufficient color contrast
+-   ✅ Focus indicators
+-   ✅ Descriptive alt text
+-   ✅ Accessible forms
+
+## 🚀 Performance
+
+Performance optimizations implemented:
+
+-   ⚡ Code splitting with React.lazy
+-   ⚡ Image optimization
+-   ⚡ Lazy loading for components
+-   ⚡ Skeleton loading states
+-   ⚡ Efficient animations with GPU acceleration
+-   ⚡ CSS purging in production
+-   ⚡ Minification and compression
+-   ⚡ Caching strategies
+
+## 🔒 Security
+
+Security measures:
+
+-   🛡️ Content Security Policy (CSP)
+-   🛡️ Security headers (X-Content-Type-Options, X-Frame-Options, etc.)
+-   🛡️ XSS protection
+-   🛡️ CSRF protection
+-   🛡️ Safe external links (noopener, noreferrer)
+
+## 📊 SEO
+
+SEO features:
+
+-   🔍 Semantic HTML
+-   🔍 Meta tags (description, keywords, author)
+-   🔍 Open Graph tags for social sharing
+-   🔍 Twitter Card tags
+-   🔍 JSON-LD structured data
+-   🔍 Sitemap.xml
+-   🔍 Robots.txt
+-   🔍 Canonical URLs
+
+## 🧪 Testing
+
+Run tests with:
+
+```bash
+npm test
+```
+
+Coverage report:
+
+```bash
+npm test -- --coverage
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run linting (`npm run lint:fix`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-## Code Style
+### Code Style Guidelines
 
-This project uses ESLint and Prettier for code formatting. The configuration files are included in the repository.
+-   Follow ESLint rules (see [`.eslintrc.json`](.eslintrc.json))
+-   Use Prettier for formatting (see [`.prettierrc`](.prettierrc))
+-   Write meaningful commit messages
+-   Add tests for new features
+-   Update documentation as needed
 
-- ESLint rules are defined in `.eslintrc.json`
-- Prettier configuration is in `.prettierrc`
-- TypeScript support is configured in ESLint
+## 🔧 Development Tools
 
-## Accessibility
+### Recommended VS Code Extensions
 
-This project follows WCAG 2.1 guidelines and includes:
+-   ESLint
+-   Prettier
+-   Tailwind CSS IntelliSense
+-   ES7+ React/Redux/React-Native snippets
+-   Auto Rename Tag
+-   GitLens
 
-- Semantic HTML
-- ARIA labels and roles
-- Keyboard navigation
-- Skip links
-- Proper color contrast
-- Screen reader support
+## 📈 Analytics
 
-## Performance
+This portfolio uses:
 
-The project is optimized for performance with:
+-   **Vercel Analytics** - Page views, user metrics
+-   **Vercel Speed Insights** - Core Web Vitals, FCP, LCP, CLS, etc.
+-   **Lighthouse CI** - Automated performance auditing
 
-- Code splitting
-- Lazy loading
-- Image optimization
-- Caching strategies
-- Minification
-- Compression
-- Lighthouse CI integration
-- Vercel Speed Insights
+## 🐛 Known Issues
 
-## Security
+No known issues at this time. Please report any bugs via [GitHub Issues](https://github.com/shreyuu/Portfolio/issues).
 
-Security measures implemented:
-
-- Content Security Policy (CSP)
-- Security headers
-- Input sanitization
-- XSS protection
-- CSRF protection
-
-## Analytics and Monitoring
-
-- Vercel Analytics for performance monitoring
-- Vercel Speed Insights for detailed performance metrics
-- Lighthouse CI for automated performance checks
-- Custom event tracking
-
-## License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contact
+## 👤 Contact
 
-[Shreyash Meshram](mailto:shreyashmeshram0031@gmail.com)
+**Shreyash Meshram**
 
-Project Link: [https://github.com/shreyuu/Portfolio](https://github.com/shreyuu/Portfolio)
+-   Email: [shreyashmeshram0031@gmail.com](mailto:shreyashmeshram0031@gmail.com)
+-   GitHub: [@shreyuu](https://github.com/shreyuu)
+-   LinkedIn: [shreyuu](https://www.linkedin.com/in/shreyuu/)
+-   Portfolio: [https://shreyash-meshram.vercel.app](https://shreyash-meshram.vercel.app)
+
+## 🙏 Acknowledgments
+
+-   [React](https://react.dev/) - UI library
+-   [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+-   [Framer Motion](https://www.framer.com/motion/) - Animation library
+-   [Vercel](https://vercel.com/) - Hosting and analytics
+-   [Daily.dev](https://daily.dev/) - Developer news platform
+
+---
+
+⭐ **If you found this portfolio helpful, please consider giving it a star!**
