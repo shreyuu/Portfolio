@@ -168,6 +168,30 @@ Modify [`src/hooks/useAnimations.js`](src/hooks/useAnimations.js) for:
 -   Stagger containers
 -   Hover/tap effects
 
+## Custom Hooks Documentation
+
+### useAnimations
+
+Provides animation variants and scroll detection for Framer Motion.
+
+**Usage:**
+
+```javascript
+const { ref, isInView, fadeInUp } = useAnimations();
+```
+
+### useTheme
+
+Manages theme state and persistence.
+
+### useResponsive
+
+Handles responsive breakpoints and adaptive values.
+
+### useKeyboardNavigation
+
+Enables keyboard shortcuts for navigation.
+
 ## ♿ Accessibility
 
 This portfolio follows WCAG 2.1 Level AA standards:
