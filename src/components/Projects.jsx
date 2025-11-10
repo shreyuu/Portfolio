@@ -141,7 +141,7 @@ const ProjectsSection = () => {
 
       <div className="flex flex-wrap gap-2 mb-6">
         <motion.button
-          onClick={() => setFilter('all')}
+          onClick={() => handleFilterChange('all')}
           className={`px-3 py-1 rounded-full text-sm ${filter === 'all'
             ? 'bg-purple-600 text-white'
             : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
@@ -152,7 +152,7 @@ const ProjectsSection = () => {
           All
         </motion.button>
         <motion.button
-          onClick={() => setFilter('web')}
+          onClick={() => handleFilterChange('web')}
           className={`px-3 py-1 rounded-full text-sm ${filter === 'web'
             ? 'bg-purple-600 text-white'
             : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
@@ -163,7 +163,7 @@ const ProjectsSection = () => {
           Web Dev
         </motion.button>
         <motion.button
-          onClick={() => setFilter('ml')}
+          onClick={() => handleFilterChange('ml')}
           className={`px-3 py-1 rounded-full text-sm ${filter === 'ml'
             ? 'bg-purple-600 text-white'
             : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
