@@ -2,6 +2,9 @@ import React, { Suspense, lazy } from 'react';
 import './App.css';
 import { inject } from '@vercel/analytics';
 import { Helmet } from 'react-helmet';
+import { ToastProvider } from './components/ToastContext.jsx';
+import StructuredData from './components/StructuredData';
+import ErrorLogger from './utils/ErrorLogger';
 
 // Initialize Vercel Analytics
 inject();
@@ -13,7 +16,7 @@ const Home = lazy(() => import('./components/Home.jsx'));
 const SkipLink = () => (
     <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-purple-600 text-white px-4 py-2 rounded z-50"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-purple-600 text-white px-4 py-2 rounded z-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
     >
         Skip to main content
     </a>
@@ -24,12 +27,15 @@ const Loading = () => (
     <div
         className="min-h-screen bg-background-dark flex items-center justify-center"
         role="status"
-        aria-label="Loading"
+        aria-label="Loading application"
     >
-        <div
-            className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"
-            aria-hidden="true"
-        ></div>
+        <div className="text-center">
+            <div
+                className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto"
+                aria-hidden="true"
+            ></div>
+            <p className="mt-4 text-gray-400">Loading...</p>
+        </div>
     </div>
 );
 
@@ -37,15 +43,15 @@ const Loading = () => (
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { hasError: false };
+        this.state = { hasError: false, error: null };
     }
 
-    static getDerivedStateFromError() {
-        return { hasError: true };
+    static getDerivedStateFromError(error) {
+        return { hasError: true, error };
     }
 
     componentDidCatch(error, errorInfo) {
-        console.error('Error:', error, errorInfo);
+        ErrorLogger.boundary(error, errorInfo);
     }
 
     render() {
@@ -56,9 +62,16 @@ class ErrorBoundary extends React.Component {
                     role="alert"
                     aria-live="assertive"
                 >
-                    <div className="text-center">
+                    <div className="text-center max-w-md">
                         <h1 className="text-2xl font-bold mb-4">Oops! Something went wrong.</h1>
-                        <p className="mb-4">Please try refreshing the page.</p>
+                        <p className="mb-4 text-gray-400">
+                            We apologize for the inconvenience. Please try refreshing the page.
+                        </p>
+                        {process.env.NODE_ENV === 'development' && this.state.error && (
+                            <pre className="text-left bg-gray-900 p-4 rounded text-xs overflow-auto mb-4">
+                                {this.state.error.toString()}
+                            </pre>
+                        )}
                         <button
                             onClick={() => window.location.reload()}
                             className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
@@ -76,84 +89,33 @@ class ErrorBoundary extends React.Component {
 }
 
 function App() {
-    // JSON-LD structured data
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Person',
-        name: 'Shreyash Meshram',
-        jobTitle: 'Full Stack Developer',
-        url: 'https://your-portfolio-domain.com',
-        sameAs: ['https://github.com/yourusername', 'https://linkedin.com/in/yourusername'],
-        knowsAbout: ['Web Development', 'React', 'JavaScript', 'Python', 'Machine Learning'],
-        description:
-            'Full-stack developer and CS student passionate about building apps and exploring AI/ML projects.',
-    };
-
     return (
         <ErrorBoundary>
-            <Helmet>
-                <title>Shreyash Meshram | Portfolio</title>
-                <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <meta
-                    name="description"
-                    content="Full-stack developer and CS student passionate about building apps and exploring AI/ML projects. Check out my portfolio of web development and machine learning projects."
-                />
-                <meta
-                    name="keywords"
-                    content="Shreyash Meshram, Full Stack Developer, Web Developer, Python Developer, React Developer, Portfolio"
-                />
+            <ToastProvider>
+                <Helmet>
+                    <title>Shreyash Meshram | Full Stack Developer Portfolio</title>
+                    <meta charSet="utf-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                    <meta
+                        name="description"
+                        content="Full-stack developer and CS student passionate about building apps and exploring AI/ML projects. Skilled in React, Python, Django, FastAPI, and more."
+                    />
+                    <meta
+                        name="keywords"
+                        content="Shreyash Meshram, Full Stack Developer, Web Developer, Python Developer, React Developer, Machine Learning, AI, Portfolio"
+                    />
+                    <link rel="canonical" href="https://shreyashmeshram.com" />
+                </Helmet>
 
-                {/* Open Graph Meta Tags */}
-                <meta property="og:title" content="Shreyash Meshram | Full Stack Developer" />
-                <meta
-                    property="og:description"
-                    content="Full-stack developer and CS student passionate about building web applications and exploring AI/ML technologies."
-                />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://shreyashmeshram.com" />
-                <meta
-                    property="og:image"
-                    content="https://shreyashmeshram.com/images/social-preview.jpg"
-                />
-                <meta property="og:image:alt" content="Shreyash Meshram's Portfolio Preview" />
-                <meta property="og:site_name" content="Shreyash Meshram" />
+                <StructuredData />
+                <SkipLink />
 
-                {/* Twitter Card Meta Tags */}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:site" content="@yourtwitterhandle" />
-                <meta name="twitter:creator" content="@yourtwitterhandle" />
-                <meta name="twitter:title" content="Shreyash Meshram | Full Stack Developer" />
-                <meta
-                    name="twitter:description"
-                    content="Full-stack developer and CS student passionate about building web applications and exploring AI/ML technologies."
-                />
-                <meta
-                    name="twitter:image"
-                    content="https://shreyashmeshram.com/images/twitter-preview.jpg"
-                />
-                <meta name="twitter:image:alt" content="Shreyash Meshram's Portfolio Preview" />
-
-                {/* Security Headers */}
-                <meta
-                    httpEquiv="Content-Security-Policy"
-                    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.your-domain.com;"
-                />
-                <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-                <meta httpEquiv="X-Frame-Options" content="DENY" />
-                <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
-                <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-
-                {/* JSON-LD Structured Data */}
-                <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-            </Helmet>
-
-            <SkipLink />
-            <main id="main-content" tabIndex="-1">
-                <Suspense fallback={<Loading />}>
-                    <Home />
-                </Suspense>
-            </main>
+                <main id="main-content" tabIndex="-1">
+                    <Suspense fallback={<Loading />}>
+                        <Home />
+                    </Suspense>
+                </main>
+            </ToastProvider>
         </ErrorBoundary>
     );
 }
