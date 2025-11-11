@@ -22,9 +22,13 @@
         "start": "craco start",
         "build": "craco build",
         "test": "craco test",
+        "test:coverage": "craco test --coverage --watchAll=false",
         "eject": "react-scripts eject",
         "lint": "eslint src/**/*.{js,jsx}",
         "lint:fix": "eslint src/**/*.{js,jsx} --fix",
+        "format": "prettier --write \"src/**/*.{js,jsx,css,md}\"",
+        "analyze": "source-map-explorer 'build/static/js/*.js'",
+        "lighthouse": "lhci autorun",
         "prepare": "husky install"
     },
     "eslintConfig": {
