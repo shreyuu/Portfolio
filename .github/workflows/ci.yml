@@ -1,36 +1,43 @@
 name: CI/CD
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
+        strategy:
+            matrix:
+                node-version: [16.x, 18.x]
 
-    steps:
-      - uses: actions/checkout@v3
+        steps:
+            - uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Run linting
-        run: npm run lint
+            - name: Run linting
+              run: npm run lint
 
-      - name: Run tests
-        run: npm test
+            - name: Run tests
+              run: npm test
 
-      - name: Build
-        run: npm run build
+            - name: Build
+              run: npm run build
+
+            - name: Run Vercel Speed Insights
+              if: success()
+              env:
+                  SPEED_INSIGHTS_TOKEN: ${{ secrets.SPEED_INSIGHTS_TOKEN }}
+              run: |
+                  npx @vercel/speed-insights@latest --url "https://shreyash-meshram.vercel.app" --upload --token $SPEED_INSIGHTS_TOKEN
