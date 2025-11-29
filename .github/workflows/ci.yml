@@ -24,7 +24,21 @@ jobs:
                   cache: 'npm'
 
             - name: Install dependencies
-              run: npm ci
+              run: |
+                  node -v
+                  npm -v
+                  echo "Attempting npm ci..."
+                  npm ci || (echo "npm ci failed — falling back to npm install (legacy-peer-deps)" && npm install --legacy-peer-deps)
+
+            - name: Dump npm debug log (if any)
+              if: failure()
+              run: |
+                  echo "NPM debug files:"
+                  ls -la /home/runner/.npm/_logs || true
+                  for f in /home/runner/.npm/_logs/*.log; do
+                    echo "---- $f ----"
+                    sed -n '1,200p' "$f" || true
+                  done
 
             - name: Run linting
               run: npm run lint
