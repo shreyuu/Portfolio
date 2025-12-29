@@ -29,7 +29,7 @@
         "analyze": "source-map-explorer 'build/static/js/*.js'",
         "lighthouse": "lhci autorun",
         "prepare": "husky install",
-        "speed-insights": "npx @vercel/speed-insights@latest --url https://shreyash-meshram.vercel.app --upload --token $SPEED_INSIGHTS_TOKEN"
+        "speed-insights": "npx --yes @vercel/speed-insights@latest --url https://shreyash-meshram.vercel.app --upload --token $SPEED_INSIGHTS_TOKEN"
     },
     "eslintConfig": {
         "extends": [

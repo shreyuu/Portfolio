@@ -55,8 +55,12 @@ jobs:
               run: npm run build
 
             - name: Run Vercel Speed Insights
-              if: success()
+              if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
                   SPEED_INSIGHTS_TOKEN: ${{ secrets.SPEED_INSIGHTS_TOKEN }}
               run: |
-                  npx @vercel/speed-insights@latest --url "https://shreyash-meshram.vercel.app" --upload --token $SPEED_INSIGHTS_TOKEN
+                  if [ -z "$SPEED_INSIGHTS_TOKEN" ]; then
+                    echo "⚠️ SPEED_INSIGHTS_TOKEN is not set. Skipping Speed Insights upload."
+                    exit 0
+                  fi
+                  npx --yes @vercel/speed-insights@latest --url "https://shreyash-meshram.vercel.app" --upload --token "$SPEED_INSIGHTS_TOKEN"
