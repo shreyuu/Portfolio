@@ -53,11 +53,18 @@ const Experience = () => {
             key={index}
             className="relative pl-12 pb-8"
             variants={fadeInUp}
+            initial={{ scale: 0 }}
+            animate={isInView ? { scale: 1 } : { scale: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.3 }}
           >
             {/* Timeline dot */}
             <div className="absolute left-0 top-1.5 w-7 h-7 rounded-full border-4 border-purple-500 bg-[#0f0f0f]"></div>
 
-            <div className="bg-[#0f0f0f] p-4 rounded-lg border border-gray-700">
+            <motion.div
+              className="bg-[#0f0f0f] p-4 rounded-lg border border-gray-700 hover:border-purple-500/40 transition-colors duration-300"
+              whileHover={{ y: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <h3 className="font-semibold text-white text-lg">{exp.role}</h3>
               <p className="text-purple-400">{exp.company}</p>
               <p className="text-xs text-gray-500 mb-3">{exp.period}</p>
@@ -74,7 +81,7 @@ const Experience = () => {
                   </span>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         ))}
       </div>
