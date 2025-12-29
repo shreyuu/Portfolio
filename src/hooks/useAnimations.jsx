@@ -3,10 +3,22 @@ import { useRef, useMemo } from 'react';
 
 const useAnimations = (options = {}) => {
     const ref = useRef(null);
+
+    // Use responsive margin based on viewport
+    const getMargin = () => {
+        if (typeof window !== 'undefined') {
+            const width = window.innerWidth;
+            if (width < 640) return '-20px'; // Mobile
+            if (width < 1024) return '-50px'; // Tablet
+            return '-100px'; // Desktop
+        }
+        return '-100px';
+    };
+
     const isInView = useInView(ref, {
         once: true,
-        margin: '-100px',
-        amount: 0.3,
+        margin: getMargin(),
+        amount: 0.2, // Reduced from 0.3
         ...options,
     });
 
