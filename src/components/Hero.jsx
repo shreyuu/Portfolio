@@ -17,8 +17,8 @@ const Hero = () => {
     visible: {
       opacity: 1,
       transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.08,
+        delayChildren: 0.15,
+        staggerChildren: 0.04,
       },
     },
   };
@@ -120,7 +120,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{
-              delay: 1.2,
+              delay: 0.6,
               duration: 0.8,
               ease: 'easeOut',
             }}

@@ -84,7 +84,7 @@ const Skills = () => {
                     className="px-2 py-1 text-xs bg-[#2c2c2c] rounded-md hover:bg-purple-600 hover:text-white transition-colors cursor-pointer"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                    transition={{ delay: 0.1 * techIndex, duration: 0.3 }}
+                    transition={{ delay: 0.05 * techIndex, duration: 0.3 }}
                     whileHover={{ scale: 1.05 }}
                     onClick={() => handleSkillClick(skill.url)}
                   >
