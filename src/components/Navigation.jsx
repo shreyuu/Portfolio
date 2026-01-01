@@ -76,8 +76,8 @@ const Navigation = () => {
                             scrollToSection(section.id);
                         }}
                         className={`w-3 h-3 rounded-full transition-all duration-300 relative group ${activeSection === index
-                                ? 'bg-purple-500 scale-125'
-                                : 'bg-gray-400 hover:bg-gray-300'
+                            ? 'bg-purple-500 scale-125'
+                            : 'bg-gray-400 hover:bg-gray-300'
                             }`}
                         whileHover={{ scale: 1.2 }}
                         whileTap={{ scale: 0.9 }}
@@ -93,6 +93,10 @@ const Navigation = () => {
                         </span>
                     </motion.button>
                 ))}
+            </div>
+            <div className="text-xs text-gray-500 mt-4">
+                <p>↑↓ Navigate</p>
+                <p>Enter Skip</p>
             </div>
         </nav>
     );
