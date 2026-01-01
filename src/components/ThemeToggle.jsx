@@ -1,7 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSun, FaMoon, FaPalette } from 'react-icons/fa';
-import useTheme from '../hooks/useTheme';
+
+const useTheme = () => {
+    const [theme, setTheme] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) return savedTheme;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        return 'light';
+    });
+
+    useEffect(() => {
+        const root = window.document.documentElement;
+        // Remove all theme classes
+        root.classList.remove('light', 'dark', 'ocean', 'forest', 'sunset', 'rose');
+        root.classList.add(theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const setTheme_ = (newTheme) => setTheme(newTheme);
+
+    return {
+        theme,
+        isDark: theme === 'dark',
+        isLight: theme === 'light',
+        toggleTheme: () => setTheme_(theme === 'light' ? 'dark' : 'light'),
+        setLightTheme: () => setTheme_('light'),
+        setDarkTheme: () => setTheme_('dark'),
+        setTheme: setTheme_,
+    };
+};
 
 const ThemeToggle = () => {
     const { theme, toggleTheme } = useTheme();
