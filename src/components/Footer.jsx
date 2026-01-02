@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import emailjs from '@emailjs/browser';
+import { send } from '@emailjs/browser';
 
 const Footer = () => {
   const [copied, setCopied] = useState(false);
@@ -38,7 +38,7 @@ const Footer = () => {
         throw new Error('EmailJS configuration is missing');
       }
 
-      await emailjs.send(
+      await send(
         EMAIL_SERVICE_ID,
         EMAIL_TEMPLATE_ID,
         {

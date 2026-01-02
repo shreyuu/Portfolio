@@ -228,7 +228,7 @@ const ProjectsSection = () => {
           filteredProjects.map((project, index) => (
             <motion.div
               key={`${project.title}-${index}`}
-              className="bg-[#0f0f0f] border border-gray-700 p-5 rounded-xl hover:scale-[1.02] transition duration-200 relative overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-xl"
+              className="bg-[#0f0f0f] border border-gray-700 p-5 rounded-xl hover:scale-[1.02] transition duration-200 relative overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500"
               variants={fadeInUp}
               whileHover={{
                 scale: 1.05,
