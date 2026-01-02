@@ -1,11 +1,11 @@
 import { useInView } from 'framer-motion';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useCallback } from 'react';
 
 const useAnimations = (options = {}) => {
     const ref = useRef(null);
 
-    // Use responsive margin based on viewport
-    const getMargin = () => {
+    // Memoize getMargin function to prevent recalculation on every render
+    const getMargin = useCallback(() => {
         if (typeof window !== 'undefined') {
             const width = window.innerWidth;
             if (width < 640) return '-20px'; // Mobile
@@ -13,16 +13,19 @@ const useAnimations = (options = {}) => {
             return '-100px'; // Desktop
         }
         return '-100px';
-    };
+    }, []);
+
+    // Memoize margin value
+    const margin = useMemo(() => getMargin(), [getMargin]);
 
     const isInView = useInView(ref, {
         once: true,
-        margin: getMargin(),
-        amount: 0.2, // Reduced from 0.3
+        margin: margin,
+        amount: 0.2,
         ...options,
     });
 
-    const fadeInUp = {
+    const fadeInUp = useMemo(() => ({
         hidden: { opacity: 0, y: 20 },
         visible: {
             opacity: 1,
@@ -32,9 +35,9 @@ const useAnimations = (options = {}) => {
                 ease: [0.215, 0.61, 0.355, 1],
             },
         },
-    };
+    }), []);
 
-    const fadeInDown = {
+    const fadeInDown = useMemo(() => ({
         hidden: { opacity: 0, y: -20 },
         visible: {
             opacity: 1,
@@ -44,9 +47,9 @@ const useAnimations = (options = {}) => {
                 ease: [0.215, 0.61, 0.355, 1],
             },
         },
-    };
+    }), []);
 
-    const fadeInLeft = {
+    const fadeInLeft = useMemo(() => ({
         hidden: { opacity: 0, x: -20 },
         visible: {
             opacity: 1,
@@ -56,9 +59,9 @@ const useAnimations = (options = {}) => {
                 ease: [0.215, 0.61, 0.355, 1],
             },
         },
-    };
+    }), []);
 
-    const fadeInRight = {
+    const fadeInRight = useMemo(() => ({
         hidden: { opacity: 0, x: 20 },
         visible: {
             opacity: 1,
@@ -68,9 +71,9 @@ const useAnimations = (options = {}) => {
                 ease: [0.215, 0.61, 0.355, 1],
             },
         },
-    };
+    }), []);
 
-    const scaleIn = {
+    const scaleIn = useMemo(() => ({
         hidden: { opacity: 0, scale: 0.8 },
         visible: {
             opacity: 1,
@@ -80,9 +83,9 @@ const useAnimations = (options = {}) => {
                 ease: [0.215, 0.61, 0.355, 1],
             },
         },
-    };
+    }), []);
 
-    const staggerContainer = {
+    const staggerContainer = useMemo(() => ({
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -90,9 +93,9 @@ const useAnimations = (options = {}) => {
                 staggerChildren: 0.05,
             },
         },
-    };
+    }), []);
 
-    const letterAnimation = {
+    const letterAnimation = useMemo(() => ({
         hidden: {
             y: 50,
             opacity: 0,
@@ -107,53 +110,47 @@ const useAnimations = (options = {}) => {
                 ease: [0.215, 0.61, 0.355, 1],
             },
         },
-    };
+    }), []);
 
-    const hoverScale = {
+    const hoverScale = useMemo(() => ({
         scale: 1.05,
         transition: {
             duration: 0.2,
             ease: 'easeInOut',
         },
-    };
+    }), []);
 
-    const tapScale = {
+    const tapScale = useMemo(() => ({
         scale: 0.95,
         transition: {
             duration: 0.1,
             ease: 'easeInOut',
         },
-    };
+    }), []);
 
-    const slideUp = useMemo(
-        () => ({
-            hidden: { opacity: 0, y: 30 },
-            visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                    duration: 0.5,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                },
+    const slideUp = useMemo(() => ({
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5,
+                ease: [0.25, 0.46, 0.45, 0.94],
             },
-        }),
-        []
-    );
+        },
+    }), []);
 
-    const rotateIn = useMemo(
-        () => ({
-            hidden: { opacity: 0, rotate: -10 },
-            visible: {
-                opacity: 1,
-                rotate: 0,
-                transition: {
-                    duration: 0.6,
-                    ease: [0.215, 0.61, 0.355, 1],
-                },
+    const rotateIn = useMemo(() => ({
+        hidden: { opacity: 0, rotate: -10 },
+        visible: {
+            opacity: 1,
+            rotate: 0,
+            transition: {
+                duration: 0.6,
+                ease: [0.215, 0.61, 0.355, 1],
             },
-        }),
-        []
-    );
+        },
+    }), []);
 
     return {
         ref,

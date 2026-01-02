@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import useKeyboardNavigation from '../hooks/useKeyboardNavigation';
 
@@ -13,12 +13,12 @@ const Navigation = () => {
         { id: 'contact', label: 'Contact' }
     ], []);
 
-    const scrollToSection = (sectionId) => {
+    const scrollToSection = useCallback((sectionId) => {
         const element = document.getElementById(sectionId);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
-    };
+    }, []);
 
     // Update active section based on scroll position
     useEffect(() => {
@@ -39,26 +39,26 @@ const Navigation = () => {
     }, [sections]);
 
     useKeyboardNavigation({
-        onArrowUp: (e) => {
+        onArrowUp: useCallback((e) => {
             e.preventDefault();
             const newIndex = activeSection > 0 ? activeSection - 1 : sections.length - 1;
             setActiveSection(newIndex);
             scrollToSection(sections[newIndex].id);
-        },
-        onArrowDown: (e) => {
+        }, [activeSection, sections, scrollToSection]),
+        onArrowDown: useCallback((e) => {
             e.preventDefault();
             const newIndex = activeSection < sections.length - 1 ? activeSection + 1 : 0;
             setActiveSection(newIndex);
             scrollToSection(sections[newIndex].id);
-        },
-        onEnter: (e) => {
+        }, [activeSection, sections, scrollToSection]),
+        onEnter: useCallback((e) => {
             e.preventDefault();
             scrollToSection(sections[activeSection].id);
-        },
-        onSpace: (e) => {
+        }, [activeSection, sections, scrollToSection]),
+        onSpace: useCallback((e) => {
             e.preventDefault();
             scrollToSection(sections[activeSection].id);
-        }
+        }, [activeSection, sections, scrollToSection])
     });
 
     return (
@@ -75,7 +75,7 @@ const Navigation = () => {
                             setActiveSection(index);
                             scrollToSection(section.id);
                         }}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 relative group ${activeSection === index
+                        className={`w-3 h-3 rounded-full transition-all duration-300 relative group focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black ${activeSection === index
                             ? 'bg-purple-500 scale-125'
                             : 'bg-gray-400 hover:bg-gray-300'
                             }`}
@@ -84,6 +84,7 @@ const Navigation = () => {
                         aria-label={`Navigate to ${section.label}`}
                         aria-current={activeSection === index ? 'true' : 'false'}
                         role="listitem"
+                        title={`Go to ${section.label} section`}
                     >
                         <span
                             className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
@@ -94,9 +95,9 @@ const Navigation = () => {
                     </motion.button>
                 ))}
             </div>
-            <div className="text-xs text-gray-500 mt-4">
+            <div className="text-xs text-gray-500 mt-4 space-y-1">
                 <p>↑↓ Navigate</p>
-                <p>Enter Skip</p>
+                <p>Enter Go</p>
             </div>
         </nav>
     );
