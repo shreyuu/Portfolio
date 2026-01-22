@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import './App.css';
 import { inject } from '@vercel/analytics';
 import { Helmet } from 'react-helmet';
@@ -89,6 +89,17 @@ class ErrorBoundary extends React.Component {
 }
 
 function App() {
+    const [mounted, setMounted] = useState(false);
+
+    // Move any initialization code to useEffect
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return null;
+    }
+
     return (
         <ErrorBoundary>
             <ToastProvider>

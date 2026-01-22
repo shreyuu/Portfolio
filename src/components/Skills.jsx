@@ -10,37 +10,43 @@ const Skills = () => {
       title: 'Languages & Tools',
       skills: [
         { name: 'Python', url: 'https://www.python.org' },
-        { name: 'Java', url: 'https://www.oracle.com/java/' },
         { name: 'JavaScript', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
+        { name: 'TypeScript', url: 'https://www.typescriptlang.org/' },
+        { name: 'Java', url: 'https://www.oracle.com/java/' },
         { name: 'C', url: 'https://en.wikipedia.org/wiki/C_(programming_language)' },
         { name: 'C++', url: 'https://cplusplus.com/' },
         { name: 'Git', url: 'https://git-scm.com/' },
-        { name: 'Docker', url: 'https://www.docker.com/' },
-        { name: 'Virtual Machines', url: 'https://www.vmware.com/' },
-        { name: 'Adobe Photoshop', url: 'https://www.adobe.com/products/photoshop.html' },
-        { name: 'Premiere Pro', url: 'https://www.adobe.com/products/premiere.html' },
-        { name: 'After Effects', url: 'https://www.adobe.com/products/aftereffects.html' },
-        { name: 'Figma', url: 'https://www.figma.com/' }
+        { name: 'Docker', url: 'https://www.docker.com/' }
       ]
     },
     {
-      title: 'Frameworks & Libraries',
+      title: 'Backend & Frameworks',
       skills: [
-        { name: 'Flask', url: 'https://flask.palletsprojects.com/' },
+        { name: 'FastAPI', url: 'https://fastapi.tiangolo.com/' },
         { name: 'Django', url: 'https://www.djangoproject.com/' },
+        { name: 'Flask', url: 'https://flask.palletsprojects.com/' },
         { name: 'React', url: 'https://react.dev/' },
         { name: 'TailwindCSS', url: 'https://tailwindcss.com/' },
-        { name: 'REST APIs', url: 'https://restfulapi.net/' },
-        { name: 'Unit Testing', url: 'https://en.wikipedia.org/wiki/Unit_testing' },
-        { name: 'CI/CD pipelines', url: 'https://about.gitlab.com/topics/ci-cd/' }
+        { name: 'REST APIs', url: 'https://restfulapi.net/' }
       ]
     },
     {
-      title: 'Cloud & DevOps',
+      title: 'Data Science & ML',
+      skills: [
+        { name: 'TensorFlow', url: 'https://www.tensorflow.org/' },
+        { name: 'Scikit-learn', url: 'https://scikit-learn.org/' },
+        { name: 'Pandas', url: 'https://pandas.pydata.org/' },
+        { name: 'MediaPipe', url: 'https://mediapipe.dev/' },
+        { name: 'NumPy', url: 'https://numpy.org/' }
+      ]
+    },
+    {
+      title: 'Cloud & Databases',
       skills: [
         { name: 'AWS', url: 'https://aws.amazon.com/' },
         { name: 'Google Cloud', url: 'https://cloud.google.com/' },
         { name: 'Microsoft Azure', url: 'https://azure.microsoft.com/' },
+        { name: 'Firebase', url: 'https://firebase.google.com/' },
         { name: 'PostgreSQL', url: 'https://www.postgresql.org/' },
         { name: 'MongoDB', url: 'https://www.mongodb.com/' },
         { name: 'MySQL', url: 'https://www.mysql.com/' }

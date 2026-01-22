@@ -131,7 +131,7 @@ const Education = () => {
               aria-hidden="true"
               initial={{ scale: 0 }}
               animate={isInView ? { scale: 1 } : { scale: 0 }}
-              transition={{ delay: index * 0.2, duration: 0.3 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
             ></motion.div>
 
             <motion.div

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ToastContext = createContext();
@@ -14,18 +14,27 @@ export const useToast = () => {
 export const ToastProvider = ({ children }) => {
     const [toasts, setToasts] = useState([]);
 
-    const addToast = useCallback((message, type = 'info', duration = 3000) => {
+    const addToast = useCallback((message, type = 'info') => {
         const id = Date.now();
         setToasts((prev) => [...prev, { id, message, type }]);
-
-        setTimeout(() => {
-            setToasts((prev) => prev.filter((toast) => toast.id !== id));
-        }, duration);
     }, []);
 
     const removeToast = useCallback((id) => {
         setToasts((prev) => prev.filter((toast) => toast.id !== id));
     }, []);
+
+    // Handle toast auto-removal with useEffect
+    useEffect(() => {
+        if (toasts.length === 0) return;
+
+        const timers = toasts.map((toast) =>
+            setTimeout(() => {
+                removeToast(toast.id);
+            }, 3000)
+        );
+
+        return () => timers.forEach((timer) => clearTimeout(timer));
+    }, [toasts, removeToast]);
 
     return (
         <ToastContext.Provider value={{ addToast, removeToast }}>
