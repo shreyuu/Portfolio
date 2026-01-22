@@ -11,7 +11,7 @@ const ProfileCard = () => {
         rel="noopener noreferrer"
       >
         <img
-          src="https://api.daily.dev/devcards/v2/zwkjv4hIqFk3ReuCdRjqV.png?type=default&r=vrs"
+          src="https://api.daily.dev/devcards/v2/zwkjv4hIqFk3ReuCdRjqV.png?type=default&r=z0c"
           width="356"
           alt="Shreyash Meshram's Dev Card"
           className="rounded-xl shadow-xl"

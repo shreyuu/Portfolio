@@ -53,12 +53,15 @@ const Experience = () => {
             key={index}
             className="relative pl-12 pb-8"
             variants={fadeInUp}
-            initial={{ scale: 0 }}
-            animate={isInView ? { scale: 1 } : { scale: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.3 }}
+            custom={index}
           >
             {/* Timeline dot */}
-            <div className="absolute left-0 top-1.5 w-7 h-7 rounded-full border-4 border-purple-500 bg-[#0f0f0f]"></div>
+            <motion.div
+              className="absolute left-0 top-1.5 w-7 h-7 rounded-full border-4 border-purple-500 bg-[#0f0f0f]"
+              initial={{ scale: 0 }}
+              animate={isInView ? { scale: 1 } : { scale: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
+            ></motion.div>
 
             <motion.div
               className="bg-[#0f0f0f] p-4 rounded-lg border border-gray-700 hover:border-purple-500/40 transition-colors duration-300"

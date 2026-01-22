@@ -17,8 +17,8 @@ const Hero = () => {
     visible: {
       opacity: 1,
       transition: {
-        delayChildren: 0.15,
-        staggerChildren: 0.04,
+        delayChildren: 0.05,
+        staggerChildren: 0.02,
       },
     },
   };
@@ -34,7 +34,7 @@ const Hero = () => {
       opacity: 1,
       rotateX: 0,
       transition: {
-        duration: 0.6,
+        duration: 0.3,
         ease: [0.215, 0.61, 0.355, 1],
       },
     },
@@ -120,13 +120,13 @@ const Hero = () => {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{
-              delay: 0.6,
-              duration: 0.8,
+              delay: 0.2,
+              duration: 0.4,
               ease: 'easeOut',
             }}
             className={`absolute -top-12 ${greetingPosition}
-           bg-purple-500 px-4 py-3 rounded-full 
-           shadow-lg transform-gpu`}
+         bg-purple-500 px-4 py-3 rounded-full 
+         shadow-lg transform-gpu`}
           >
             <span className={`${greetingTextSize} font-bold text-white`}>
               {getGreeting()}

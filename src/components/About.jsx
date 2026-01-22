@@ -24,9 +24,18 @@ const About = () => {
         className="mb-4 leading-relaxed"
         variants={fadeInUp}
       >
-        I&apos;m a CS student from India 🇮🇳 who enjoys building apps & exploring AI/ML projects. I
-        love playing with frameworks 🖥️ and in my free time, I enjoy watching anime 🎥 or solving
-        Rubik&apos;s Cubes.
+        I&apos;m a <span className="text-purple-300 font-semibold">full-stack developer</span> and MSc Business Analytics student at the University of Nottingham.
+        I obsess over building <span className="text-purple-300 font-semibold">scalable systems</span> and
+        experimenting with <span className="text-purple-300 font-semibold">AI/ML solutions</span> that solve
+        real problems.
+      </motion.p>
+      <motion.p
+        className="mb-4 leading-relaxed"
+        variants={fadeInUp}
+      >
+        Whether architecting <span className="text-purple-300 font-semibold">backend services</span>, crafting <span className="text-purple-300 font-semibold">frontends</span>, or <span className="text-purple-300 font-semibold">wrangling data</span>—I&apos;m drawn to challenges
+        requiring both technical depth and creative thinking. I thrive in collaborative environments and love
+        building things with real-world impact.
       </motion.p>
       <motion.div variants={fadeInUp} className="flex flex-col items-end">
         <p className="text-sm text-white mb-2">FIND ME AT</p>
