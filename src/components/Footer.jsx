@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { send } from '@emailjs/browser';
+import React, { useState, useEffect } from 'react';
+import { send, init } from '@emailjs/browser';
 
 const Footer = () => {
   const [copied, setCopied] = useState(false);
@@ -8,10 +8,16 @@ const Footer = () => {
   const [sending, setSending] = useState(false);
   const [formStatus, setFormStatus] = useState('');
 
-  // Initialize EmailJS (get your Service ID, Template ID, and Public Key from EmailJS dashboard)
+  // Initialize EmailJS
   const EMAIL_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
   const EMAIL_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
   const EMAIL_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+  useEffect(() => {
+    if (EMAIL_PUBLIC_KEY) {
+      init(EMAIL_PUBLIC_KEY);
+    }
+  }, [EMAIL_PUBLIC_KEY]);
 
   const copyEmail = async () => {
     try {
@@ -42,9 +48,8 @@ const Footer = () => {
         EMAIL_SERVICE_ID,
         EMAIL_TEMPLATE_ID,
         {
-          to_email: 'shreyashmeshram0031@gmail.com',
-          from_name: formData.name,
-          from_email: formData.email,
+          name: formData.name,
+          email: formData.email,
           message: formData.message,
         },
         EMAIL_PUBLIC_KEY
