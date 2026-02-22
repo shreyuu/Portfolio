@@ -15,18 +15,18 @@ const Education = () => {
 
   // Core skills that are most relevant to your career path
   const coreSkills = [
-    'Data Structures & Algorithms',
-    'Web Technology',
-    'Machine Learning & Deep Learning',
-    'Database Management Systems',
-    'Software Engineering',
-    'Object-Oriented Programming',
-    'Python',
-    'Java & Adv. Java',
-    'Business Analytics',
-    'Big Data',
-    'Supply Chain Management',
-    'Digital Marketing'
+    // 'Data Structures & Algorithms',
+    // 'Web Technology',
+    // 'Machine Learning & Deep Learning',
+    // 'Database Management Systems',
+    // 'Software Engineering',
+    // 'Object-Oriented Programming',
+    // 'Python',
+    // 'Java & Adv. Java',
+    // 'Business Analytics',
+    // 'Big Data',
+    // 'Supply Chain Management',
+    // 'Digital Marketing'
   ];
 
   const educations = [
@@ -47,7 +47,7 @@ const Education = () => {
         'Data at Scale: Management & Processing',
         'Data Driven Dissertation Project',
         'Supply Chain Planning & Management',
-        'Digital Marketing',
+        'Advanced Operations Analysis',
         'Machine Learning and Predictive Analytics'
       ],
     },
@@ -189,7 +189,7 @@ const Education = () => {
                           whileHover={hoverScale}
                           title={isCore ? 'Core skill for my career path' : ''}
                         >
-                          {skill}{isCore && ' ★'}
+                          {skill}{isCore && ' ★'} {/* Core skill indicator */}
                         </motion.span>
                       );
                     })}
