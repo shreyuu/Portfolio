@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SkeletonProject } from './Skeleton';
+// import { SkeletonProject } from './Skeleton';
 import ProjectDetails from './ProjectDetails';
 import useAnimations from '../hooks/useAnimations';
 
 const ProjectsSection = () => {
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [selectedProject, setSelectedProject] = useState(null);
   const { ref, isInView, fadeInUp, staggerContainer } = useAnimations();
@@ -102,14 +101,14 @@ const ProjectsSection = () => {
     setFilter(newFilter);
   }, []);
 
-  useEffect(() => {
-    // Simulate loading delay
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+  // useEffect(() => {
+  //   // Simulate loading delay
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   // Close project details when Escape key is pressed
   useEffect(() => {
@@ -176,57 +175,49 @@ const ProjectsSection = () => {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {loading ? (
-          // Show skeleton loading state
-          Array.from({ length: 3 }).map((_, index) => (
-            <SkeletonProject key={index} className="bg-[#0f0f0f]" />
-          ))
-        ) : (
-          // Show actual projects
-          filteredProjects.map((project, index) => (
-            <motion.div
-              key={index}
-              className="bg-[#0f0f0f] border border-gray-700 p-5 rounded-xl hover:scale-[1.02] transition duration-200 relative overflow-hidden cursor-pointer"
-              variants={fadeInUp}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
-                transition: { duration: 0.3 }
+        {filteredProjects.map((project, index) => (
+          <motion.div
+            key={index}
+            className="bg-[#0f0f0f] border border-gray-700 p-5 rounded-xl hover:scale-[1.02] transition duration-200 relative overflow-hidden cursor-pointer"
+            variants={fadeInUp}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
+              transition: { duration: 0.3 }
+            }}
+            onClick={() => handleProjectClick(project)}
+          >
+            <h3 className="text-2xl font-bold text-white mb-3">{project.title}</h3>
+
+            <div className="flex flex-wrap gap-2 mb-3">
+              {project.technologies.map((tech, idx) => (
+                <motion.span
+                  key={idx}
+                  className="bg-[#1c1c1c] text-sm px-3 py-1 rounded-full text-gray-400 border border-gray-600"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * idx }}
+                >
+                  {tech}
+                </motion.span>
+              ))}
+            </div>
+
+            <p className="text-sm text-gray-400 mb-4">{project.description}</p>
+
+            <motion.button
+              className="inline-flex items-center gap-2 text-white font-medium text-sm bg-gray-800 px-3 py-1.5 rounded hover:bg-gray-700 transition"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent opening the modal
+                window.open(project.link, '_blank', 'noopener,noreferrer');
               }}
-              onClick={() => handleProjectClick(project)}
             >
-              <h3 className="text-2xl font-bold text-white mb-3">{project.title}</h3>
-
-              <div className="flex flex-wrap gap-2 mb-3">
-                {project.technologies.map((tech, idx) => (
-                  <motion.span
-                    key={idx}
-                    className="bg-[#1c1c1c] text-sm px-3 py-1 rounded-full text-gray-400 border border-gray-600"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * idx }}
-                  >
-                    {tech}
-                  </motion.span>
-                ))}
-              </div>
-
-              <p className="text-sm text-gray-400 mb-4">{project.description}</p>
-
-              <motion.button
-                className="inline-flex items-center gap-2 text-white font-medium text-sm bg-gray-800 px-3 py-1.5 rounded hover:bg-gray-700 transition"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent opening the modal
-                  window.open(project.link, '_blank', 'noopener,noreferrer');
-                }}
-              >
-                View code →
-              </motion.button>
-            </motion.div>
-          ))
-        )}
+              View code →
+            </motion.button>
+          </motion.div>
+        ))}
       </div>
 
       {/* Project Details Modal */}

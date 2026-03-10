@@ -115,7 +115,20 @@ function App() {
                         name="keywords"
                         content="Shreyash Meshram, Full Stack Developer, Web Developer, Python Developer, React Developer, Machine Learning, AI, Portfolio"
                     />
-                    <link rel="canonical" href="https://shreyashmeshram.com" />
+                    <link rel="canonical" href="https://shreyash-meshram.vercel.app" />
+
+                    {/* Open Graph */}
+                    <meta property="og:type" content="website" />
+                    <meta property="og:url" content="https://shreyash-meshram.vercel.app" />
+                    <meta property="og:title" content="Shreyash Meshram | Full Stack Developer Portfolio" />
+                    <meta property="og:description" content="Full-stack developer passionate about building scalable apps and exploring AI/ML projects." />
+                    <meta property="og:image" content="https://shreyash-meshram.vercel.app/icons/logo512.png" />
+
+                    {/* Twitter Card */}
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:title" content="Shreyash Meshram | Full Stack Developer Portfolio" />
+                    <meta name="twitter:description" content="Full-stack developer passionate about building scalable apps and exploring AI/ML projects." />
+                    <meta name="twitter:image" content="https://shreyash-meshram.vercel.app/icons/logo512.png" />
                 </Helmet>
 
                 <StructuredData />

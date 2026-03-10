@@ -36,6 +36,25 @@ const Footer = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    // Client-side validation
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedMessage = formData.message.trim();
+
+    if (trimmedName.length < 2) {
+      setFormStatus('✗ Name must be at least 2 characters.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setFormStatus('✗ Please enter a valid email address.');
+      return;
+    }
+    if (trimmedMessage.length < 10) {
+      setFormStatus('✗ Message must be at least 10 characters.');
+      return;
+    }
+
     setSending(true);
     setFormStatus('');
 
