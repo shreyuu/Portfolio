@@ -7,7 +7,7 @@ const StructuredData = () => {
         '@type': 'Person',
         name: 'Shreyash Meshram',
         jobTitle: 'Full Stack Developer',
-        url: 'https://shreyashmeshram.com',
+        url: 'https://shreyasesh-meshram.vercel.app',
         sameAs: [
             'https://github.com/shreyuu',
             'https://linkedin.com/in/shreyuu',
@@ -36,14 +36,9 @@ const StructuredData = () => {
     const websiteSchema = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        url: 'https://shreyashmeshram.com',
+        url: 'https://shreyasesh-meshram.vercel.app',
         name: 'Shreyash Meshram Portfolio',
         description: 'Full-stack developer and CS student portfolio',
-        potentialAction: {
-            '@type': 'SearchAction',
-            target: 'https://shreyashmeshram.com/search?q={search_term_string}',
-            'query-input': 'required name=search_term_string',
-        },
     };
 
     return (

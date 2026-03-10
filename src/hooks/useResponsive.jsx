@@ -9,12 +9,9 @@ const useResponsive = () => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
+    const handleResize = debounce(() => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    }, 150);
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -53,3 +50,11 @@ const useResponsive = () => {
 };
 
 export default useResponsive;
+
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}

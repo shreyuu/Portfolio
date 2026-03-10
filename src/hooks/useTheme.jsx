@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 
+const THEMES = ['light', 'dark', 'ocean', 'forest', 'sunset', 'rose'];
+
 const useTheme = () => {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) return savedTheme;
+      if (savedTheme && THEMES.includes(savedTheme)) return savedTheme;
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     return 'light';
@@ -12,30 +14,17 @@ const useTheme = () => {
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
+    THEMES.forEach(t => root.classList.remove(t));
     root.classList.add(theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
-
-  const setLightTheme = () => {
-    setTheme('light');
-  };
-
-  const setDarkTheme = () => {
-    setTheme('dark');
-  };
 
   return {
     theme,
     isDark: theme === 'dark',
     isLight: theme === 'light',
-    toggleTheme,
-    setLightTheme,
-    setDarkTheme,
+    toggleTheme: () => setTheme(prev => prev === 'light' ? 'dark' : 'light'),
+    setTheme,
   };
 };
 
