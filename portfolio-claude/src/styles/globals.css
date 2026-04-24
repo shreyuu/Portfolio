@@ -1,0 +1,180 @@
+/* ==========================================================================
+   Design tokens + base styles
+   ========================================================================== */
+
+:root {
+  --bg: #ebe8e1;
+  --bg-raised: #f2efe8;
+  --ink: #161513;
+  --ink-soft: #403d37;
+  --ink-mute: #78736a;
+  --rule: #161513;
+  --rule-soft: rgba(22, 21, 19, 0.14);
+  --accent: #d94a1f;
+  --accent-ink: #ffffff;
+  --grain-op: 0.04;
+
+  --serif: "Fraunces", "Times New Roman", serif;
+  --sans:  "Neue Haas Grotesk Text Pro", ui-sans-serif, -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html[data-theme="dark"] {
+  --bg: #0f0e0c;
+  --bg-raised: #171613;
+  --ink: #ece7dc;
+  --ink-soft: #bab4a7;
+  --ink-mute: #7a746a;
+  --rule: #ece7dc;
+  --rule-soft: rgba(236, 231, 220, 0.14);
+  --accent: #ff6b3d;
+  --accent-ink: #0f0e0c;
+  --grain-op: 0.06;
+}
+
+/* ==========================================================================
+   Reset + base
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  font-feature-settings: "ss01", "cv01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+a { color: inherit; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ==========================================================================
+   Grain overlay
+   ========================================================================== */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: var(--grain-op);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+html[data-theme="dark"] body::before { mix-blend-mode: screen; }
+
+/* ==========================================================================
+   Typography helpers
+   ========================================================================== */
+
+.mono  { font-family: var(--mono); letter-spacing: 0.02em; }
+.serif { font-family: var(--serif); }
+
+/* ==========================================================================
+   Scroll progress bar
+   ========================================================================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 900;
+  background: transparent;
+}
+
+.scroll-progress__fill {
+  height: 100%;
+  background: var(--ink);
+  width: 0%;
+  transition: width 0.05s linear;
+}
+
+/* ==========================================================================
+   Reveal + mask animations
+   ========================================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity   900ms cubic-bezier(.2, .65, .2, 1),
+    transform 900ms cubic-bezier(.2, .65, .2, 1);
+}
+
+.mask {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.mask > span {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 1100ms cubic-bezier(.2, .7, .2, 1);
+  transition-delay: var(--d, 0ms);
+}
+
+.mask.in > span { transform: none; }
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+.hr      { height: 1px; background: var(--rule);      width: 100%; }
+.hr-soft { height: 1px; background: var(--rule-soft); width: 100%; }
+
+.wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 48px);
+}
+
+.u-link {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  text-decoration: none;
+  padding-bottom: 2px;
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color .3s ease;
+}
+
+.u-link:hover {
+  color: var(--accent);
+  background-image: linear-gradient(var(--accent), var(--accent));
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
