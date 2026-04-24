@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shreyash Meshram — Full-Stack &amp; AI Engineer</title>
+  <meta name="description" content="Portfolio of Shreyash Meshram — full-stack and applied-AI engineer. MSc Business Analytics, Nottingham. Scalable backends, thoughtful interfaces, ML systems that ship." />
+  <meta name="author" content="Shreyash Meshram" />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Shreyash Meshram — Full-Stack &amp; AI Engineer" />
+  <meta property="og:description" content="Scalable backends, thoughtful interfaces, and applied-ML systems that solve actual problems." />
+  <meta property="og:site_name" content="Shreyash Meshram" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Shreyash Meshram — Full-Stack &amp; AI Engineer" />
+  <meta name="twitter:description" content="Scalable backends, thoughtful interfaces, and applied-ML systems that solve actual problems." />
+
+  <!-- Favicon: monogram "s" in serif italic, SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <!-- Fonts: preconnect + preload critical -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500;600&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500;600&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Design system -->
+  <link rel="stylesheet" href="src/styles/globals.css">
+  <link rel="stylesheet" href="src/styles/print.css" media="print">
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- React + Babel (pinned) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Data -->
+  <script type="text/babel" src="src/data/portfolio.jsx"></script>
+
+  <!-- Components (shared) -->
+  <script type="text/babel" src="src/components/primitives.jsx"></script>
+  <script type="text/babel" src="src/components/nav.jsx"></script>
+  <script type="text/babel" src="src/components/tweaks-panel.jsx"></script>
+
+  <!-- Sections -->
+  <script type="text/babel" src="src/sections/hero.jsx"></script>
+  <script type="text/babel" src="src/sections/about.jsx"></script>
+  <script type="text/babel" src="src/sections/projects.jsx"></script>
+  <script type="text/babel" src="src/sections/experience.jsx"></script>
+  <script type="text/babel" src="src/sections/contact.jsx"></script>
+
+  <!-- App root (last) -->
+  <script type="text/babel" src="src/app.jsx"></script>
+</body>
+</html>
