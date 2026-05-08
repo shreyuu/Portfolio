@@ -1,10 +1,10 @@
-// About + Skills + Now
+// About + Toolkit
 
 function About() {
   const p = window.PORTFOLIO;
 
   return (
-    <section id="about" style={{ padding: "96px 0 64px" }}>
+    <section id="about" data-screen-label="02 About + Toolkit" style={{ padding: "96px 0 64px" }}>
       <div className="wrap">
         <SectionHeader
           number="01"
@@ -54,47 +54,49 @@ function About() {
           </Reveal>
         </div>
 
-        {/* Skills / Toolkit */}
+        {/* Toolkit — minimal: category label / clean comma list */}
         <div style={{ marginTop: 112 }}>
           <Reveal>
             <div className="mono" style={{
               fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase",
-              color: "var(--ink-mute)", marginBottom: 28,
+              color: "var(--ink-mute)", marginBottom: 32,
               display: "flex", alignItems: "baseline", gap: 14,
             }}>
               <span>§ 01.2</span>
               <span style={{ flex: "0 0 32px", height: 1, background: "currentColor", opacity: 0.5, alignSelf: "center" }} />
               <span style={{ color: "var(--ink)" }}>Toolkit</span>
               <span style={{ flex: 1, height: 1, background: "var(--rule-soft)", alignSelf: "center" }} />
-              <span>{p.skills.reduce((a, c) => a + c.items.length, 0)} disciplines</span>
             </div>
           </Reveal>
 
-          <div>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+            gap: "0 80px",
+          }} className="tk-grid">
             {p.skills.map((cat, i) => (
-              <Reveal key={cat.label} delay={i * 50}>
+              <Reveal key={cat.label} delay={i * 40}>
                 <div className="tk-row" style={{
-                  display: "grid",
-                  gridTemplateColumns: "180px 1fr",
-                  gap: 32,
-                  alignItems: "baseline",
-                  padding: "14px 0",
+                  padding: "22px 0",
+                  borderTop: "1px solid var(--rule-soft)",
                 }}>
-                  <h3 className="serif" style={{
-                    margin: 0,
-                    fontSize: 17,
+                  <h4 className="serif" style={{
+                    margin: "0 0 10px",
+                    fontSize: 18,
                     lineHeight: 1.2,
+                    letterSpacing: "-0.01em",
                     fontWeight: 400,
                     fontStyle: "italic",
                     color: "var(--ink-soft)",
                   }}>
                     {cat.label}
-                  </h3>
-                  <p style={{
+                  </h4>
+                  <p className="serif" style={{
                     margin: 0,
-                    fontSize: 15,
-                    lineHeight: 1.6,
+                    fontSize: 16,
+                    lineHeight: 1.55,
                     color: "var(--ink)",
+                    fontWeight: 300,
                   }}>
                     {cat.items.join(", ")}
                   </p>
@@ -106,8 +108,8 @@ function About() {
       </div>
 
       <style>{`
-        @media (max-width: 700px) {
-          .tk-row { grid-template-columns: 1fr !important; gap: 6px !important; }
+        @media (max-width: 760px) {
+          .tk-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
         }
       `}</style>
     </section>

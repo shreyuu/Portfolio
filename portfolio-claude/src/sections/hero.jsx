@@ -11,7 +11,7 @@ function Hero() {
   const timeStr = time.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false });
 
   return (
-    <section id="top" style={{ paddingTop: 140, paddingBottom: 80, position: "relative" }}>
+    <section id="top" data-screen-label="01 Hero" style={{ paddingTop: 140, paddingBottom: 80, position: "relative" }}>
       <div className="wrap">
         {/* Display headline */}
         <div style={{ position: "relative" }}>
@@ -71,7 +71,7 @@ function Hero() {
               <div>
                 — Nottingham, UK<br />
                 — MSc Business Analytics, 25—26<br />
-                — Currently freelancing &amp; open to grad roles
+                — Open to part-time &amp; graduate roles
               </div>
             </div>
           </Reveal>

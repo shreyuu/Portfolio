@@ -13,7 +13,7 @@ function Contact() {
   };
 
   return (
-    <section id="contact" style={{
+    <section id="contact" data-screen-label="05 Contact" style={{
       padding: "120px 0 48px",
       borderTop: "1px solid var(--rule-soft)",
       marginTop: 40,

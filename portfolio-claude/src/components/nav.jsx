@@ -55,7 +55,7 @@ function ThemeToggle({ theme, setTheme }) {
   );
 }
 
-function Nav({ theme, setTheme }) {
+function Nav({ theme, setTheme, openCmdK }) {
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -115,6 +115,30 @@ function Nav({ theme, setTheme }) {
         </ul>
 
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button
+            type="button"
+            onClick={openCmdK}
+            aria-label="Open command palette"
+            className="mono cmdk-trigger"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
+              padding: "8px 12px", borderRadius: 999,
+              border: "1px solid var(--rule-soft)",
+              background: "transparent",
+              color: "var(--ink-mute)",
+            }}
+          >
+            <span>Search</span>
+            <span style={{
+              fontFamily: "var(--mono)",
+              padding: "2px 6px",
+              border: "1px solid var(--rule-soft)",
+              borderRadius: 4,
+              fontSize: 10,
+              color: "var(--ink)",
+            }}>⌘K</span>
+          </button>
           <a href={window.PORTFOLIO.resume} className="mono" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
@@ -125,11 +149,13 @@ function Nav({ theme, setTheme }) {
           </a>
           <ThemeToggle theme={theme} setTheme={setTheme} />
         </div>
+
       </div>
 
       <style>{`
         @media (max-width: 860px) {
           .nav-links { display: none !important; }
+          .cmdk-trigger { display: none !important; }
         }
       `}</style>
     </nav>

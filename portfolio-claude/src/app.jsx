@@ -1,11 +1,9 @@
-// App shell — theme management + tweaks + wiring
+// App shell — theme management + tweaks + command palette + project detail overlay
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "layout": "grid",
   "accent": "#d94a1f",
   "accentDark": "#ff6b3d",
   "density": "comfortable",
-  "motion": "cinematic",
   "fontPairing": "fraunces_mono",
   "theme": "light"
 }/*EDITMODE-END*/;
@@ -47,18 +45,26 @@ function applyDensity(density) {
 function App() {
   const [values, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
-  // Theme is tracked separately (user can toggle live, independent of tweaks default)
+  // Theme state (persisted, independent of tweaks default)
   const [theme, setThemeState] = React.useState(() => {
     const saved = localStorage.getItem("portfolio_theme");
     return saved || values.theme || "light";
   });
 
-  const setTheme = (nextTheme) => {
+  // Smooth theme transitions: add a class for ~360ms while colours animate
+  const setTheme = React.useCallback((nextTheme) => {
+    if (nextTheme === theme) return;
+    const root = document.documentElement;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced) {
+      root.classList.add("theme-transition");
+      window.setTimeout(() => root.classList.remove("theme-transition"), 360);
+    }
     setThemeState(nextTheme);
     localStorage.setItem("portfolio_theme", nextTheme);
-  };
+  }, [theme]);
 
-  // Apply theme
+  // Apply theme attribute
   React.useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -79,33 +85,40 @@ function App() {
     applyDensity(values.density);
   }, [values.density]);
 
-  const layout = values.layout || "editorial";
+  // Command palette state
+  const [cmdkOpen, setCmdkOpen] = React.useState(false);
+
+  // Project detail overlay (lifted up so palette can open it)
+  const [activeProject, setActiveProject] = React.useState(null);
 
   return (
     <>
       <ScrollProgress />
-      <Nav theme={theme} setTheme={setTheme} />
+      <Nav theme={theme} setTheme={setTheme} openCmdK={() => setCmdkOpen(true)} />
 
       <Hero />
       <About />
-      <Projects layout={layout} />
+      <Projects onOpenProject={setActiveProject} />
       <ExperienceSection />
       <Contact />
 
+      <ProjectDetail
+        project={activeProject}
+        onClose={() => setActiveProject(null)}
+      />
+
+      <CommandPalette
+        open={cmdkOpen}
+        setOpen={setCmdkOpen}
+        theme={theme}
+        setTheme={setTheme}
+        openProject={setActiveProject}
+      />
+
       <TweaksPanel title="Tweaks">
-        <TweakSection label="Layout" />
+        <TweakSection label="Density" />
         <TweakRadio
-          label="Project layout"
-          value={values.layout}
-          options={[
-            { value: "editorial", label: "Editorial" },
-            { value: "grid", label: "Grid" },
-            { value: "list", label: "Index" },
-          ]}
-          onChange={(v) => setTweak("layout", v)}
-        />
-        <TweakRadio
-          label="Density"
+          label="Section spacing"
           value={values.density}
           options={[
             { value: "comfortable", label: "Comfy" },
