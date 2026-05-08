@@ -3,13 +3,12 @@
 function ExperienceSection() {
   const p = window.PORTFOLIO;
   return (
-    <section id="experience" style={{ padding: "96px 0 80px" }}>
+    <section id="experience" data-screen-label="04 Experience + Education" style={{ padding: "96px 0 80px" }}>
       <div className="wrap">
         <SectionHeader
           number="03"
           label="Trajectory"
           title="Experience &amp; Education"
-          kicker="Three internships shaping the engineering side; three degrees shaping the analytical one."
         />
 
         <div style={{
@@ -62,6 +61,28 @@ function ExperienceSection() {
                     }}>
                       {e.blurb}
                     </p>
+                    {e.outcomes && e.outcomes.length > 0 && (
+                      <ul style={{
+                        listStyle: "none", margin: "0 0 14px", padding: 0,
+                        display: "grid", gap: 6,
+                      }}>
+                        {e.outcomes.map((o) => (
+                          <li key={o} style={{
+                            fontSize: 13, lineHeight: 1.5, color: "var(--ink)",
+                            display: "flex", gap: 10, alignItems: "flex-start",
+                          }}>
+                            <span style={{
+                              color: "var(--accent)",
+                              flexShrink: 0,
+                              fontFamily: "var(--mono)",
+                              fontSize: 11,
+                              transform: "translateY(2px)",
+                            }}>→</span>
+                            <span>{o}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                       {e.skills.map((s) => <Chip key={s}>{s}</Chip>)}
                     </div>

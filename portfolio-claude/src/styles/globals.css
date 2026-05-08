@@ -14,6 +14,25 @@
   --accent-ink: #ffffff;
   --grain-op: 0.04;
 
+  /* Project category swatches (used by project cards) */
+  --swatch-fullstack: #6b6f5e;
+  --swatch-llm:       #d97757;
+  --swatch-cv:        #2e4d6b;
+  --swatch-ml:        #7a5b8e;
+  --swatch-realtime:  #4a7a6a;
+  --swatch-web:       #b08855;
+
+  /* Type ramp — modular, anchored to 16px base */
+  --t-display: clamp(54px, 12vw, 192px);
+  --t-h1:      clamp(40px, 6vw, 72px);
+  --t-h2:      clamp(28px, 3.4vw, 48px);
+  --t-h3:      clamp(22px, 2.4vw, 32px);
+  --t-h4:      clamp(18px, 1.6vw, 22px);
+  --t-body:    16px;
+  --t-small:   14px;
+  --t-caption: 12px;
+  --t-eyebrow: 11px;
+
   --serif: "Fraunces", "Times New Roman", serif;
   --sans:  "Neue Haas Grotesk Text Pro", ui-sans-serif, -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
   --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -30,6 +49,25 @@ html[data-theme="dark"] {
   --accent: #ff6b3d;
   --accent-ink: #0f0e0c;
   --grain-op: 0.06;
+
+  --swatch-fullstack: #8a8d7a;
+  --swatch-llm:       #ff8a5c;
+  --swatch-cv:        #4a78a8;
+  --swatch-ml:        #a58ac0;
+  --swatch-realtime:  #6da895;
+  --swatch-web:       #d6a878;
+}
+
+/* Smooth cross-fade when toggling themes — colours only, never layout */
+html.theme-transition,
+html.theme-transition * {
+  transition:
+    background-color 320ms ease,
+    color            320ms ease,
+    border-color     320ms ease,
+    fill             320ms ease,
+    stroke           320ms ease !important;
+  transition-delay: 0 !important;
 }
 
 /* ==========================================================================
@@ -134,6 +172,13 @@ html[data-theme="dark"] body::before { mix-blend-mode: screen; }
 .mask {
   overflow: hidden;
   display: inline-block;
+  vertical-align: baseline;
+  /* Italic Fraunces glyphs (and similar overshooting serifs) extend ink past
+     their advance width on the right. Without slack, overflow:hidden shears
+     trailing glyph ink. We add horizontal padding and a matching negative
+     margin so the clip box is wider while layout metrics stay identical. */
+  padding-right: 0.14em;
+  margin-right: -0.14em;
 }
 
 .mask > span {
@@ -178,3 +223,200 @@ html[data-theme="dark"] body::before { mix-blend-mode: screen; }
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ==========================================================================
+   prefers-reduced-motion guard
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .mask > span { transform: none !important; }
+}
+
+/* ==========================================================================
+   Command palette (⌘K)
+   ========================================================================== */
+
+.cmdk-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.cmdk-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cmdk-shell {
+  position: fixed;
+  top: 18vh; left: 50%;
+  transform: translate(-50%, -8px);
+  width: min(560px, 92vw);
+  background: var(--bg);
+  border: 1px solid var(--rule-soft);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+  z-index: 1101;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 280ms cubic-bezier(.2,.7,.2,1);
+}
+
+.cmdk-shell.open {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.cmdk-input {
+  width: 100%;
+  padding: 22px 24px;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-style: italic;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule-soft);
+  color: var(--ink);
+  outline: none;
+}
+
+.cmdk-input::placeholder { color: var(--ink-mute); }
+
+.cmdk-list {
+  list-style: none; margin: 0; padding: 8px 0;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.cmdk-item {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink);
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.cmdk-item .cmdk-icon {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
+}
+
+.cmdk-item .cmdk-kbd {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.cmdk-item[aria-selected="true"],
+.cmdk-item:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.cmdk-item[aria-selected="true"] .cmdk-icon,
+.cmdk-item[aria-selected="true"] .cmdk-kbd,
+.cmdk-item:hover .cmdk-icon,
+.cmdk-item:hover .cmdk-kbd { color: var(--bg); opacity: 0.7; }
+
+.cmdk-empty {
+  padding: 28px 24px;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-mute);
+}
+
+/* ==========================================================================
+   Project detail overlay
+   ========================================================================== */
+
+.pdx-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 320ms ease;
+}
+
+.pdx-backdrop.open { opacity: 1; pointer-events: auto; }
+
+.pdx-panel {
+  position: fixed; top: 0; right: 0;
+  height: 100vh;
+  width: min(640px, 92vw);
+  background: var(--bg);
+  border-left: 1px solid var(--rule-soft);
+  z-index: 1201;
+  transform: translateX(100%);
+  transition: transform 420ms cubic-bezier(.2,.7,.2,1);
+  overflow-y: auto;
+}
+
+.pdx-panel.open { transform: translateX(0); }
+
+.pdx-close {
+  position: absolute; top: 20px; right: 20px;
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-mute);
+  padding: 8px 10px;
+  z-index: 2;
+}
+
+.pdx-close:hover { color: var(--accent); }
+
+.pdx-cover {
+  height: 240px;
+  background: var(--swatch);
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+
+.pdx-cover::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><circle cx='40' cy='40' r='1' fill='white' fill-opacity='0.18'/></svg>");
+  background-size: 80px 80px;
+  opacity: 0.5;
+}
+
+.pdx-cover-inner {
+  position: relative; z-index: 1;
+  padding: 28px 32px;
+  color: white;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.pdx-body { padding: 36px 36px 60px; }
+
+@media (max-width: 540px) {
+  .pdx-body { padding: 24px 22px 48px; }
+  .pdx-cover { height: 180px; }
+}

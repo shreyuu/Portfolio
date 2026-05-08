@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Print stylesheet — one-page resume view
+   ========================================================================== */
+
+@page {
+  size: A4;
+  margin: 14mm 16mm;
+}
+
+@media print {
+  /* Force light values for ink-on-paper */
+  :root, html[data-theme="dark"] {
+    --bg: #ffffff !important;
+    --bg-raised: #ffffff !important;
+    --ink: #111111 !important;
+    --ink-soft: #333333 !important;
+    --ink-mute: #666666 !important;
+    --rule: #111111 !important;
+    --rule-soft: rgba(0, 0, 0, 0.18) !important;
+    --accent: #111111 !important;
+    --grain-op: 0 !important;
+  }
+
+  html, body {
+    background: white !important;
+    color: #111 !important;
+    font-size: 10.5pt !important;
+  }
+
+  /* Strip page chrome */
+  body::before,                         /* grain */
+  .scroll-progress,
+  nav, .nav,
+  .twk-panel,
+  .cmdk-backdrop, .cmdk-shell,
+  .pdx-backdrop, .pdx-panel {
+    display: none !important;
+  }
+
+  /* Hide visual flourishes */
+  .reveal, .mask > span {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Compact sections */
+  section {
+    padding: 16pt 0 !important;
+    page-break-inside: avoid;
+  }
+
+  /* Hero: keep just the name + role line */
+  #top h1 {
+    font-size: 28pt !important;
+    line-height: 1 !important;
+    margin: 0 0 4pt !important;
+  }
+
+  /* Sized-down headings */
+  h2, h3 { page-break-after: avoid; }
+
+  /* Links: print URL after */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #666;
+    word-break: break-all;
+  }
+
+  /* Don't bleed across pages mid-card */
+  article, li { page-break-inside: avoid; }
+
+  /* Hide hero hover-only flourishes */
+  .hero-credit-stack, .hero-stamp { display: none !important; }
+}

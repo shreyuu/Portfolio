@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZenSpend — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="ZenSpend case study — designing a privacy-first AI expense coach that runs Llama locally so financial data never leaves the machine." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+
+  <style>
+    /* ── Case-study layout overrides ─────────────────────────────────────── */
+    body { background: var(--bg); }
+
+    .cs-wrap { max-width: 880px; margin: 0 auto; padding: 0 28px; }
+
+    .cs-topbar {
+      position: sticky; top: 0; z-index: 50;
+      padding: 16px 0;
+      background: color-mix(in oklab, var(--bg) 86%, transparent);
+      backdrop-filter: blur(10px) saturate(1.2);
+      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+      border-bottom: 1px solid var(--rule-soft);
+    }
+
+    .cs-topbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+
+    .cs-back {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink-mute);
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+    .cs-back:hover { color: var(--ink); }
+    .cs-back .arr { display: inline-block; transition: transform 200ms ease; }
+    .cs-back:hover .arr { transform: translateX(-3px); }
+
+    .cs-meta {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+
+    /* Hero */
+    .cs-hero {
+      padding: 120px 0 60px;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+
+    .cs-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .cs-eyebrow .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--swatch-llm);
+    }
+
+    h1.cs-title {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 96px);
+      line-height: 0.96;
+      letter-spacing: -0.03em;
+      font-weight: 400;
+      margin: 0 0 28px;
+      font-variation-settings: "opsz" 144;
+    }
+    h1.cs-title em { font-style: italic; }
+
+    .cs-deck {
+      font-family: var(--serif);
+      font-size: clamp(20px, 2.4vw, 26px);
+      line-height: 1.45;
+      color: var(--ink-soft);
+      max-width: 60ch;
+      margin: 0 0 40px;
+      font-weight: 300;
+    }
+
+    .cs-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      padding: 28px 0;
+      border-top: 1px solid var(--rule-soft);
+    }
+    .cs-meta-grid dt {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 8px;
+    }
+    .cs-meta-grid dd {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 18px;
+      line-height: 1.3;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    /* Cover plate */
+    .cs-cover {
+      margin: 64px 0 80px;
+      height: 360px;
+      background: var(--swatch-llm);
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+    .cs-cover::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><circle cx='40' cy='40' r='1' fill='white' fill-opacity='0.22'/></svg>");
+      background-size: 80px 80px;
+      opacity: 0.6;
+    }
+    .cs-cover-num {
+      position: absolute;
+      right: 32px; bottom: -28px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(180px, 22vw, 320px);
+      color: white;
+      opacity: 0.18;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      font-variation-settings: "opsz" 144;
+    }
+    .cs-cover-tag {
+      position: absolute;
+      left: 32px; top: 32px;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: white; opacity: 0.92;
+    }
+    .cs-cover-quote {
+      position: absolute;
+      left: 32px; bottom: 32px;
+      max-width: 56%;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(20px, 2.4vw, 32px);
+      line-height: 1.25;
+      color: white;
+      letter-spacing: -0.01em;
+    }
+
+    /* Body */
+    .cs-section {
+      padding: 56px 0;
+      border-top: 1px solid var(--rule-soft);
+    }
+    .cs-section:first-of-type { border-top: 0; padding-top: 0; }
+
+    .cs-section-num {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    h2.cs-h {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-weight: 400;
+      margin: 0 0 28px;
+      max-width: 22ch;
+    }
+    h2.cs-h em { font-style: italic; }
+
+    .cs-prose p {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 19px;
+      line-height: 1.65;
+      color: var(--ink);
+      margin: 0 0 22px;
+      max-width: 64ch;
+    }
+    .cs-prose p em { font-style: italic; color: var(--ink); }
+    .cs-prose strong { font-weight: 500; }
+    .cs-prose code {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      background: var(--bg-raised);
+      padding: 2px 6px;
+      border: 1px solid var(--rule-soft);
+    }
+
+    /* Pull-quote */
+    .cs-pullquote {
+      margin: 48px 0;
+      padding: 40px 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(28px, 3.4vw, 42px);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      text-indent: -0.3em;
+      max-width: 24ch;
+    }
+    .cs-pullquote::before { content: "“"; }
+    .cs-pullquote::after { content: "”"; }
+
+    /* Stat row */
+    .cs-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin: 48px 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+    .cs-stat {
+      padding: 32px 24px;
+      border-right: 1px solid var(--rule-soft);
+    }
+    .cs-stat:last-child { border-right: 0; }
+    .cs-stat-n {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-variation-settings: "opsz" 144;
+    }
+    .cs-stat-label {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-mute);
+      line-height: 1.4;
+    }
+
+    /* Architecture diagram (CSS-only) */
+    .cs-arch {
+      margin: 40px 0;
+      padding: 40px 32px;
+      background: var(--bg-raised);
+      border: 1px solid var(--rule-soft);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .cs-arch-block {
+      padding: 20px 18px;
+      background: var(--bg);
+      border: 1px solid var(--rule-soft);
+      position: relative;
+      min-height: 110px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .cs-arch-block-tag {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .cs-arch-block-name {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin: 8px 0 6px;
+    }
+    .cs-arch-block-detail {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-mute);
+      line-height: 1.4;
+    }
+    .cs-arch-block::after {
+      content: "→";
+      position: absolute;
+      right: -14px; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--mono);
+      color: var(--ink-mute);
+      font-size: 14px;
+      z-index: 1;
+    }
+    .cs-arch-block:last-child::after { display: none; }
+
+    /* Lessons list */
+    .cs-lessons {
+      list-style: none;
+      padding: 0;
+      margin: 28px 0 0;
+      display: grid;
+      gap: 0;
+      counter-reset: lesson;
+    }
+    .cs-lessons li {
+      counter-increment: lesson;
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 24px;
+      padding: 28px 0;
+      border-top: 1px solid var(--rule-soft);
+      align-items: baseline;
+    }
+    .cs-lessons li:last-child { border-bottom: 1px solid var(--rule-soft); }
+    .cs-lessons li::before {
+      content: counter(lesson, decimal-leading-zero);
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.18em;
+      color: var(--accent);
+    }
+    .cs-lessons h3 {
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      font-weight: 400;
+      font-style: italic;
+      margin: 0 0 8px;
+    }
+    .cs-lessons p {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      margin: 0;
+      max-width: 56ch;
+    }
+
+    /* Footer / CTA */
+    .cs-footer {
+      padding: 80px 0 100px;
+      text-align: center;
+      border-top: 1px solid var(--rule-soft);
+    }
+    .cs-footer h2 {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-weight: 400;
+      margin: 0 0 32px;
+    }
+    .cs-cta-row {
+      display: inline-flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cs-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 22px;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 999px;
+      transition: transform 200ms ease, opacity 200ms ease;
+    }
+    .cs-cta:hover { transform: translateY(-2px); }
+    .cs-cta--solid { background: var(--ink); color: var(--bg); }
+    .cs-cta--ghost { color: var(--ink); border: 1px solid var(--rule-soft); }
+
+    @media (max-width: 700px) {
+      .cs-meta-grid { grid-template-columns: repeat(2, 1fr); }
+      .cs-arch { grid-template-columns: 1fr; }
+      .cs-arch-block::after { content: "↓"; right: 50%; top: auto; bottom: -14px; transform: translateX(50%); }
+      .cs-stats { grid-template-columns: 1fr; }
+      .cs-stat { border-right: 0; border-bottom: 1px solid var(--rule-soft); }
+      .cs-stat:last-child { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ── Top bar ────────────────────────────────────────────────────────── -->
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back">
+        <span class="arr">←</span> Back to portfolio
+      </a>
+      <div class="cs-meta">Case Study · 01 / 06</div>
+    </div>
+  </div>
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Applied LLM · Full-Stack · 2025</span>
+      </div>
+      <h1 class="cs-title">A privacy-first<br>expense coach<br><em>that never leaves your machine.</em></h1>
+      <p class="cs-deck">
+        ZenSpend is an AI expense tracker that runs a local Llama via Ollama —
+        meaning your financial data is read, classified, and queried without ever
+        touching a third-party API. This is the story of why I built it that way,
+        what broke first, and what shipped.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div>
+          <dt>Role</dt>
+          <dd>Solo build — design &amp; engineering</dd>
+        </div>
+        <div>
+          <dt>Timeline</dt>
+          <dd>Six weekends, evenings</dd>
+        </div>
+        <div>
+          <dt>Stack</dt>
+          <dd>FastAPI · LangChain · pgvector · Ollama</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>Personal use, open-source</dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <!-- ── Cover plate ───────────────────────────────────────────────────── -->
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 01 · ZenSpend.local</div>
+      <div class="cs-cover-num">01</div>
+      <div class="cs-cover-quote">
+        Your bank statements are <em>more revealing</em> than your search history.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Body ──────────────────────────────────────────────────────────── -->
+  <main class="cs-wrap">
+
+    <!-- The problem -->
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Existing trackers ask you to <em>upload your soul.</em></h2>
+      <div class="cs-prose">
+        <p>
+          Every "AI" budgeting app I tried wanted the same thing: full read access
+          to my bank, broker, and credit cards — and a quiet promise that it would
+          live happily on someone else's GPU. The trade was supposedly worth it,
+          because LLMs would sort transactions, flag weird charges, and write
+          mildly judgmental summaries of my coffee habit.
+        </p>
+        <p>
+          The category I cared about most was the one I trusted least.
+          <em>Transactions are biographical.</em> They show where I sleep, who I
+          live with, what I'm sick from, and what I'm trying to quit. Sending all
+          of that to a third party for a feature I could write in a weekend felt
+          backwards.
+        </p>
+        <p>
+          So I asked the obvious question: how good can a tracker be if the
+          model never leaves the laptop?
+        </p>
+      </div>
+    </section>
+
+    <!-- Pull quote -->
+    <p class="cs-pullquote">A local model is a feature, not a fallback.</p>
+
+    <!-- Constraints -->
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">Three rules I refused to break.</h2>
+      <ul class="cs-lessons">
+        <li>
+          <div>
+            <h3>No outbound calls for inference.</h3>
+            <p>If the laptop is offline, ZenSpend still works. Categorisation,
+            search, and the chat coach all run on a local Llama 3 via Ollama.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Plain-text exports must always be possible.</h3>
+            <p>Every transaction is just a row in Postgres. No proprietary format,
+            no lock-in. <code>pg_dump</code> is the export button.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>The UI is not allowed to feel like a database admin tool.</h3>
+            <p>Most finance UIs default to grid + sidebar + 200 chart options.
+            ZenSpend is a chat surface with one strong opinion at a time.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Architecture -->
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Four boxes, one machine.</h2>
+      <div class="cs-prose">
+        <p>
+          The system is deliberately small. Each transaction passes through four
+          stages — ingest, embed, store, retrieve — and the whole pipeline runs
+          inside a single <code>docker compose up</code> on a M-series MacBook.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block">
+          <div>
+            <div class="cs-arch-block-tag">01 — Ingest</div>
+            <div class="cs-arch-block-name">CSV / OFX</div>
+          </div>
+          <div class="cs-arch-block-detail">FastAPI parses statement files, normalises currency &amp; merchant.</div>
+        </div>
+        <div class="cs-arch-block">
+          <div>
+            <div class="cs-arch-block-tag">02 — Embed</div>
+            <div class="cs-arch-block-name">Local Llama</div>
+          </div>
+          <div class="cs-arch-block-detail">Ollama serves embedding + chat via HTTP on localhost:11434.</div>
+        </div>
+        <div class="cs-arch-block">
+          <div>
+            <div class="cs-arch-block-tag">03 — Store</div>
+            <div class="cs-arch-block-name">Postgres + pgvector</div>
+          </div>
+          <div class="cs-arch-block-detail">Transactions + embedding column, indexed for ANN search.</div>
+        </div>
+        <div class="cs-arch-block">
+          <div>
+            <div class="cs-arch-block-tag">04 — Retrieve</div>
+            <div class="cs-arch-block-name">React surface</div>
+          </div>
+          <div class="cs-arch-block-detail">Chat coach queries vectors + SQL aggregates side-by-side.</div>
+        </div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The interesting bit is step 03: every transaction stores
+          both a structured row <em>and</em> its embedding. That means
+          <em>"how much do I spend on caffeine in a stressful week?"</em>
+          is one vector search joined to one SQL aggregate — not a
+          retraining job, not a re-prompt, just a hybrid query.
+        </p>
+      </div>
+    </section>
+
+    <!-- What broke first -->
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">Local models lie <em>differently</em> than hosted ones.</h2>
+      <div class="cs-prose">
+        <p>
+          The first painful lesson was that a 7B local model categorises
+          merchants competently but fabricates totals when asked a numeric
+          question. It would happily report I spent £312 on groceries when the
+          real number was £267 — close enough to sound right, wrong enough to
+          ruin the tool.
+        </p>
+        <p>
+          The fix was unglamorous: <strong>never let the model do arithmetic.</strong>
+          Numbers come from SQL. The LLM only does three things — classify,
+          summarise, and pick the right query template. Once that boundary was
+          enforced, every accuracy bug disappeared at once.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <div class="cs-stat-n">94%</div>
+          <div class="cs-stat-label">Categorisation accuracy on my 18-month statement set</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-n">~180ms</div>
+          <div class="cs-stat-label">Median chat-to-answer latency on M2 Pro, fully local</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-n">0</div>
+          <div class="cs-stat-label">Outbound network calls during normal use</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Design -->
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Designing the surface</div>
+      <h2 class="cs-h">A coach, not a dashboard.</h2>
+      <div class="cs-prose">
+        <p>
+          The biggest design call was rejecting the spreadsheet. Most finance
+          tools open onto a wall of categories, totals, and pie charts. That
+          layout assumes you already know what to ask. I wanted the opposite:
+          one prompt at the top, one chart at the bottom, one piece of advice
+          in between.
+        </p>
+        <p>
+          The chat coach is therefore the entire app. Charts and tables exist,
+          but they appear <em>inside</em> a conversation as the model decides
+          they're warranted — closer to a teammate explaining your week than a
+          tool you have to operate.
+        </p>
+      </div>
+    </section>
+
+    <!-- What I'd do differently -->
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, if I built it again.</h2>
+      <ul class="cs-lessons">
+        <li>
+          <div>
+            <h3>Ship without the chart kit.</h3>
+            <p>I spent a week wiring Recharts before realising the chat coach
+            answered most questions in a sentence. The dashboard is now the
+            least-used surface.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Treat the prompt template as a versioned artefact.</h3>
+            <p>Categorisation behaviour drifted whenever I tweaked the system
+            prompt. Tagging each prompt with a version + a small eval set would
+            have caught regressions weeks earlier.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Make "explain this charge" a first-class action.</h3>
+            <p>The single feature people actually used in dogfooding was
+            asking the model "what was this £42 thing on Tuesday?" — and that
+            was hidden three menus deep in the prototype.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ── Footer / CTA ──────────────────────────────────────────────────── -->
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the build. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/ZenSpend" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">
+          View repository ↗
+        </a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">
+          Get in touch
+        </a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">
+          ← Back to portfolio
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
