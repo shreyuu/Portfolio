@@ -1,12 +1,6 @@
 {
-  "builds": [
-    {
-      "src": "vibe-crafted/package.json",
-      "use": "@vercel/static-build"
-    }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "^/(.*)$", "dest": "/index.html" }
-  ]
+  "installCommand": "cd vibe-crafted && npm install",
+  "buildCommand": "cd vibe-crafted && npm run build",
+  "outputDirectory": "vibe-crafted/dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
