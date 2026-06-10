@@ -1,7 +1,11 @@
 // About + Toolkit
 
-function About() {
-  const p = window.PORTFOLIO;
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+import { SectionHeader, Reveal, ArrowUpRight } from "../components/primitives.jsx";
+
+export function About() {
+  const p = PORTFOLIO;
 
   return (
     <section id="about" data-screen-label="02 About + Toolkit" style={{ padding: "96px 0 64px" }}>
@@ -115,5 +119,3 @@ function About() {
     </section>
   );
 }
-
-window.About = About;

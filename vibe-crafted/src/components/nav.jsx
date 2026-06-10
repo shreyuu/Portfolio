@@ -1,6 +1,10 @@
 // Top navigation + scroll progress + theme toggle
 
-function ScrollProgress() {
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+import { ArrowUpRight } from "./primitives.jsx";
+
+export function ScrollProgress() {
   const [pct, setPct] = React.useState(0);
   React.useEffect(() => {
     const onScroll = () => {
@@ -24,7 +28,7 @@ function ScrollProgress() {
   );
 }
 
-function ThemeToggle({ theme, setTheme }) {
+export function ThemeToggle({ theme, setTheme }) {
   const isDark = theme === "dark";
   return (
     <button
@@ -55,7 +59,7 @@ function ThemeToggle({ theme, setTheme }) {
   );
 }
 
-function Nav({ theme, setTheme, openCmdK }) {
+export function Nav({ theme, setTheme, openCmdK }) {
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -139,7 +143,7 @@ function Nav({ theme, setTheme, openCmdK }) {
               color: "var(--ink)",
             }}>⌘K</span>
           </button>
-          <a href={window.PORTFOLIO.resume} className="mono" style={{
+          <a href={PORTFOLIO.resume} className="mono" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
             padding: "8px 14px", borderRadius: 999,
@@ -161,5 +165,3 @@ function Nav({ theme, setTheme, openCmdK }) {
     </nav>
   );
 }
-
-Object.assign(window, { Nav, ScrollProgress, ThemeToggle });

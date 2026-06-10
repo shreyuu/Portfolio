@@ -1,5 +1,21 @@
 // App shell — theme management + tweaks + command palette + project detail overlay
 
+import React from "react";
+import { Nav, ScrollProgress } from "./components/nav.jsx";
+import { CommandPalette } from "./components/command-palette.jsx";
+import {
+  useTweaks,
+  TweaksPanel,
+  TweakSection,
+  TweakRadio,
+  TweakColor,
+} from "./components/tweaks-panel.jsx";
+import { Hero } from "./sections/hero.jsx";
+import { About } from "./sections/about.jsx";
+import { Projects, ProjectDetail } from "./sections/projects.jsx";
+import { ExperienceSection } from "./sections/experience.jsx";
+import { Contact } from "./sections/contact.jsx";
+
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "#d94a1f",
   "accentDark": "#ff6b3d",
@@ -42,7 +58,7 @@ function applyDensity(density) {
   }
 }
 
-function App() {
+export function App() {
   const [values, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
   // Theme state (persisted, independent of tweaks default)
@@ -163,6 +179,3 @@ function App() {
     </>
   );
 }
-
-const root = ReactDOM.createRoot(document.getElementById("app"));
-root.render(<App />);

@@ -1,7 +1,10 @@
 // Command Palette (⌘K / Ctrl+K) — keyboard-first navigation
 
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+
 function buildCommands({ setTheme, theme, openProject, setOpen }) {
-  const p = window.PORTFOLIO || {};
+  const p = PORTFOLIO || {};
   const sections = [
     { id: "top", label: "Hero", section: "Top" },
     { id: "work", label: "Projects", section: "Section" },
@@ -11,9 +14,9 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
   ];
 
   const navCmds = sections.map((s) => ({
-    id: "nav-" + s.id,
+    id: `nav-${s.id}`,
     icon: "GO",
-    label: "Jump to " + s.label,
+    label: `Jump to ${s.label}`,
     section: "Navigate",
     run: () => {
       document.getElementById(s.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -22,7 +25,7 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
   }));
 
   const projectCmds = (p.projects || []).map((proj) => ({
-    id: "proj-" + proj.n,
+    id: `proj-${proj.n}`,
     icon: proj.n,
     label: proj.title,
     hint: proj.kind,
@@ -37,7 +40,7 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
     {
       id: "theme-toggle",
       icon: "◐",
-      label: "Toggle theme — " + (theme === "dark" ? "Light" : "Dark"),
+      label: `Toggle theme — ${theme === "dark" ? "Light" : "Dark"}`,
       section: "Action",
       run: () => {
         setTheme(theme === "dark" ? "light" : "dark");
@@ -52,7 +55,9 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
       run: async () => {
         try {
           await navigator.clipboard.writeText(p.email || "");
-        } catch (e) {}
+        } catch (e) {
+          console.error("Failed to copy email:", e);
+        }
         setOpen(false);
       },
     },
@@ -82,7 +87,11 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
       label: "Open CV / Résumé",
       section: "Action",
       run: () => {
-        window.open(p.resume, "_blank", "noopener");
+        try {
+          window.open(p.resume, "_blank", "noopener");
+        } catch (e) {
+          console.error("Failed to open CV:", e);
+        }
         setOpen(false);
       },
     },
@@ -91,7 +100,7 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
   return [...navCmds, ...projectCmds, ...actionCmds];
 }
 
-function CommandPalette({ open, setOpen, theme, setTheme, openProject }) {
+export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) {
   const [query, setQuery] = React.useState("");
   const [selectedIdx, setSelectedIdx] = React.useState(0);
   const inputRef = React.useRef(null);
@@ -106,7 +115,7 @@ function CommandPalette({ open, setOpen, theme, setTheme, openProject }) {
     const q = query.trim().toLowerCase();
     if (!q) return commands;
     return commands.filter((c) =>
-      (c.label + " " + (c.section || "") + " " + (c.hint || "")).toLowerCase().includes(q)
+      `${c.label} ${c.section || ""} ${c.hint || ""}`.toLowerCase().includes(q)
     );
   }, [commands, query]);
 
@@ -159,10 +168,19 @@ function CommandPalette({ open, setOpen, theme, setTheme, openProject }) {
   return (
     <>
       <div
-        className={"cmdk-backdrop" + (open ? " open" : "")}
+        className={`cmdk-backdrop${open ? " open" : ""}`}
+        role="button"
+        tabIndex={0}
+        aria-label="Close command palette"
         onClick={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setOpen(false);
+          }
+        }}
       />
-      <div className={"cmdk-shell" + (open ? " open" : "")} role="dialog" aria-label="Command palette">
+      <div className={`cmdk-shell${open ? " open" : ""}`} role="dialog" aria-label="Command palette">
         <input
           ref={inputRef}
           className="cmdk-input"
@@ -174,16 +192,24 @@ function CommandPalette({ open, setOpen, theme, setTheme, openProject }) {
           aria-label="Search commands"
         />
         {filtered.length === 0 ? (
-          <div className="cmdk-empty">No matches for "{query}"</div>
+          <div className="cmdk-empty">No matches for &quot;{query}&quot;</div>
         ) : (
-          <ul className="cmdk-list" ref={listRef}>
+          <ul className="cmdk-list" ref={listRef} role="listbox">
             {filtered.map((c, i) => (
               <li
                 key={c.id}
                 className="cmdk-item"
+                role="option"
                 aria-selected={i === selectedIdx}
+                tabIndex={0}
                 onMouseEnter={() => setSelectedIdx(i)}
                 onClick={() => c.run()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    c.run();
+                  }
+                }}
               >
                 <span className="cmdk-icon">{c.icon}</span>
                 <span>
@@ -213,5 +239,3 @@ function CommandPalette({ open, setOpen, theme, setTheme, openProject }) {
     </>
   );
 }
-
-window.CommandPalette = CommandPalette;
