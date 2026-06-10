@@ -1,0 +1,12 @@
+{
+  "builds": [
+    {
+      "src": "vibe-crafted/package.json",
+      "use": "@vercel/static-build"
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "^/(.*)$", "dest": "/index.html" }
+  ]
+}
