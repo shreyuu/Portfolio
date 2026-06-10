@@ -1,13 +1,13 @@
 // Portfolio data — single source of truth
 
-const PORTFOLIO = {
+export const PORTFOLIO = {
   name: "Shreyash Meshram",
   role: "Full-Stack & AI Engineer",
   location: "Nottingham, UK",
   email: "shreyashmeshram0031@gmail.com",
   github: "https://github.com/shreyuu",
   linkedin: "https://www.linkedin.com/in/shreyuu/",
-  resume: "/Shreyash-Meshram-Resume.pdf",
+  resume: "./Shreyash-Meshram-Resume.pdf",
 
   tagline:
     "I build scalable backends, thoughtful interfaces, and applied-ML systems that solve actual problems.",
@@ -327,5 +327,3 @@ const PORTFOLIO = {
     },
   ],
 };
-
-window.PORTFOLIO = PORTFOLIO;

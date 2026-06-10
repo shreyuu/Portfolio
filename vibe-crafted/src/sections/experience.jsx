@@ -1,7 +1,11 @@
 // Experience + Education as two parallel columns
 
-function ExperienceSection() {
-  const p = window.PORTFOLIO;
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+import { SectionHeader, Reveal, Chip } from "../components/primitives.jsx";
+
+export function ExperienceSection() {
+  const p = PORTFOLIO;
   return (
     <section id="experience" data-screen-label="04 Experience + Education" style={{ padding: "96px 0 80px" }}>
       <div className="wrap">
@@ -165,5 +169,3 @@ function ExperienceSection() {
     </section>
   );
 }
-
-window.ExperienceSection = ExperienceSection;

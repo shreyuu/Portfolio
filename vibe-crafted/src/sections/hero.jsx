@@ -1,7 +1,11 @@
 // Hero — cinematic staggered reveal, editorial
 
-function Hero() {
-  const p = window.PORTFOLIO;
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+import { Reveal, ArrowUpRight } from "../components/primitives.jsx";
+
+export function Hero() {
+  const p = PORTFOLIO;
   const [time, setTime] = React.useState(() => new Date());
   React.useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 30_000);
@@ -107,10 +111,6 @@ function Hero() {
             gap: 14,
             flexWrap: "wrap",
             alignItems: "center",
-            display: "flex",
-            gap: 14,
-            flexWrap: "wrap",
-            alignItems: "center",
           }}>
             <a href="#work" className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 10,
@@ -161,5 +161,3 @@ function Hero() {
     </section>
   );
 }
-
-window.Hero = Hero;

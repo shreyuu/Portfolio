@@ -2,7 +2,7 @@
 
 A detailed single-page portfolio for **Shreyash Meshram**, a **Full-Stack & AI Engineer** based in Nottingham, UK. The site presents Shreyash's profile, education, internships, technical toolkit, selected projects, project case study, resume links, and contact information in a polished editorial interface.
 
-This repository is intentionally lightweight: there is no build step, package manager, or bundler. `Portfolio.html` loads React 18, ReactDOM, and Babel Standalone from CDNs, then mounts modular JSX files from `src/`.
+The site is built with [Vite](https://vitejs.dev/) and React 18. Source lives in `src/` as ES modules and is bundled into an optimized production build with `npm run build`. (Earlier versions transpiled JSX in the browser via Babel Standalone; that has been replaced with a proper build step for faster loads and smaller payloads.)
 
 ## Table of Contents
 
@@ -488,10 +488,10 @@ The tweak defaults live in the `TWEAK_DEFAULTS` block inside `src/app.jsx`.
 
 ### Runtime
 
-- React 18.3.1 UMD
-- ReactDOM 18.3.1 UMD
-- Babel Standalone 7.29.0
-- Browser-native ES modules are not used; each JSX file is loaded as `type="text/babel"`.
+- React 18.3.1
+- ReactDOM 18.3.1
+- Vite 5 (build tooling + dev server) with `@vitejs/plugin-react`
+- Source is authored as ES modules and bundled for production; JSX is compiled at build time, not in the browser.
 
 ### Styling
 
@@ -509,17 +509,23 @@ The tweak defaults live in the `TWEAK_DEFAULTS` block inside `src/app.jsx`.
 
 ### External Dependencies
 
-The page loads React, ReactDOM, Babel, and Google Fonts from CDNs. Because of that, the first uncached page load requires network access.
+React and ReactDOM are bundled locally via npm. Google Fonts are loaded from CDN, so the first uncached page load fetches fonts over the network; all application JS/CSS is self-hosted in the build output.
 
 ## Project Structure
 
 ```text
 .
-├── Portfolio.html
+├── index.html              # Vite entry (HTML shell + meta + fonts)
+├── package.json
+├── vite.config.js
 ├── README.md
-├── case-studies/
-│   └── zenspend.html
+├── public/                 # static assets copied verbatim to the build
+│   ├── og-image.png        # 1200×630 social preview
+│   ├── Shreyash-Meshram-Resume.pdf
+│   └── case-studies/
+│       └── zenspend.html
 └── src/
+    ├── main.jsx            # entry point — mounts <App>, imports CSS
     ├── app.jsx
     ├── components/
     │   ├── command-palette.jsx
@@ -543,7 +549,8 @@ The page loads React, ReactDOM, Babel, and Google Fonts from CDNs. Because of th
 
 | File | Purpose |
 | --- | --- |
-| `Portfolio.html` | HTML entry point. Loads styles, React, Babel, data, components, sections, and app root in order. |
+| `index.html` | Vite HTML entry. Holds document `<head>` (title, meta, Open Graph/Twitter tags, fonts) and the `#app` mount node. |
+| `src/main.jsx` | Application entry point. Imports global CSS and mounts `<App>` into `#app`. |
 | `src/data/portfolio.jsx` | Single source of truth for profile, links, about copy, experience, education, skills, and projects. |
 | `src/app.jsx` | Root app shell. Applies theme, accent, font pairing, density, command palette state, project overlay state, and tweaks panel. |
 | `src/components/primitives.jsx` | Shared helpers: `Reveal`, `MaskText`, `SectionHeader`, `Chip`, `ArrowUpRight`, and `useInView`. |
@@ -557,29 +564,29 @@ The page loads React, ReactDOM, Babel, and Google Fonts from CDNs. Because of th
 | `src/sections/contact.jsx` | Contact section, email copy button, social links, CV link, and availability block. |
 | `src/styles/globals.css` | Design tokens, reset, layout utilities, animation styles, command palette styles, and overlay styles. |
 | `src/styles/print.css` | Print/resume stylesheet. |
-| `case-studies/zenspend.html` | Standalone ZenSpend case study page. |
+| `public/case-studies/zenspend.html` | Standalone ZenSpend case study page. |
+| `public/og-image.png` | 1200×630 social/link-preview image referenced by the Open Graph + Twitter meta tags. |
+| `public/Shreyash-Meshram-Resume.pdf` | One-page résumé served by the CV links. |
 
 ## Running Locally
 
-Because this portfolio is static, any local static server works.
+Install dependencies once, then start the Vite dev server (hot-reloads on save):
 
 ```sh
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then open:
+Open the URL Vite prints (default `http://localhost:5173`).
 
-```text
-http://localhost:8000/Portfolio.html
-```
-
-Alternative:
+To produce and preview the optimized production build:
 
 ```sh
-npx serve .
+npm run build     # outputs static files to dist/
+npm run preview   # serves the built dist/ locally
 ```
 
-Then open the URL printed by `serve` and navigate to `Portfolio.html`.
+The contents of `dist/` are fully static and can be deployed to any static host (Vercel, Netlify, GitHub Pages, etc.).
 
 ## Editing Content
 
@@ -699,12 +706,9 @@ The current default tweak values in `src/app.jsx` are:
 
 ## Implementation Notes
 
-- The project does not use npm, Vite, Next.js, or a bundler.
-- JSX is transpiled in the browser by Babel Standalone.
-- Script order in `Portfolio.html` matters.
-- Shared functions/components must be assigned to `window` because each Babel script has its own scope.
-- `src/data/portfolio.jsx` must load before components and sections that read `window.PORTFOLIO`.
-- `src/app.jsx` must load last because it mounts the app with `ReactDOM.createRoot`.
+- The project uses Vite for the dev server and production bundling; JSX is compiled at build time.
+- Modules use standard ES `import`/`export`. Shared components are imported from `src/components/primitives.jsx`; data is imported from `src/data/portfolio.jsx`.
+- `src/main.jsx` is the entry point and mounts the app with `ReactDOM.createRoot`.
 - Theme state is stored in `localStorage`.
 - Command palette and project drawer manage body scroll locking when open.
 - Reduced-motion users get animation suppression through `prefers-reduced-motion`.

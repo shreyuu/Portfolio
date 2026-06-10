@@ -1,7 +1,11 @@
 // Projects — equalised cards, no swatches, no category tags, no year overlay.
 
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+import { SectionHeader, Chip, ArrowUpRight } from "../components/primitives.jsx";
+
 // Detail overlay (slide-in from right)
-function ProjectDetail({ project, onClose }) {
+export function ProjectDetail({ project, onClose }) {
   const ref = React.useRef(null);
   const open = !!project;
 
@@ -198,23 +202,6 @@ function ProjectDetail({ project, onClose }) {
   );
 }
 
-// Reusable mini-chip used in stack lists
-function Chip({ children }) {
-  return (
-    <span className="mono" style={{
-      fontSize: 10.5,
-      letterSpacing: "0.06em",
-      padding: "6px 10px",
-      border: "1px solid var(--rule-soft)",
-      color: "var(--ink-soft)",
-      borderRadius: 0,
-      whiteSpace: "nowrap",
-    }}>
-      {children}
-    </span>
-  );
-}
-
 // ── Equalised card ────────────────────────────────────────────────────────
 // All cards: same width, same height, no swatch image header, no kind/year tag.
 // Just: index · title · blurb · stack chips · open arrow.
@@ -334,8 +321,8 @@ function ProjectCard({ p, onOpen }) {
 }
 
 // ── Section ────────────────────────────────────────────────────────────────
-function Projects({ onOpenProject }) {
-  const data = window.PORTFOLIO;
+export function Projects({ onOpenProject }) {
+  const data = PORTFOLIO;
   const projects = data.projects;
   const handleOpen = onOpenProject || (() => {});
 
@@ -386,6 +373,3 @@ function Projects({ onOpenProject }) {
     </section>
   );
 }
-
-window.Projects = Projects;
-window.ProjectDetail = ProjectDetail;
