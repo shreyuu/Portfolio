@@ -1,5 +1,22 @@
 // App shell — theme management + tweaks + command palette + project detail overlay
 
+import React from "react";
+import { Nav, ScrollProgress } from "./components/nav.jsx";
+import { CommandPalette } from "./components/command-palette.jsx";
+import {
+  useTweaks,
+  TweaksPanel,
+  TweakSection,
+  TweakRadio,
+  TweakColor,
+} from "./components/tweaks-panel.jsx";
+import { Hero } from "./sections/hero.jsx";
+import { About } from "./sections/about.jsx";
+import { Projects, ProjectDetail } from "./sections/projects.jsx";
+import { ExperienceSection } from "./sections/experience.jsx";
+import { Contact } from "./sections/contact.jsx";
+import { inject } from "@vercel/analytics";
+
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "#d94a1f",
   "accentDark": "#ff6b3d",
@@ -42,13 +59,26 @@ function applyDensity(density) {
   }
 }
 
-function App() {
+function Analytics() {
+  React.useEffect(() => {
+    inject({ framework: "react" });
+  }, []);
+
+  return null;
+}
+
+export function App() {
   const [values, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
-  // Theme state (persisted, independent of tweaks default)
+  // Theme state (persisted, independent of tweaks default).
+  // Order: saved choice > what the pre-paint script already applied
+  // (which itself respects prefers-color-scheme) > light.
   const [theme, setThemeState] = React.useState(() => {
     const saved = localStorage.getItem("portfolio_theme");
-    return saved || values.theme || "light";
+    if (saved === "light" || saved === "dark") return saved;
+    const applied = document.documentElement.getAttribute("data-theme");
+    if (applied === "light" || applied === "dark") return applied;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   });
 
   // Smooth theme transitions: add a class for ~360ms while colours animate
@@ -93,14 +123,17 @@ function App() {
 
   return (
     <>
+      <a href="#main" className="skip-link mono">Skip to content</a>
       <ScrollProgress />
       <Nav theme={theme} setTheme={setTheme} openCmdK={() => setCmdkOpen(true)} />
 
-      <Hero />
-      <About />
-      <Projects onOpenProject={setActiveProject} />
-      <ExperienceSection />
-      <Contact />
+      <main id="main">
+        <Hero />
+        <About />
+        <Projects onOpenProject={setActiveProject} />
+        <ExperienceSection />
+        <Contact />
+      </main>
 
       <ProjectDetail
         project={activeProject}
@@ -160,9 +193,8 @@ function App() {
           onChange={setTheme}
         />
       </TweaksPanel>
+
+      <Analytics />
     </>
   );
 }
-
-const root = ReactDOM.createRoot(document.getElementById("app"));
-root.render(<App />);

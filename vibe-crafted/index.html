@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shreyash Meshram — Full-Stack &amp; AI Engineer</title>
+  <meta name="description" content="Portfolio of Shreyash Meshram — full-stack and applied-AI engineer. MSc Business Analytics, Nottingham. Scalable backends, thoughtful interfaces, ML systems that ship." />
+  <meta name="author" content="Shreyash Meshram" />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="canonical" href="https://shreyuu.vercel.app/" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://shreyuu.vercel.app/" />
+  <meta property="og:title" content="Shreyash Meshram — Full-Stack &amp; AI Engineer" />
+  <meta property="og:description" content="Scalable backends, thoughtful interfaces, and applied-ML systems that solve actual problems." />
+  <meta property="og:site_name" content="Shreyash Meshram" />
+  <meta property="og:image" content="https://shreyuu.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Shreyash Meshram — Full-Stack & AI Engineer" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Shreyash Meshram — Full-Stack &amp; AI Engineer" />
+  <meta name="twitter:description" content="Scalable backends, thoughtful interfaces, and applied-ML systems that solve actual problems." />
+  <meta name="twitter:image" content="https://shreyuu.vercel.app/og-image.png" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Shreyash Meshram",
+    "url": "https://shreyuu.vercel.app/",
+    "email": "mailto:shreyashmeshram0031@gmail.com",
+    "jobTitle": "Full-Stack & AI Engineer",
+    "address": { "@type": "PostalAddress", "addressLocality": "Nottingham", "addressCountry": "GB" },
+    "alumniOf": [
+      { "@type": "CollegeOrUniversity", "name": "University of Nottingham" },
+      { "@type": "CollegeOrUniversity", "name": "Sandip Institute of Technology & Research Centre" }
+    ],
+    "knowsAbout": ["Python", "FastAPI", "Django", "React", "Machine Learning", "Data Analytics"],
+    "sameAs": [
+      "https://github.com/shreyuu",
+      "https://www.linkedin.com/in/shreyuu/"
+    ]
+  }
+  </script>
+
+  <!-- Favicon: monogram "s" in serif italic, SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <!-- Fonts: preconnect + preload critical -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Note: Neue Haas Grotesk isn't on Google Fonts — the sans stack falls back to system fonts by design. -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Apply theme before first paint: saved choice > system preference > light -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("portfolio_theme");
+        if (t !== "light" && t !== "dark") {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
+  <div id="app"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

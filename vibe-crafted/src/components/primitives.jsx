@@ -1,8 +1,10 @@
 // Reusable primitives: reveal, mask text, section headers
 
+import React from "react";
+
 const { useEffect, useRef, useState, useMemo, useCallback } = React;
 
-function useInView(threshold = 0.15) {
+export function useInView(threshold = 0.15) {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -24,7 +26,7 @@ function useInView(threshold = 0.15) {
   return [ref, inView];
 }
 
-function Reveal({ children, delay = 0, as: As = "div", className = "", style, ...rest }) {
+export function Reveal({ children, delay = 0, as: As = "div", className = "", style, ...rest }) {
   const [ref, inView] = useInView(0.12);
   return (
     <As
@@ -39,7 +41,7 @@ function Reveal({ children, delay = 0, as: As = "div", className = "", style, ..
 }
 
 // Animated split-text that masks per word
-function MaskText({ text, delay = 0, stagger = 35, className = "", style, as: As = "span" }) {
+export function MaskText({ text, delay = 0, stagger = 35, className = "", style, as: As = "span" }) {
   const [ref, inView] = useInView(0.1);
   const words = String(text).split(" ");
   return (
@@ -54,7 +56,7 @@ function MaskText({ text, delay = 0, stagger = 35, className = "", style, as: As
 }
 
 // Section header: "§ 02 — Selected Work"
-function SectionHeader({ number, label, title, kicker }) {
+export function SectionHeader({ number, label, title, kicker }) {
   return (
     <header style={{ display: "grid", gap: 12, marginBottom: 28 }}>
       <div
@@ -109,32 +111,25 @@ function SectionHeader({ number, label, title, kicker }) {
   );
 }
 
-// Chip
-function Chip({ children, style, ...rest }) {
+// Chip — bordered square tag used in stack lists
+export function Chip({ children }) {
   return (
-    <span
-      className="mono"
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        padding: "4px 9px",
-        fontSize: 11,
-        letterSpacing: "0.02em",
-        border: "1px solid var(--rule-soft)",
-        borderRadius: 999,
-        color: "var(--ink-soft)",
-        whiteSpace: "nowrap",
-        ...style,
-      }}
-      {...rest}
-    >
+    <span className="mono" style={{
+      fontSize: 10.5,
+      letterSpacing: "0.06em",
+      padding: "6px 10px",
+      border: "1px solid var(--rule-soft)",
+      color: "var(--ink-soft)",
+      borderRadius: 0,
+      whiteSpace: "nowrap",
+    }}>
       {children}
     </span>
   );
 }
 
 // Arrow icon
-function ArrowUpRight({ size = 14 }) {
+export function ArrowUpRight({ size = 14 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true"
       style={{ transition: "transform .25s ease" }}>
@@ -142,5 +137,3 @@ function ArrowUpRight({ size = 14 }) {
     </svg>
   );
 }
-
-Object.assign(window, { useInView, Reveal, MaskText, SectionHeader, Chip, ArrowUpRight });

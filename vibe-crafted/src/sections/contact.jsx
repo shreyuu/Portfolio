@@ -1,7 +1,11 @@
 // Contact / Footer
 
-function Contact() {
-  const p = window.PORTFOLIO;
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+import { Reveal } from "../components/primitives.jsx";
+
+export function Contact() {
+  const p = PORTFOLIO;
   const [copied, setCopied] = React.useState(false);
 
   const copyEmail = async () => {
@@ -176,5 +180,3 @@ function Contact() {
     </section>
   );
 }
-
-window.Contact = Contact;

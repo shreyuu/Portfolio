@@ -1,6 +1,10 @@
 // Top navigation + scroll progress + theme toggle
 
-function ScrollProgress() {
+import React from "react";
+import { PORTFOLIO } from "../data/portfolio.jsx";
+import { ArrowUpRight } from "./primitives.jsx";
+
+export function ScrollProgress() {
   const [pct, setPct] = React.useState(0);
   React.useEffect(() => {
     const onScroll = () => {
@@ -24,7 +28,7 @@ function ScrollProgress() {
   );
 }
 
-function ThemeToggle({ theme, setTheme }) {
+export function ThemeToggle({ theme, setTheme }) {
   const isDark = theme === "dark";
   return (
     <button
@@ -55,8 +59,9 @@ function ThemeToggle({ theme, setTheme }) {
   );
 }
 
-function Nav({ theme, setTheme, openCmdK }) {
+export function Nav({ theme, setTheme, openCmdK }) {
   const [scrolled, setScrolled] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -64,8 +69,20 @@ function Nav({ theme, setTheme, openCmdK }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lock scroll + close on Escape while the mobile menu is open
+  React.useEffect(() => {
+    if (!menuOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
   const items = [
-    { href: "#work", label: "Work" },
+    { href: "#projects", label: "Projects" },
     { href: "#about", label: "About" },
     { href: "#experience", label: "Experience" },
     { href: "#contact", label: "Contact" },
@@ -139,7 +156,7 @@ function Nav({ theme, setTheme, openCmdK }) {
               color: "var(--ink)",
             }}>⌘K</span>
           </button>
-          <a href={window.PORTFOLIO.resume} className="mono" style={{
+          <a href={PORTFOLIO.resume} className="mono" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
             padding: "8px 14px", borderRadius: 999,
@@ -148,18 +165,124 @@ function Nav({ theme, setTheme, openCmdK }) {
             CV <ArrowUpRight size={12} />
           </a>
           <ThemeToggle theme={theme} setTheme={setTheme} />
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            className="mono nav-burger"
+            style={{
+              display: "none",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 36, height: 36,
+              border: "1px solid var(--rule-soft)",
+              borderRadius: 999,
+              color: "var(--ink)",
+              flexDirection: "column",
+              gap: 4,
+            }}
+          >
+            <span style={{
+              width: 14, height: 1.5, background: "currentColor", display: "block",
+              transition: "transform .25s ease",
+              transform: menuOpen ? "translateY(2.75px) rotate(45deg)" : "none",
+            }} />
+            <span style={{
+              width: 14, height: 1.5, background: "currentColor", display: "block",
+              transition: "transform .25s ease",
+              transform: menuOpen ? "translateY(-2.75px) rotate(-45deg)" : "none",
+            }} />
+          </button>
         </div>
 
+      </div>
+
+      {/* Mobile menu overlay */}
+      <div
+        id="mobile-menu"
+        className="nav-mobile"
+        aria-hidden={!menuOpen}
+        style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: "var(--bg)",
+          zIndex: -1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "0 clamp(20px, 6vw, 48px)",
+          opacity: menuOpen ? 1 : 0,
+          pointerEvents: menuOpen ? "auto" : "none",
+          transition: "opacity 260ms ease",
+        }}
+      >
+        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 8 }}>
+          {items.map((it, i) => (
+            <li key={it.href}>
+              <a
+                href={it.href}
+                onClick={() => setMenuOpen(false)}
+                className="serif"
+                tabIndex={menuOpen ? 0 : -1}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "baseline",
+                  gap: 16,
+                  textDecoration: "none",
+                  fontSize: "clamp(36px, 9vw, 56px)",
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.02em",
+                  color: "var(--ink)",
+                  transform: menuOpen ? "none" : "translateY(14px)",
+                  opacity: menuOpen ? 1 : 0,
+                  transition: `transform 420ms cubic-bezier(.2,.7,.2,1) ${80 + i * 60}ms, opacity 360ms ease ${80 + i * 60}ms`,
+                }}
+              >
+                <span className="mono" style={{
+                  fontSize: 11, letterSpacing: "0.18em", color: "var(--ink-mute)",
+                }}>0{i + 1}</span>
+                {it.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a
+          href={PORTFOLIO.resume}
+          onClick={() => setMenuOpen(false)}
+          className="mono"
+          tabIndex={menuOpen ? 0 : -1}
+          style={{
+            marginTop: 40,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 10,
+            alignSelf: "flex-start",
+            padding: "12px 20px",
+            background: "var(--ink)",
+            color: "var(--bg)",
+            textDecoration: "none",
+            fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase",
+            borderRadius: 999,
+            opacity: menuOpen ? 1 : 0,
+            transition: "opacity 360ms ease 360ms",
+          }}
+        >
+          Download CV <ArrowUpRight size={12} />
+        </a>
       </div>
 
       <style>{`
         @media (max-width: 860px) {
           .nav-links { display: none !important; }
           .cmdk-trigger { display: none !important; }
+          .nav-burger { display: inline-flex !important; }
+        }
+        @media (min-width: 861px) {
+          .nav-mobile { display: none !important; }
         }
       `}</style>
     </nav>
   );
 }
-
-Object.assign(window, { Nav, ScrollProgress, ThemeToggle });
