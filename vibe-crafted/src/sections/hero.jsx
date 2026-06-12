@@ -112,7 +112,7 @@ export function Hero() {
             flexWrap: "wrap",
             alignItems: "center",
           }}>
-            <a href="#work" className="mono" style={{
+            <a href="#projects" className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 10,
               padding: "14px 22px", borderRadius: 999,
               background: "var(--ink)", color: "var(--bg)",

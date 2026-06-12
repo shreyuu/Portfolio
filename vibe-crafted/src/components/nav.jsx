@@ -82,7 +82,7 @@ export function Nav({ theme, setTheme, openCmdK }) {
   }, [menuOpen]);
 
   const items = [
-    { href: "#work", label: "Work" },
+    { href: "#projects", label: "Projects" },
     { href: "#about", label: "About" },
     { href: "#experience", label: "Experience" },
     { href: "#contact", label: "Contact" },

@@ -461,7 +461,7 @@ export function Projects({ onOpenProject }) {
 
   return (
     <section
-      id="work"
+      id="projects"
       data-screen-label="03 Projects"
       style={{
         padding: "96px 0 80px",
