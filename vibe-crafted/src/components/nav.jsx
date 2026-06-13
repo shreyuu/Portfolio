@@ -82,8 +82,8 @@ export function Nav({ theme, setTheme, openCmdK }) {
   }, [menuOpen]);
 
   const items = [
-    { href: "#projects", label: "Projects" },
     { href: "#about", label: "About" },
+    { href: "#projects", label: "Projects" },
     { href: "#experience", label: "Experience" },
     { href: "#contact", label: "Contact" },
   ];

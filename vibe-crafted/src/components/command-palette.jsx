@@ -7,7 +7,7 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
   const p = PORTFOLIO || {};
   const sections = [
     { id: "top", label: "Hero", section: "Top" },
-    { id: "work", label: "Projects", section: "Section" },
+    { id: "projects", label: "Projects", section: "Section" },
     { id: "about", label: "About + Toolkit", section: "Section" },
     { id: "experience", label: "Experience + Education", section: "Section" },
     { id: "contact", label: "Contact", section: "Section" },
@@ -28,7 +28,6 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
     id: `proj-${proj.n}`,
     icon: proj.n,
     label: proj.title,
-    hint: proj.kind,
     section: "Open Project",
     run: () => {
       openProject(proj);
@@ -150,7 +149,14 @@ export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) 
     return () => window.removeEventListener("keydown", onKey);
   }, [open, setOpen]);
 
-  // Arrow nav
+  // Keep the highlighted item visible as you arrow through the list
+  React.useEffect(() => {
+    const el = listRef.current?.children[selectedIdx];
+    if (el) el.scrollIntoView({ block: "nearest" });
+  }, [selectedIdx]);
+
+  // Arrow nav — focus stays in the input; Tab is trapped so it can't
+  // escape to the page behind the open palette.
   const onInputKey = (e) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -162,6 +168,8 @@ export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) 
       e.preventDefault();
       const cmd = filtered[selectedIdx];
       if (cmd) cmd.run();
+    } else if (e.key === "Tab") {
+      e.preventDefault();
     }
   };
 
@@ -180,7 +188,7 @@ export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) 
           }
         }}
       />
-      <div className={`cmdk-shell${open ? " open" : ""}`} role="dialog" aria-label="Command palette">
+      <div className={`cmdk-shell${open ? " open" : ""}`} role="dialog" aria-modal="true" aria-label="Command palette">
         <input
           ref={inputRef}
           className="cmdk-input"
@@ -190,18 +198,25 @@ export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) 
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={onInputKey}
           aria-label="Search commands"
+          role="combobox"
+          aria-expanded={filtered.length > 0}
+          aria-controls="cmdk-list"
+          aria-activedescendant={
+            filtered[selectedIdx] ? `cmdk-opt-${filtered[selectedIdx].id}` : undefined
+          }
         />
         {filtered.length === 0 ? (
           <div className="cmdk-empty">No matches for &quot;{query}&quot;</div>
         ) : (
-          <ul className="cmdk-list" ref={listRef} role="listbox">
+          <ul className="cmdk-list" id="cmdk-list" ref={listRef} role="listbox">
             {filtered.map((c, i) => (
               <li
                 key={c.id}
+                id={`cmdk-opt-${c.id}`}
                 className="cmdk-item"
                 role="option"
                 aria-selected={i === selectedIdx}
-                tabIndex={0}
+                tabIndex={-1}
                 onMouseEnter={() => setSelectedIdx(i)}
                 onClick={() => c.run()}
                 onKeyDown={(e) => {
