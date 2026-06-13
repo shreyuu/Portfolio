@@ -1,11 +1,9 @@
 // Hero — cinematic staggered reveal, editorial
 
 import React from "react";
-import { PORTFOLIO } from "../data/portfolio.jsx";
 import { Reveal, ArrowUpRight } from "../components/primitives.jsx";
 
 export function Hero() {
-  const p = PORTFOLIO;
   const [time, setTime] = React.useState(() => new Date());
   React.useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 30_000);
@@ -134,7 +132,7 @@ export function Hero() {
               marginLeft: "auto", fontSize: 11, color: "var(--ink-mute)",
               letterSpacing: "0.12em", textTransform: "uppercase",
             }}>
-              ↓ Scroll
+              {timeStr} · ↓ Scroll
             </span>
           </div>
         </Reveal>
