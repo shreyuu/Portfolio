@@ -13,7 +13,9 @@ export function Contact() {
       await navigator.clipboard.writeText(p.email);
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
-    } catch (e) {}
+    } catch (e) {
+      // Clipboard API error - silently fail
+    }
   };
 
   return (
@@ -110,7 +112,7 @@ export function Contact() {
                     }}>{x.label}</div>
                     {x.href ? (
                       <a href={x.href} target="_blank" rel="noreferrer" className="u-link"
-                         style={{ fontSize: 15 }}>{x.val}</a>
+                        style={{ fontSize: 15 }}>{x.val}</a>
                     ) : (
                       <span style={{ fontSize: 15 }}>{x.val}</span>
                     )}
