@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Business Risk Prediction Pipeline — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Business Risk Prediction Pipeline case study — an end-to-end predictive-analytics workflow with model comparison, probability calibration, and explainable decision trees." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-ml)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 07 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Predictive Analytics · 2025</span>
+      </div>
+      <h1 class="cs-title">A model you can<br><em>actually explain.</em></h1>
+      <p class="cs-deck">
+        A full predictive-analytics workflow — data prep, exploration, model
+        comparison, probability calibration, and a decision-tree visualisation
+        built to be read by a stakeholder, not a data scientist. The theme
+        throughout: an honest probability beats a confident guess.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — modelling &amp; write-up</dd></div>
+        <div><dt>Module</dt><dd>BUSI4371 · Foundational Business Analytics</dd></div>
+        <div><dt>Stack</dt><dd>scikit-learn · Pandas · Joblib</dd></div>
+        <div><dt>Status</dt><dd>Completed coursework</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 07 · train → calibrate → explain</div>
+      <div class="cs-cover-num">07</div>
+      <div class="cs-cover-quote">A risk score is only worth acting on if its 70% really means seventy.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Accuracy alone <em>can't carry a decision.</em></h2>
+      <div class="cs-prose">
+        <p>
+          A business risk model that outputs "high risk" with no calibrated
+          probability and no reasoning is a black box a manager can't defend. In a
+          business-analytics setting the model's <em>legibility</em> — can you trust
+          its confidence, can you explain its call — matters as much as its raw
+          accuracy.
+        </p>
+        <p>
+          So this was built as a complete pipeline whose deliverable isn't just a
+          score: it's a calibrated probability and a decision-tree diagram that
+          shows the path to each prediction.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">An uncalibrated classifier is confident in exactly the wrong way.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">What the workflow had to deliver.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Reproducible end to end.</h3>
+          <p>Preprocessing and modelling saved together as a single pipeline, so
+          the exact transforms travel with the model into <code>.joblib</code> and
+          <code>.pkl</code> artefacts.</p>
+        </div></li>
+        <li><div>
+          <h3>Honest probabilities.</h3>
+          <p>A calibrated version of the final pipeline, so predicted probabilities
+          can be read as real likelihoods rather than arbitrary model scores.</p>
+        </div></li>
+        <li><div>
+          <h3>Explainable to a non-specialist.</h3>
+          <p>A decision-tree visualisation that a stakeholder can follow without a
+          stats background.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Six stages, saved as artefacts.</h2>
+      <div class="cs-prose">
+        <p>
+          The notebook moves from data to a shipped model: load and clean, explore,
+          engineer features, train and compare, calibrate the winner, and export
+          the whole pipeline.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Prepare</div>
+          <div class="cs-arch-block-name">Clean + EDA</div>
+        </div><div class="cs-arch-block-detail">Handle missing values, format variables, understand feature meaning.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Engineer</div>
+          <div class="cs-arch-block-name">Features</div>
+        </div><div class="cs-arch-block-detail">Select predictors, encode and transform, assemble the modelling pipeline.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Compare</div>
+          <div class="cs-arch-block-name">Model bake-off</div>
+        </div><div class="cs-arch-block-detail">Train several models, evaluate with a metrics summary, select the best.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Ship</div>
+          <div class="cs-arch-block-name">Calibrate + export</div>
+        </div><div class="cs-arch-block-detail">Calibrate probabilities, save the pipeline, render the decision tree.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Saving the <em>whole</em> pipeline — not just the estimator — means the
+          preprocessing can never drift out of sync with the model at inference
+          time. It is the difference between a model that works in the notebook and
+          one that works when someone loads the <code>.pkl</code> months later.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What earned its keep</div>
+      <h2 class="cs-h">Calibration changed the <em>usable</em> output.</h2>
+      <div class="cs-prose">
+        <p>
+          The model comparison picked a strong classifier on the metrics summary,
+          but the step that made the output <strong>usable</strong> was
+          calibration. Raw classifier scores clustered in ways that misrepresented
+          real risk; after calibration, a 0.7 could be read as roughly a 70% chance
+          — which is the only form a probability can safely inform a business action.
+        </p>
+        <p>
+          The decision-tree visualisation then did the explaining, turning the final
+          model from a verdict into a traceable argument.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">6</div><div class="cs-stat-label">Workflow stages from raw data to shipped model</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">1</div><div class="cs-stat-label">Calibrated pipeline exported end-to-end</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">100%</div><div class="cs-stat-label">Preprocessing bundled with the model artefact</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Explaining the model</div>
+      <h2 class="cs-h">A diagram beats a coefficient table.</h2>
+      <div class="cs-prose">
+        <p>
+          The decision-tree render was chosen deliberately as the explanation
+          artefact: a stakeholder can trace a single prediction down the branches
+          and see exactly which thresholds drove it. That legibility is why a
+          slightly simpler, explainable model can be the right business choice over
+          a marginally more accurate opaque one.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Add SHAP alongside the tree.</h3>
+          <p>Per-prediction SHAP values would explain the ensemble models too, not
+          only the single decision tree.</p>
+        </div></li>
+        <li><div>
+          <h3>Show a calibration curve.</h3>
+          <p>A reliability plot before and after calibration would make the
+          probability improvement visible instead of asserted.</p>
+        </div></li>
+        <li><div>
+          <h3>Version the artefacts cleanly.</h3>
+          <p>Multiple <code>.joblib</code> and <code>.pkl</code> files accumulated;
+          a single named, versioned artefact would remove ambiguity about which
+          model is final.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the pipeline. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/business-risk-prediction-pipeline" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

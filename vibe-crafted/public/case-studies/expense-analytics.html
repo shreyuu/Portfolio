@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expense Analytics — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Expense Analytics case study — a minimal MERN-stack expense tracker focused on fast CRUD and clear, real-time spending analytics." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-web)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 16 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Full-Stack · MERN · 2025</span>
+      </div>
+      <h1 class="cs-title">An expense tracker<br>with <em>nothing extra.</em></h1>
+      <p class="cs-deck">
+        Expense Analytics is a deliberately minimal MERN-stack tracker: add, edit,
+        delete an expense, see the running total update instantly, and persist it
+        all to MongoDB. A study in resisting feature creep and getting the core loop
+        genuinely right.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — full-stack build</dd></div>
+        <div><dt>Pattern</dt><dd>MERN CRUD + analytics</dd></div>
+        <div><dt>Stack</dt><dd>React · Express · MongoDB · Tailwind</dd></div>
+        <div><dt>Status</dt><dd>Open-source project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 16 · add → list → total</div>
+      <div class="cs-cover-num">16</div>
+      <div class="cs-cover-quote">The hard part of a simple app is keeping it simple.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The intent</div>
+      <h2 class="cs-h">Most trackers <em>drown the one job</em> you came for.</h2>
+      <div class="cs-prose">
+        <p>
+          Expense apps love to sprawl — budgets, categories, recurring rules,
+          charts three levels deep — and somewhere in there the actual task, "write
+          down what I spent and see the total," gets buried. This project is a
+          reaction to that: strip the tracker back to the loop that matters and make
+          that loop feel instant.
+        </p>
+        <p>
+          It's also a clean MERN exercise — React, Express, MongoDB, wired end to
+          end — where the discipline is doing the fundamentals well rather than piling
+          on features.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">A total that lags by a refresh isn't real-time — it's just late.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">The whole spec, honestly.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Full CRUD, no ceremony.</h3>
+          <p>Add, edit, delete, and list expenses — the complete lifecycle, exposed
+          through clean Express routes over a Mongoose model.</p>
+        </div></li>
+        <li><div>
+          <h3>Analytics that update live.</h3>
+          <p>The total recomputes the moment an expense changes, so the number on
+          screen is never stale.</p>
+        </div></li>
+        <li><div>
+          <h3>Persist properly.</h3>
+          <p>Everything lives in MongoDB, so the data survives a refresh and the app
+          is real rather than a session toy.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Four layers, cleanly separated.</h2>
+      <div class="cs-prose">
+        <p>
+          A React form and list talk to an Express API organised into
+          routes, controllers, and a Mongoose model, with MongoDB underneath and a
+          small analytics component deriving the totals.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Form</div>
+          <div class="cs-arch-block-name">React input</div>
+        </div><div class="cs-arch-block-detail">Add and edit expenses; Tailwind-styled, submits to the API.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — API</div>
+          <div class="cs-arch-block-name">Express routes</div>
+        </div><div class="cs-arch-block-detail">Controller logic over Mongoose handles the CRUD lifecycle.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Store</div>
+          <div class="cs-arch-block-name">MongoDB</div>
+        </div><div class="cs-arch-block-detail">Expense schema persists every record for durable state.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Analytics</div>
+          <div class="cs-arch-block-name">Live total</div>
+        </div><div class="cs-arch-block-detail">A component derives the running total and re-renders on change.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Splitting the backend into config, controllers, models, and routes is
+          overkill for an app this size — on purpose. It's the shape a larger service
+          would take, practised where the stakes are low.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — Where the care went</div>
+      <h2 class="cs-h">Keeping the UI and the total <em>in sync.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The one bit of real state discipline is making sure the list and the
+          analytics never disagree. Delete an expense and the total has to drop in the
+          same beat — no manual refresh, no stale figure lingering. Getting that
+          <strong>single source of truth</strong> right, so both the list and the
+          total read the same data, is the difference between "feels instant" and
+          "feels broken."
+        </p>
+        <p>
+          Everything else was resisting temptation: no category system, no charts
+          library, no auth — because each of those would have blurred the one loop the
+          app exists to nail.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">4</div><div class="cs-stat-label">CRUD operations, the complete lifecycle</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">1</div><div class="cs-stat-label">Source of truth behind list and total</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">0</div><div class="cs-stat-label">Refreshes needed to see an updated total</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Design</div>
+      <h2 class="cs-h">Legible over clever.</h2>
+      <div class="cs-prose">
+        <p>
+          Tailwind keeps the surface plain and readable — a form, a list, a total —
+          with the theme adjustable in one config file. There's nothing to learn and
+          nothing in the way, which for a personal expense tracker is exactly the
+          point.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Add categories — carefully.</h3>
+          <p>A single grouping dimension would unlock genuinely useful breakdowns
+          without reopening the feature-creep floodgates.</p>
+        </div></li>
+        <li><div>
+          <h3>Introduce accounts.</h3>
+          <p>User auth would turn a single-user demo into something a second person
+          could actually use for their own spend.</p>
+        </div></li>
+        <li><div>
+          <h3>One honest chart.</h3>
+          <p>A spend-over-time line — just one — would add insight the running total
+          can't, while keeping the interface calm.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's Expense Analytics. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/expense-analytics-react" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

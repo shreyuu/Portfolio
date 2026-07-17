@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Posture Recognition — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Posture Recognition case study — a CNN that classifies images as sitting or standing, trained with data augmentation and evaluated with a matplotlib report." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-cv)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 15 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Computer Vision · Deep Learning · 2025</span>
+      </div>
+      <h1 class="cs-title">Sitting or standing —<br>a <em>small CNN's</em> whole job.</h1>
+      <p class="cs-deck">
+        A tight image classifier: a convolutional network that decides whether a
+        photo shows someone sitting or standing, trained with augmentation to
+        survive a small dataset and evaluated with honest accuracy and loss curves.
+        A study in getting a CNN to generalise from too little data.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — model &amp; evaluation</dd></div>
+        <div><dt>Task</dt><dd>Binary image classification</dd></div>
+        <div><dt>Stack</dt><dd>TensorFlow · Keras · scikit-learn</dd></div>
+        <div><dt>Status</dt><dd>Open-source project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 15 · sitting vs standing</div>
+      <div class="cs-cover-num">15</div>
+      <div class="cs-cover-quote">With a small dataset, augmentation isn't a tweak — it's the training set.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">A small dataset invites <em>overfitting.</em></h2>
+      <div class="cs-prose">
+        <p>
+          Binary posture classification sounds trivial until you count the images. A
+          modest labelled set of sitting and standing photos gives a CNN more than
+          enough room to memorise the training examples — nailing them while learning
+          nothing that transfers to a new photo.
+        </p>
+        <p>
+          So the real task wasn't "build a CNN"; it was "build a CNN that generalises
+          from limited data," which turns the project into a study of regularisation
+          and augmentation rather than architecture.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">A model that aces training and flunks test hasn't learned — it's memorised.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">Guardrails against memorising.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Augment aggressively.</h3>
+          <p>Rotation, width/height shifts, and horizontal flips synthesise variety
+          the small dataset lacks, so the model sees a new-ish image every epoch.</p>
+        </div></li>
+        <li><div>
+          <h3>Regularise the classifier head.</h3>
+          <p>Dropout between dense layers keeps the network from leaning on any
+          single feature to fit the training set.</p>
+        </div></li>
+        <li><div>
+          <h3>Evaluate honestly.</h3>
+          <p>A held-out test split plus training/validation accuracy and loss curves,
+          so overfitting shows up as a diverging gap rather than hiding.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Load, augment, learn, judge.</h2>
+      <div class="cs-prose">
+        <p>
+          Images and CSV labels are loaded and resized to 224×224, encoded to
+          categorical, split train/test, then fed through three conv blocks into a
+          dense classifier — trained on an augmenting data generator.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Load</div>
+          <div class="cs-arch-block-name">Images + CSV</div>
+        </div><div class="cs-arch-block-detail">Read filenames and labels, resize to 224×224, normalise pixels.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Augment</div>
+          <div class="cs-arch-block-name">Generator</div>
+        </div><div class="cs-arch-block-detail">Rotation, shift, and flip synthesise variety on every batch.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Model</div>
+          <div class="cs-arch-block-name">3-block CNN</div>
+        </div><div class="cs-arch-block-detail">Conv + pool stacks into a dense head with dropout and softmax.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Evaluate</div>
+          <div class="cs-arch-block-name">Curves + predict</div>
+        </div><div class="cs-arch-block-detail">Test accuracy, accuracy/loss plots, and a single-image predictor.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The <code>predict_image</code> helper closes the loop — load a new photo,
+          normalise it the same way, and print the predicted class with a confidence
+          score, so the trained model is usable, not just measurable.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What the curves showed</div>
+      <h2 class="cs-h">Augmentation <em>bought the generalisation.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The training and validation curves are the whole story. Without
+          augmentation the two lines split early — training accuracy climbing while
+          validation stalls, the textbook shape of a network memorising its inputs.
+          <strong>With augmentation the gap narrows</strong>, and the test accuracy
+          becomes a number you can actually believe.
+        </p>
+        <p>
+          Plotting accuracy and loss side by side made that trade-off visible rather
+          than assumed — which is exactly why the evaluation plots are part of the
+          deliverable, not an afterthought.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">2</div><div class="cs-stat-label">Classes — sitting and standing</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">224²</div><div class="cs-stat-label">Input resolution each image is resized to</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">3</div><div class="cs-stat-label">Convolutional blocks before the dense head</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Keeping it honest</div>
+      <h2 class="cs-h">The plots are the point.</h2>
+      <div class="cs-prose">
+        <p>
+          It would have been easy to report a single test-accuracy figure and stop.
+          Shipping the accuracy and loss curves instead admits where the model is
+          weak and shows the augmentation earning its place — the difference between a
+          result you can defend and a number you're hoping nobody probes.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Start from a pretrained backbone.</h3>
+          <p>Transfer learning from a network like MobileNet would beat a
+          from-scratch CNN on a dataset this small, with far less overfitting risk.</p>
+        </div></li>
+        <li><div>
+          <h3>Report a confusion matrix.</h3>
+          <p>Knowing whether errors skew toward false-sitting or false-standing tells
+          you more than a single accuracy figure.</p>
+        </div></li>
+        <li><div>
+          <h3>Use a proper validation split.</h3>
+          <p>Validating on the test set inflates confidence; a distinct validation
+          set would make early-stopping and tuning honest.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the classifier. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/ml-models" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

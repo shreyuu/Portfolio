@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brainfarts &amp; Benchmarks — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Brainfarts & Benchmarks case study — a public playground of curiosity-driven coding experiments and micro-benchmarks, one folder per question." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-fullstack)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 10 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Experiments · Benchmarking · Ongoing</span>
+      </div>
+      <h1 class="cs-title">"Why is this<br>faster?" <em>— answered, publicly.</em></h1>
+      <p class="cs-deck">
+        Brainfarts &amp; Benchmarks is a deliberately un-serious repository: one
+        folder per curiosity, each a small experiment that measures something,
+        proves something, or fails honestly. It isn't a product — it's a learning
+        habit made visible.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — ongoing playground</dd></div>
+        <div><dt>Shape</dt><dd>One isolated folder per idea</dd></div>
+        <div><dt>Stack</dt><dd>Python · Jupyter · timeit</dd></div>
+        <div><dt>Status</dt><dd>Living repository</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 10 · one folder, one question</div>
+      <div class="cs-cover-num">10</div>
+      <div class="cs-cover-quote">Some ideas are useful. Some are questionable. Curiosity won either way.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The premise</div>
+      <h2 class="cs-h">Small questions <em>evaporate</em> if you don't catch them.</h2>
+      <div class="cs-prose">
+        <p>
+          "Why is this faster?" "Does this actually work?" "What happens if I try it
+          this way?" — these thoughts show up constantly while coding and vanish
+          just as fast. Most never get tested, because setting up a whole project
+          for a two-minute question feels like too much friction.
+        </p>
+        <p>
+          This repository removes that friction. Each idea gets a folder, a script
+          or notebook, and a short write-up of what was tested and learned. The
+          point isn't polish — it's that the question got answered instead of
+          forgotten.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">If something here looks dumb, that's probably the point.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — The rules</div>
+      <h2 class="cs-h">What keeps a playground usable.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>One idea, one isolated folder.</h3>
+          <p>No shared code between experiments. Isolation keeps each one simple,
+          focused, and safe to break without touching anything else.</p>
+        </div></li>
+        <li><div>
+          <h3>Always write down what you learned.</h3>
+          <p>Every folder carries an <code>explained.md</code>: what was tested,
+          why, and what it showed. The note is the actual deliverable.</p>
+        </div></li>
+        <li><div>
+          <h3>Measure, don't assume.</h3>
+          <p>Performance claims get a <code>timeit</code> number attached. "Feels
+          faster" isn't an answer here.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Structure</div>
+      <h2 class="cs-h">Deliberately, aggressively simple.</h2>
+      <div class="cs-prose">
+        <p>
+          There's no framework and no build. A typical project is a single entry
+          file plus a note, runnable directly.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Ask</div>
+          <div class="cs-arch-block-name">The question</div>
+        </div><div class="cs-arch-block-detail">A curiosity worth a few minutes — speed, behaviour, "does this work?"</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Build</div>
+          <div class="cs-arch-block-name">main.*</div>
+        </div><div class="cs-arch-block-detail">All the code in one file — Python, notebook, or JS — nothing shared.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Measure</div>
+          <div class="cs-arch-block-name">timeit</div>
+        </div><div class="cs-arch-block-detail">Micro-benchmarks and comparisons produce actual numbers, not vibes.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Record</div>
+          <div class="cs-arch-block-name">explained.md</div>
+        </div><div class="cs-arch-block-detail">A short note captures the finding so future-me remembers why.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The isolation is a feature, not laziness. Because no experiment depends on
+          another, any folder can be deleted, rewritten, or ignored without
+          consequence — which is exactly what makes it safe to try the reckless idea.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — Why it earns a place</div>
+      <h2 class="cs-h">Public experiments build <em>intuition faster.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The reason this repo exists is straightforward: experimenting in the open
+          is how you learn faster, remember <em>why</em> things work, and stop being
+          afraid of "wrong" code. A benchmark you actually ran sticks in a way a
+          blog post you skimmed never does.
+        </p>
+        <p>
+          It's the counterweight to the polished projects — proof that the same
+          person who ships clean pipelines also pokes at small questions for their
+          own sake. <strong>The habit is the product.</strong>
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">1:1</div><div class="cs-stat-label">One folder per idea, no exceptions</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">0</div><div class="cs-stat-label">Shared dependencies between experiments</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">∞</div><div class="cs-stat-label">Questions the repo has room to grow into</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — The philosophy</div>
+      <h2 class="cs-h">Not a library. Not a tutorial. A sandbox.</h2>
+      <div class="cs-prose">
+        <p>
+          It's explicitly none of the things people expect from a public repo — not
+          a framework, not best practices, not reusable. Framing it that way up
+          front frees every experiment from the pressure to be good, which is the
+          only condition under which the reckless-but-illuminating ones actually get
+          written.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — Where it goes</div>
+      <h2 class="cs-h">Three ways to grow it.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>An index of findings.</h3>
+          <p>A top-level table linking each folder to its one-line result would make
+          the accumulated learning browsable at a glance.</p>
+        </div></li>
+        <li><div>
+          <h3>Reproducible benchmark harness.</h3>
+          <p>A tiny shared timing helper (kept optional) would make speed claims
+          comparable across experiments and machines.</p>
+        </div></li>
+        <li><div>
+          <h3>Cross-language probes.</h3>
+          <p>Widening beyond Python into the same question in JS or C would turn
+          single benchmarks into genuinely interesting comparisons.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the playground. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/brainfarts-and-benchmarks" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

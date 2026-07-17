@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TempTracker — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="TempTracker case study — a small Django + React app that fetches live temperature from OpenWeatherMap, used to get the frontend/backend boundary right." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-web)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 17 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Full-Stack · Django + React · 2025</span>
+      </div>
+      <h1 class="cs-title">One number,<br>done <em>the right way.</em></h1>
+      <p class="cs-deck">
+        TempTracker shows the current temperature for a city — that's it. The value
+        of building it was everything around that number: keeping the API key on the
+        server, drawing a clean Django/React boundary, and handling the failure
+        cases a "simple" app quietly hides.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — full-stack build</dd></div>
+        <div><dt>Purpose</dt><dd>Clean frontend/backend split</dd></div>
+        <div><dt>Stack</dt><dd>Django · React · Tailwind · OpenWeatherMap</dd></div>
+        <div><dt>Status</dt><dd>Open-source project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 17 · request → API → degrees</div>
+      <div class="cs-cover-num">17</div>
+      <div class="cs-cover-quote">The secret to a "simple" app is where you decide to hide the API key.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The intent</div>
+      <h2 class="cs-h">A tiny app is the <em>honest place</em> to learn a pattern.</h2>
+      <div class="cs-prose">
+        <p>
+          Fetching a temperature is trivial. Fetching it <em>properly</em> — without
+          leaking an API key into the browser, with a clean split between the React
+          client and the Django server — is the reusable skill, and a one-number app
+          is the cheapest place to practise it without any other complexity in the way.
+        </p>
+        <p>
+          So TempTracker is small on purpose: a focused exercise in the
+          frontend-calls-backend-calls-third-party pattern that every real
+          integration repeats.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">If the browser can see your API key, it isn't a secret.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">The rules that made it worth building.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>The key never reaches the client.</h3>
+          <p>The OpenWeatherMap key lives server-side via <code>python-decouple</code>
+          and an <code>.env</code> file; the React app only ever talks to Django.</p>
+        </div></li>
+        <li><div>
+          <h3>A clean API boundary.</h3>
+          <p>Django exposes one endpoint, <code>/api/temperature/</code>, returning
+          plain JSON — the frontend never needs to know OpenWeatherMap exists.</p>
+        </div></li>
+        <li><div>
+          <h3>Handle the unhappy path.</h3>
+          <p>CORS configured correctly and error handling for a bad key or a failed
+          upstream call, so the app degrades gracefully instead of hanging.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">React asks Django, Django asks the world.</h2>
+      <div class="cs-prose">
+        <p>
+          The flow is a clean relay: the React app requests the Django endpoint on
+          load, Django calls OpenWeatherMap with the secret key, and the temperature
+          and city come back as JSON the client renders.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Client</div>
+          <div class="cs-arch-block-name">React</div>
+        </div><div class="cs-arch-block-detail">On load, requests <code>/api/temperature/</code> — no third-party knowledge.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — API</div>
+          <div class="cs-arch-block-name">Django view</div>
+        </div><div class="cs-arch-block-detail">Reads the secret key from env and calls OpenWeatherMap server-side.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Source</div>
+          <div class="cs-arch-block-name">OpenWeatherMap</div>
+        </div><div class="cs-arch-block-detail">Returns live conditions for the requested city.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Render</div>
+          <div class="cs-arch-block-name">JSON out</div>
+        </div><div class="cs-arch-block-detail">Temperature + city returned as JSON and shown in the Tailwind UI.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Routing the call through Django rather than fetching OpenWeatherMap
+          straight from React is the whole lesson: it's the one place the API key can
+          live without being shipped to every visitor's browser.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">CORS is the <em>tax on a split stack.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The predictable first wall was CORS. React on one origin and Django on
+          another means the browser blocks the request until the server explicitly
+          allows it — the classic "it works in the terminal but fails in the browser"
+          moment. Installing and configuring <code>django-cors-headers</code> was
+          the fix, and understanding <em>why</em> it was needed was the actual value.
+        </p>
+        <p>
+          The second was configuration hygiene: an app that silently fails when the
+          key is missing is worse than one that says so, which is why the
+          <strong>error path got as much attention as the happy one</strong>.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">1</div><div class="cs-stat-label">JSON endpoint the frontend depends on</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">0</div><div class="cs-stat-label">API keys shipped to the browser</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">2</div><div class="cs-stat-label">Origins the CORS config has to reconcile</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Design</div>
+      <h2 class="cs-h">Readable at a glance.</h2>
+      <div class="cs-prose">
+        <p>
+          The interface is a single responsive card — temperature, city, and nothing
+          competing for attention — styled with Tailwind. For an app whose entire job
+          is to surface one number, the design brief was simply to make that number
+          unmissable and the whole thing pleasant to look at.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Let the user pick the city.</h3>
+          <p>A search input would turn a fixed-city demo into something genuinely
+          useful, at the cost of validating input.</p>
+        </div></li>
+        <li><div>
+          <h3>Show more than a number.</h3>
+          <p>Humidity, wind, and a conditions description are already in the API
+          response — surfacing them is nearly free.</p>
+        </div></li>
+        <li><div>
+          <h3>Cache and rate-limit sensibly.</h3>
+          <p>Caching recent lookups would cut redundant OpenWeatherMap calls and keep
+          the app inside free-tier limits.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's TempTracker. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/TempTracker" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

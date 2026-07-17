@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FinCast AI — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="FinCast AI case study — a market-analysis platform blending technical indicators, an SVM price predictor, and FinBERT news sentiment behind a TypeScript React dashboard." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-ml)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 03 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Applied ML · Full-Stack · 2025</span>
+      </div>
+      <h1 class="cs-title">Price, indicators,<br>and <em>the mood of the news.</em></h1>
+      <p class="cs-deck">
+        FinCast AI pulls Indian-market data, runs a battery of technical
+        indicators, predicts direction with an SVM, and weighs the tone of the
+        headlines with FinBERT — then puts all of it behind one TypeScript React
+        dashboard. Here's how the three signals fit together, and where I drew a
+        hard line.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo build — ML &amp; full-stack</dd></div>
+        <div><dt>Domain</dt><dd>NSE equities analysis</dd></div>
+        <div><dt>Stack</dt><dd>FastAPI · scikit-learn · FinBERT · React</dd></div>
+        <div><dt>Status</dt><dd>Educational project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 03 · signal fusion</div>
+      <div class="cs-cover-num">03</div>
+      <div class="cs-cover-quote">A number, a trend, and a sentiment — three witnesses, not one oracle.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">One indicator tells you <em>almost nothing.</em></h2>
+      <div class="cs-prose">
+        <p>
+          RSI says overbought, MACD says momentum, the news says a downgrade —
+          and a retail dashboard usually shows you exactly one of those at a time,
+          on its own tab, with no attempt to reconcile them. The interesting
+          question is what happens when you place price action and headline
+          sentiment side by side.
+        </p>
+        <p>
+          FinCast AI is that experiment: fold technical indicators, a learned
+          price-direction model, and financial-news sentiment into a single view
+          for NSE-listed stocks — and be honest about what each part can and can't
+          claim.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">This is a lens on the market, not advice about it.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">The rules the project runs under.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Never present output as financial advice.</h3>
+          <p>Predictions are uncertain and past performance guarantees nothing.
+          The app is framed as educational analysis — a tool to think with, not a
+          buy button.</p>
+        </div></li>
+        <li><div>
+          <h3>Keep the three signals separable.</h3>
+          <p>Indicators, the SVM, and FinBERT sentiment are computed
+          independently, so the user can see <em>why</em> a view looks bullish
+          rather than trusting a single blended score.</p>
+        </div></li>
+        <li><div>
+          <h3>Auth stays out of the model service.</h3>
+          <p>A separate Node/Express + MySQL server owns login and hashing, so the
+          FastAPI analysis service never touches credentials.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Data in, three signals out.</h2>
+      <div class="cs-prose">
+        <p>
+          A FastAPI backend fetches prices from Yahoo Finance, computes indicators
+          with the <code>ta</code> library, runs the ML models, and scores news
+          from NewsData.io through FinBERT. The React dashboard reads it all over
+          a small REST surface.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Ingest</div>
+          <div class="cs-arch-block-name">yfinance</div>
+        </div><div class="cs-arch-block-detail">Live + historical OHLCV for NSE tickers, plus news via NewsData.io.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Indicators</div>
+          <div class="cs-arch-block-name">ta engine</div>
+        </div><div class="cs-arch-block-detail">EMA, RSI, MACD, Bollinger Bands and OBV computed with pandas.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Models</div>
+          <div class="cs-arch-block-name">SVR / SVC + FinBERT</div>
+        </div><div class="cs-arch-block-detail">SVR predicts price, SVC predicts direction, FinBERT scores headline tone.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Surface</div>
+          <div class="cs-arch-block-name">React dashboard</div>
+        </div><div class="cs-arch-block-detail">TypeScript + Recharts view with prediction charts and top movers.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          FinBERT (<code>yiyanghkust/finbert-tone</code>) is the heavyweight piece —
+          a ~440&nbsp;MB model that classifies each headline positive, negative, or
+          neutral, then scales that into a sentiment score fed alongside the
+          indicators into the price model's feature set.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">Sentiment is <em>noisy and slow.</em></h2>
+      <div class="cs-prose">
+        <p>
+          Two things bit early. First, FinBERT's cold start: the first request
+          downloads hundreds of megabytes of weights, so without warming and
+          caching the model, the initial call felt broken. Second,
+          news-API rate limits on the free tier meant naive per-request fetching
+          ran dry fast — headline sentiment had to be cached, not recomputed on
+          every view.
+        </p>
+        <p>
+          The deeper lesson was resisting the urge to collapse everything into one
+          confident number. Blending a fuzzy sentiment score into a price
+          prediction and reporting a single figure would have <strong>hidden the
+          uncertainty</strong> instead of surfacing it. Keeping the signals visible
+          and separate was the more honest design.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">5</div><div class="cs-stat-label">Technical indicators — EMA, RSI, MACD, Bollinger, OBV</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">3</div><div class="cs-stat-label">Independent signals fused per stock view</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">~440MB</div><div class="cs-stat-label">FinBERT weights loaded for sentiment scoring</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Designing the surface</div>
+      <h2 class="cs-h">Charts that explain themselves.</h2>
+      <div class="cs-prose">
+        <p>
+          The dashboard leads with historical-versus-predicted price on a chart you
+          can zoom from all-time down to a week, then layers in top movers,
+          portfolio value, and the news-sentiment read for the selected company. A
+          Material UI shell and Recharts keep it legible rather than cluttered.
+        </p>
+        <p>
+          The design brief was: show the ingredients, not just the verdict. A user
+          should be able to disagree with the model and still find the view useful.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Cache sentiment as a first-class layer.</h3>
+          <p>News scoring should be a scheduled job writing to a store, not an
+          on-request call — cheaper, faster, and immune to rate limits mid-session.</p>
+        </div></li>
+        <li><div>
+          <h3>Backtest before believing.</h3>
+          <p>The SVM classifier deserves a proper walk-forward backtest so its
+          direction accuracy is reported honestly, not assumed.</p>
+        </div></li>
+        <li><div>
+          <h3>Broaden beyond SVM.</h3>
+          <p>LSTM or gradient-boosted baselines would give an apples-to-apples
+          sense of whether the SVM is actually pulling its weight.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's FinCast AI. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/FinCastAI" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

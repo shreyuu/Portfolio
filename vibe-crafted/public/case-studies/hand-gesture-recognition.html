@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hand Gesture Recognition — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Hand Gesture Recognition case study — real-time hand-sign detection with MediaPipe landmarks and a TensorFlow classifier, with spoken feedback via gTTS." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-cv)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 14 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Computer Vision · Real-Time · 2025</span>
+      </div>
+      <h1 class="cs-title">Ten hand signs,<br>read <em>and spoken aloud.</em></h1>
+      <p class="cs-deck">
+        A real-time gesture recogniser: MediaPipe finds 21 hand landmarks, a small
+        TensorFlow model classifies the pose, and gTTS speaks the result. The
+        interesting lesson lived in one word — <em>normalisation</em> — and why the
+        first version only worked in the middle of the frame.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — CV &amp; tooling</dd></div>
+        <div><dt>Discipline</dt><dd>Landmark classification</dd></div>
+        <div><dt>Stack</dt><dd>MediaPipe · TensorFlow · OpenCV · gTTS</dd></div>
+        <div><dt>Status</dt><dd>Open-source, trainable</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 14 · 21 landmarks → label</div>
+      <div class="cs-cover-num">14</div>
+      <div class="cs-cover-quote">A gesture is a shape, not a location — the model had to learn the difference.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Raw pixels are <em>the wrong feature</em> for a hand.</h2>
+      <div class="cs-prose">
+        <p>
+          Classifying gestures straight from webcam pixels forces a model to learn
+          lighting, skin tone, backgrounds, and hand position all at once — most of
+          which have nothing to do with the gesture. The signal that actually matters
+          is the geometry of the hand: where the fingers are relative to each other.
+        </p>
+        <p>
+          MediaPipe hands that geometry over directly as 21 landmark points, so the
+          real design question becomes how to turn those coordinates into a feature
+          a small classifier can learn from reliably.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">Recognition shouldn't care where your hand is, only what it's doing.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">What the recogniser had to do.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Run in real time on a webcam.</h3>
+          <p>Landmark detection and classification per frame, fast enough that the
+          on-screen label and audio keep up with a moving hand.</p>
+        </div></li>
+        <li><div>
+          <h3>Speak, don't just show.</h3>
+          <p>Non-blocking text-to-speech via gTTS announces the gesture, so the tool
+          works as accessible feedback and not only a visual overlay.</p>
+        </div></li>
+        <li><div>
+          <h3>Be trainable by the user.</h3>
+          <p>Record, train, recognise — a full CLI so anyone can capture their own
+          gestures and fit a custom model.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Detect, normalise, classify, speak.</h2>
+      <div class="cs-prose">
+        <p>
+          Each frame runs through MediaPipe for landmarks, a normalisation step to
+          make the pose position- and scale-invariant, a TensorFlow classifier for
+          the label, and a threaded audio manager for spoken feedback.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Detect</div>
+          <div class="cs-arch-block-name">MediaPipe</div>
+        </div><div class="cs-arch-block-detail">21 hand landmarks extracted per frame from the webcam feed.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Normalise</div>
+          <div class="cs-arch-block-name">Wrist-relative</div>
+        </div><div class="cs-arch-block-detail">Landmarks re-centred on the wrist and scaled — invariant to position.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Classify</div>
+          <div class="cs-arch-block-name">TensorFlow</div>
+        </div><div class="cs-arch-block-detail">A model maps the normalised pose to one of ten gestures, with smoothing.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Speak</div>
+          <div class="cs-arch-block-name">gTTS audio</div>
+        </div><div class="cs-arch-block-detail">Non-blocking text-to-speech announces the recognised gesture.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The codebase is organised into a proper package — tracking, services
+          (audio, smoothing, performance), and UI — rather than one long script, with
+          prediction smoothing to stop the label flickering between frames.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">The model learned <em>position, not gesture.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The original recorder stored raw pixel coordinates, so an early model quietly
+          learned "thumbs up <em>in the centre of the frame</em>." Move your hand to
+          the corner and recognition fell apart — it had memorised where the training
+          hands sat, not the shape they made.
+        </p>
+        <p>
+          The fix was <strong>wrist-relative, scale-invariant normalisation</strong>:
+          re-centre every landmark set on the wrist and normalise its size, so the same
+          gesture looks identical anywhere in the frame at any distance. It's the single
+          change that turned a demo into something that actually generalises — and any
+          model trained before it needs a retrain.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">21</div><div class="cs-stat-label">Hand landmarks per frame from MediaPipe</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">10</div><div class="cs-stat-label">Gestures recognised out of the box</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">0</div><div class="cs-stat-label">Dependence on where the hand sits in frame</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Making it usable</div>
+      <h2 class="cs-h">A tool, not a script.</h2>
+      <div class="cs-prose">
+        <p>
+          The recogniser ships as a CLI with distinct modes — recognise, record,
+          train, settings — plus a settings dialog and environment-variable config for
+          detection sensitivity and camera index. That's what lets someone extend it
+          to their own gestures instead of forking and editing constants, and it's why
+          the normalisation lives in shared code both training and inference call.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Support two-handed gestures.</h3>
+          <p>The pipeline handles one hand; many useful signs need both, which means
+          rethinking the feature vector.</p>
+        </div></li>
+        <li><div>
+          <h3>Add temporal gestures.</h3>
+          <p>Static poses miss motion-based signs; a small sequence model over frames
+          would unlock waves, swipes, and dynamic signs.</p>
+        </div></li>
+        <li><div>
+          <h3>Cache speech for common labels.</h3>
+          <p>gTTS needs the network per phrase; pre-rendering the fixed gesture names
+          would make audio instant and offline-capable.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the recogniser. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/Hand-Gesture-Recognition" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

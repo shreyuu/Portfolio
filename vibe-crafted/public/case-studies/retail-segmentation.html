@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retail Customer Segmentation — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Retail Customer Segmentation case study — clustering 3,000 loyalty-card customers into five interpretable segments to guide targeted marketing." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-ml)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 05 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Analytics · Clustering · 2025</span>
+      </div>
+      <h1 class="cs-title">Three thousand shoppers,<br><em>five honest segments.</em></h1>
+      <p class="cs-deck">
+        Six months of loyalty-card data from a convenience-store chain, turned
+        into five customer groups a marketing team can actually act on — Core
+        Grocery, Tobacco Convenience, Cashpoint Users, Drinks &amp; Tobacco, and
+        Lottery-Focused. Here's how the segments were built and why five was the
+        right number.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — customer analytics</dd></div>
+        <div><dt>Context</dt><dd>MSc Business Analytics coursework</dd></div>
+        <div><dt>Stack</dt><dd>Pandas · scikit-learn · PCA · K-Means</dd></div>
+        <div><dt>Status</dt><dd>Completed study</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 05 · basket → segment</div>
+      <div class="cs-cover-num">05</div>
+      <div class="cs-cover-quote">A segment is only useful if a human can name it in one breath.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">"All customers" is <em>not a strategy.</em></h2>
+      <div class="cs-prose">
+        <p>
+          A convenience chain that treats every shopper the same wastes its
+          marketing budget. But the raw data — baskets, category spends, line
+          items — doesn't hand you groups; it hands you thousands of rows of
+          behaviour. The job was to find the natural seams in that behaviour and
+          describe them in language a store manager would recognise.
+        </p>
+        <p>
+          The target was interpretability first: five segments, each with a plain
+          "pen portrait" and a clear marketing recommendation — not a cluster
+          diagram nobody can act on.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">Retail spend is skewed. Model it as if it isn't and you cluster the outliers.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">Rules for trustworthy segments.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Segments must be interpretable.</h3>
+          <p>A cluster nobody can name is useless to a marketer. Every group needed
+          a behavioural story, not just a centroid.</p>
+        </div></li>
+        <li><div>
+          <h3>Handle skew honestly.</h3>
+          <p>Retail spend and quantities are heavily skewed with fat tails.
+          Winsorisation and log transforms stop a handful of big spenders from
+          defining every cluster.</p>
+        </div></li>
+        <li><div>
+          <h3>Let the data pick the K.</h3>
+          <p>Five clusters were chosen against inertia and silhouette scores, not
+          decided in advance for tidiness.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">From four tables to five groups.</h2>
+      <div class="cs-prose">
+        <p>
+          Four datasets — customer summaries, baskets, category spends, and line
+          items — were joined into customer-level features, cleaned of skew, reduced
+          with PCA, and clustered with K-Means.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Engineer</div>
+          <div class="cs-arch-block-name">Features</div>
+        </div><div class="cs-arch-block-detail">Frequency, spend, basket size, recency, time-of-day, category preference.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Preprocess</div>
+          <div class="cs-arch-block-name">De-skew</div>
+        </div><div class="cs-arch-block-detail">Winsorise outliers, log-transform magnitudes, scale with RobustScaler.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Reduce</div>
+          <div class="cs-arch-block-name">PCA</div>
+        </div><div class="cs-arch-block-detail">Principal components cut dimensionality and de-correlate features before clustering.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Cluster</div>
+          <div class="cs-arch-block-name">K-Means</div>
+        </div><div class="cs-arch-block-detail">Five clusters chosen by inertia + silhouette, then profiled into pen portraits.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Category spend became <em>proportional preference</em> features rather
+          than raw pounds — so a light spender who buys mostly tobacco lands next
+          to a heavy one with the same tilt, which is the behaviour marketing
+          actually cares about.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What the clusters revealed</div>
+      <h2 class="cs-h">One segment carries the <em>value.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The five groups split cleanly: <strong>Core Grocery Shoppers</strong>
+          with large, diverse baskets; Tobacco Convenience Buyers and Drinks &amp;
+          Tobacco Shoppers around focused convenience purchases; Cashpoint Users
+          making small trips tied to cash withdrawals; and a very small
+          Lottery-Focused group.
+        </p>
+        <p>
+          The recommendation followed the money: prioritise Core Grocery Shoppers
+          for loyalty rewards and basket-building, use point-of-sale promotions for
+          the tobacco and drinks segments, place impulse offers near the cashpoint,
+          and run lottery-linked nudges for the last group.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">3,000</div><div class="cs-stat-label">Customers segmented over a six-month window</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">5</div><div class="cs-stat-label">Interpretable segments with pen portraits</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">4</div><div class="cs-stat-label">Source datasets fused to customer level</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Turning clusters into decisions</div>
+      <h2 class="cs-h">A recommendation per segment.</h2>
+      <div class="cs-prose">
+        <p>
+          Statistics don't move a marketing budget — recommendations do. Each
+          cluster got a short statistical summary and a concrete action, so the
+          deliverable read as a plan rather than a plot. That translation step is
+          the part that makes segmentation worth doing.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Test soft clustering.</h3>
+          <p>Some shoppers genuinely straddle segments; a Gaussian mixture would
+          capture that overlap instead of forcing a hard assignment.</p>
+        </div></li>
+        <li><div>
+          <h3>Add stability testing.</h3>
+          <p>Re-running K-Means on bootstrapped samples would show how durable each
+          segment really is before a team bets a campaign on it.</p>
+        </div></li>
+        <li><div>
+          <h3>Tie segments to a value estimate.</h3>
+          <p>Attaching a rough lifetime-value figure to each group would rank the
+          marketing recommendations by expected return, not just intuition.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the segmentation. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/retail-customer-segmentation" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

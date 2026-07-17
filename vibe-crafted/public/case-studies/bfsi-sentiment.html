@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BFSI Sentiment Analysis — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="BFSI Sentiment Analysis case study — an end-to-end NLP pipeline classifying banking and insurance news headlines, comparing classical ML, gradient-boosted ensembles, and BERT." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-ml)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 04 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>NLP · Machine Learning · 2024</span>
+      </div>
+      <h1 class="cs-title">Reading the tone of<br><em>financial headlines.</em></h1>
+      <p class="cs-deck">
+        A single pipeline that classifies banking, financial-services, and
+        insurance news headlines as positive, negative, or neutral — and pits
+        classical ML, gradient-boosted ensembles, and BERT against each other on
+        exactly the same data. This is what the comparison actually taught me.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo build — NLP &amp; modelling</dd></div>
+        <div><dt>Context</dt><dd>GenAI BFSI hackathon</dd></div>
+        <div><dt>Stack</dt><dd>scikit-learn · XGBoost · LightGBM · BERT</dd></div>
+        <div><dt>Status</dt><dd>Notebook-based project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 04 · positive / negative / neutral</div>
+      <div class="cs-cover-num">04</div>
+      <div class="cs-cover-quote">The same three labels, chased by six kinds of model.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Financial sentiment is <em>its own dialect.</em></h2>
+      <div class="cs-prose">
+        <p>
+          "Bank misses estimates" is negative; "regulator eases capital rules" is
+          positive — and a general-purpose sentiment model, trained on movie
+          reviews and tweets, has no idea. BFSI language is terse, domain-loaded,
+          and full of words that mean the opposite of their everyday sense.
+        </p>
+        <p>
+          The task was to classify sector headlines into positive, negative, and
+          neutral, and — just as importantly — to find out <em>which family of
+          model</em> earns its cost here. Is a fine-tuned transformer worth the
+          training time over a well-tuned gradient-boosted classifier?
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">The best model is the one whose cost you can justify.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">Keeping the comparison fair.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>One pipeline, many models.</h3>
+          <p>Every model sees the same cleaned, split data, so accuracy
+          differences reflect the model — not a lucky preprocessing choice.</p>
+        </div></li>
+        <li><div>
+          <h3>Domain-specific text cleaning.</h3>
+          <p>Custom financial stopwords and careful tokenisation, stemming, and
+          lemmatisation, because generic stopword lists throw away signal in this
+          domain.</p>
+        </div></li>
+        <li><div>
+          <h3>Validate with stratified folds.</h3>
+          <p>Stratified K-fold keeps the class balance stable across folds so the
+          headline accuracy figure isn't an artefact of one split.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Clean, vectorise, model, ensemble.</h2>
+      <div class="cs-prose">
+        <p>
+          The workflow runs in a single notebook: exploratory analysis and word
+          clouds, then a text pipeline, then a ladder of models from logistic
+          regression up to a fine-tuned BERT, with voting and stacking on top.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Explore</div>
+          <div class="cs-arch-block-name">EDA</div>
+        </div><div class="cs-arch-block-detail">Sentiment distribution, text stats, word clouds, duplicate + missing checks.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Vectorise</div>
+          <div class="cs-arch-block-name">TF-IDF</div>
+        </div><div class="cs-arch-block-detail">TF-IDF with n-grams over domain-cleaned text; features engineered for BFSI.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Model</div>
+          <div class="cs-arch-block-name">LR → XGB → BERT</div>
+        </div><div class="cs-arch-block-detail">Logistic, RF, SVM, XGBoost, LightGBM, MLPs and a BERT fine-tune.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Combine</div>
+          <div class="cs-arch-block-name">Ensemble</div>
+        </div><div class="cs-arch-block-detail">Voting + stacking, with confidence scoring and multi-model consensus.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Prediction works two ways: a single headline returns a label and a
+          confidence, and a batch returns a <em>consensus</em> across the top
+          models — a small hedge against any one classifier's blind spot.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What the numbers said</div>
+      <h2 class="cs-h">BERT wins on accuracy, <em>ensembles win on value.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The headline result: ensemble methods reached roughly 94–96% accuracy,
+          and a fine-tuned BERT nudged slightly higher — at the cost of by far the
+          longest training time. XGBoost and LightGBM landed in the low-90s while
+          training in a fraction of the time.
+        </p>
+        <p>
+          For most of this dataset, the <strong>gradient-boosted ensemble was the
+          sweet spot</strong>: nearly BERT-level accuracy, a small fraction of the
+          compute, and far easier to reason about. BERT earned its keep only on the
+          genuinely ambiguous headlines.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">~95%</div><div class="cs-stat-label">Accuracy from voting / stacking ensembles</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">6+</div><div class="cs-stat-label">Model families compared on one pipeline</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">3</div><div class="cs-stat-label">Sentiment classes — positive, negative, neutral</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — What earned its keep</div>
+      <h2 class="cs-h">Preprocessing beat model swaps.</h2>
+      <div class="cs-prose">
+        <p>
+          The single biggest accuracy jump didn't come from a fancier model — it
+          came from the domain-specific cleaning. Financial stopwords and careful
+          n-gram features lifted every model at once, which is a cheaper and more
+          durable win than chasing the next architecture.
+        </p>
+        <p>
+          Feature-importance analysis then paid that back in interpretability: you
+          could point at the exact financial terms driving a prediction, which
+          matters more in a regulated domain than a half-point of accuracy.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Fine-tune BERT on a larger domain corpus.</h3>
+          <p>The transformer's edge would widen with more BFSI-specific training
+          text; the current gap over ensembles is narrow partly for lack of data.</p>
+        </div></li>
+        <li><div>
+          <h3>Report per-class F1, not just accuracy.</h3>
+          <p>Neutral is the easy class and inflates the headline number; per-class
+          precision and recall tell the honest story.</p>
+        </div></li>
+        <li><div>
+          <h3>Ship a real prediction interface.</h3>
+          <p>The consensus predictor is the useful artefact — it belongs behind a
+          small web app, not buried in a notebook cell.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the BFSI pipeline. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/BFSI-NLP-Hackathon" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

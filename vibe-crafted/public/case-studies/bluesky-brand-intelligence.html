@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bluesky Brand Intelligence — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Bluesky Brand Intelligence case study — comparing Wired and The Verge on Bluesky through a seven-stage pipeline: collection, sentiment, topic modelling, keyword networks, and perceptual mapping." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-realtime)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 08 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Social Analytics · NLP · 2025</span>
+      </div>
+      <h1 class="cs-title">Wired vs The Verge,<br><em>measured on Bluesky.</em></h1>
+      <p class="cs-deck">
+        A full social-listening pipeline comparing two tech-media brands on
+        Bluesky — collection, cleaning, sentiment, LDA topic modelling, keyword
+        networks, micro-influencer scoring, and a brand perceptual map. Seven
+        notebooks, one question: how differently are these brands actually talked
+        about?
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — data &amp; NLP pipeline</dd></div>
+        <div><dt>Module</dt><dd>BUSI4370 · Analytics Specializations</dd></div>
+        <div><dt>Stack</dt><dd>NLTK · Gensim · NetworkX · scikit-learn</dd></div>
+        <div><dt>Status</dt><dd>Completed coursework</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 08 · collect → map</div>
+      <div class="cs-cover-num">08</div>
+      <div class="cs-cover-quote">Two brands, one platform, and a stack of very different conversations.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">"Who has better engagement" is <em>the shallow question.</em></h2>
+      <div class="cs-prose">
+        <p>
+          Comparing two media brands by follower count or like totals tells you
+          almost nothing about <em>how</em> they occupy a platform. Wired and The
+          Verge cover overlapping ground, but the shape of the conversation around
+          each — its themes, its tone, its network of voices — is where the real
+          difference lives.
+        </p>
+        <p>
+          The goal was a brand-intelligence read: not a scoreboard, but a
+          multi-angle comparison of sentiment, topics, network structure, and
+          positioning, each stage building on cleaned, shared data.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">Engagement counts the noise. Topics and networks find the signal.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">Discipline for a multi-stage pipeline.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>One stage per notebook.</h3>
+          <p>Collection, cleaning, analysis, sentiment, topics, network, and
+          perceptual map each live in their own notebook, so any stage can be rerun
+          without re-collecting data.</p>
+        </div></li>
+        <li><div>
+          <h3>Raw and processed kept separate.</h3>
+          <p>Raw captures are frozen; processed datasets and JSON summaries are
+          derived — reproducible from the raw layer, never edited in place.</p>
+        </div></li>
+        <li><div>
+          <h3>Every figure is an artefact.</h3>
+          <p>Each chart and table writes to <code>outputs/</code> with a stable
+          index, so the report cites files rather than screenshots.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Seven stages, cleanly chained.</h2>
+      <div class="cs-prose">
+        <p>
+          The pipeline runs in order — collect, clean, analyse, score sentiment,
+          model topics, build networks, map positioning — each reading the previous
+          stage's processed output.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Collect</div>
+          <div class="cs-arch-block-name">Bluesky pull</div>
+        </div><div class="cs-arch-block-detail">Posts + profiles for both brands captured to a frozen raw layer.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Clean</div>
+          <div class="cs-arch-block-name">Normalise</div>
+        </div><div class="cs-arch-block-detail">De-duplicate, audit, and standardise into processed CSVs.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Analyse</div>
+          <div class="cs-arch-block-name">Sentiment + topics</div>
+        </div><div class="cs-arch-block-detail">VADER-style sentiment and LDA topic models with coherence tuning.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Position</div>
+          <div class="cs-arch-block-name">Network + map</div>
+        </div><div class="cs-arch-block-detail">Keyword networks, micro-influencer scores, and a brand perceptual map.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The most interesting stage is the network work: keyword co-occurrence
+          graphs plus centrality scoring surface the <em>micro-influencers</em> —
+          smaller accounts that sit structurally central to a brand's conversation
+          and would be cheap, high-leverage partners.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What the pipeline surfaced</div>
+      <h2 class="cs-h">Different themes, different <em>tones, different maps.</em></h2>
+      <div class="cs-prose">
+        <p>
+          Stacking the stages produced a genuinely multi-dimensional comparison:
+          engagement distributions and posting-time heatmaps, sentiment splits over
+          a rolling window, distinct LDA topic clusters per brand, and finally a
+          perceptual map placing the two brands against each other on derived axes.
+        </p>
+        <p>
+          The payoff of the layered approach is that no single chart is asked to
+          carry the verdict — the <strong>perceptual map is only trustworthy
+          because the sentiment and topic stages beneath it are visible and
+          reproducible.</strong>
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">7</div><div class="cs-stat-label">Pipeline stages, one notebook each</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">2</div><div class="cs-stat-label">Brands compared across every dimension</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">20+</div><div class="cs-stat-label">Figures and tables written as reproducible outputs</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — From analysis to recommendation</div>
+      <h2 class="cs-h">Scores that point at people.</h2>
+      <div class="cs-prose">
+        <p>
+          The deliverable ends with recommendations, not just descriptions:
+          per-brand micro-influencer shortlists ranked by network centrality, and a
+          positioning read from the perceptual map. That's the shift from social
+          <em>analytics</em> to social <em>intelligence</em> — output a marketing
+          team could act on tomorrow.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Use a transformer sentiment model.</h3>
+          <p>Lexicon sentiment struggles with sarcasm and tech jargon; a fine-tuned
+          transformer would read tone on this domain more reliably.</p>
+        </div></li>
+        <li><div>
+          <h3>Track topics over time.</h3>
+          <p>Dynamic topic modelling would show how each brand's themes shift week
+          to week, not just their static mix.</p>
+        </div></li>
+        <li><div>
+          <h3>Orchestrate the notebooks.</h3>
+          <p>Seven notebooks run by hand invites drift; a small pipeline runner
+          would guarantee the stages execute in the right order every time.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the brand pipeline. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/bluesky-brand-intelligence" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
