@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FENgine — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="FENgine case study — a chess-board OCR pipeline that turns a single photograph into a FEN string and replayable PGN using OpenCV and a small CNN." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-cv)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 02 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Computer Vision · Full-Stack · 2025</span>
+      </div>
+      <h1 class="cs-title">A photo of a board,<br>turned into <em>notation.</em></h1>
+      <p class="cs-deck">
+        FENgine takes a single photograph of a chess position and returns a FEN
+        string and a replayable PGN — perspective-corrected with OpenCV, read
+        square-by-square by a small CNN. This is how the pipeline is put
+        together, and why the hard part was never the classifier.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo build — CV &amp; full-stack</dd></div>
+        <div><dt>Discipline</dt><dd>Image processing + deep learning</dd></div>
+        <div><dt>Stack</dt><dd>FastAPI · OpenCV · CNN · React</dd></div>
+        <div><dt>Status</dt><dd>Open-source project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 02 · board → FEN</div>
+      <div class="cs-cover-num">02</div>
+      <div class="cs-cover-quote">Sixty-four squares, thirteen possible pieces, one honest guess per cell.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Transcribing a board by hand is <em>slow and error-prone.</em></h2>
+      <div class="cs-prose">
+        <p>
+          If you want to analyse a position you saw over the board — in a book,
+          on a friend's set, mid-game — you first have to type it in. That means
+          reading 64 squares, remembering algebraic notation, and not fumbling a
+          rank. It is exactly the kind of mechanical task a camera should be able
+          to do for you.
+        </p>
+        <p>
+          The goal was narrow and honest: point a phone at a board, get back a
+          <code>FEN</code> string you can paste into any engine, plus a
+          <code>PGN</code> you can replay. No app store, no accounts — just an
+          upload box and a result.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">The classifier was easy. The geometry was the project.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">Three things it had to get right.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Work from a single, imperfect photo.</h3>
+          <p>No fixed rig, no top-down mount. A hand-held photo at an angle, in
+          ordinary light, has to be usable — which makes perspective correction
+          non-optional.</p>
+        </div></li>
+        <li><div>
+          <h3>Always be correctable.</h3>
+          <p>An OCR that is 95% right is still wrong on three squares. The user
+          must be able to fix a misread piece before the FEN is finalised, so the
+          board review step is part of the product, not a debug view.</p>
+        </div></li>
+        <li><div>
+          <h3>Emit standard formats only.</h3>
+          <p>The output is plain FEN and PGN via <code>python-chess</code> — the
+          notation every engine and database already speaks. No bespoke schema.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Four stages, one endpoint.</h2>
+      <div class="cs-prose">
+        <p>
+          The whole system is a single <code>POST /api/ocr</code> that accepts an
+          image and returns JSON. Inside, the request passes through four stages:
+          detect the board, warp it flat, classify each cell, then assemble the
+          notation.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Detect</div>
+          <div class="cs-arch-block-name">Board find</div>
+        </div><div class="cs-arch-block-detail">OpenCV grayscale, blur, adaptive threshold + contour to find the largest quad.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Warp</div>
+          <div class="cs-arch-block-name">Perspective</div>
+        </div><div class="cs-arch-block-detail">Homography warps the board to a flat 800×800 square, then splits into 64 cells.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Classify</div>
+          <div class="cs-arch-block-name">CNN per cell</div>
+        </div><div class="cs-arch-block-detail">Each 64×64 cell → one of 13 classes (six pieces × two colours + empty).</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Notation</div>
+          <div class="cs-arch-block-name">FEN + PGN</div>
+        </div><div class="cs-arch-block-detail">Labels map to a1–h8, a python-chess board emits FEN and a PGN game.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The model was trained largely on <em>synthetic</em> data — tens of
+          thousands of board positions rendered programmatically with official
+          piece sprites, then jittered with rotation, brightness, and occlusion
+          so it wouldn't overfit to one clean render.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">Bad crops poison <em>everything downstream.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The classifier reached strong validation accuracy quickly. The failures
+          in practice came almost entirely from the <strong>board-detection</strong>
+          step: a missed corner or a slightly-off quadrilateral shears the whole
+          grid, and then every one of the 64 cells is cropped a few pixels wrong.
+          A great piece classifier fed a sheared board produces confident nonsense.
+        </p>
+        <p>
+          The fix was to treat detection as the first-class problem and give the
+          user the last word — the review screen overlays the detected 8×8 grid so
+          a wrong square is a one-click correction, not a re-shoot.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">~97%</div><div class="cs-stat-label">Piece-classification validation accuracy</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">13</div><div class="cs-stat-label">Classes per cell — 12 pieces plus empty</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">64</div><div class="cs-stat-label">Cells classified from one warped board</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Designing the surface</div>
+      <h2 class="cs-h">Upload, review, done.</h2>
+      <div class="cs-prose">
+        <p>
+          The React client is three screens on purpose — an upload with instant
+          preview, a review canvas where the detected grid sits over the photo and
+          any square is a dropdown away from correction, and a result view with the
+          FEN in a monospace block and the PGN ready to copy.
+        </p>
+        <p>
+          The review step is the one that earns trust. It admits, out loud, that
+          the model can be wrong — and makes being wrong cheap.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Invest in corner detection before the CNN.</h3>
+          <p>A dedicated corner/keypoint model would have removed the single
+          biggest source of real-world failure earlier than any accuracy gain on
+          the classifier.</p>
+        </div></li>
+        <li><div>
+          <h3>Close the synthetic-to-real gap deliberately.</h3>
+          <p>Synthetic renders train fast but miss real sets, shadows, and worn
+          pieces. A small labelled set of real photos for fine-tuning would pay
+          for itself.</p>
+        </div></li>
+        <li><div>
+          <h3>Return confidence per square.</h3>
+          <p>Surfacing low-confidence cells in the review UI would point the user
+          straight at the squares worth checking, instead of asking them to scan
+          all 64.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's FENgine. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/FENgine" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

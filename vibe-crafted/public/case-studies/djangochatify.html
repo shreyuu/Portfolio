@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DjangoChatify — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="DjangoChatify case study — a real-time WebSocket chat app built on Django Channels and Redis, with React, Postgres, Docker, and a CI/CD pipeline." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-realtime)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 13 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Real-Time · Full-Stack · 2025</span>
+      </div>
+      <h1 class="cs-title">Messages that arrive<br><em>the moment they're sent.</em></h1>
+      <p class="cs-deck">
+        DjangoChatify is a real-time chat app built on WebSockets via Django
+        Channels, backed by Redis and Postgres, containerised end to end, and
+        wrapped in a CI/CD pipeline. The theme: making Django — a request/response
+        framework — hold a persistent connection open, cleanly.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — full-stack &amp; infra</dd></div>
+        <div><dt>Discipline</dt><dd>Real-time systems</dd></div>
+        <div><dt>Stack</dt><dd>Django Channels · React · Redis · Postgres · Docker</dd></div>
+        <div><dt>Status</dt><dd>Open-source, Dockerised</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 13 · socket open, always</div>
+      <div class="cs-cover-num">13</div>
+      <div class="cs-cover-quote">Polling asks "anything new?" a thousand times. A socket just tells you.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Chat over HTTP polling is <em>a bad impression of real-time.</em></h2>
+      <div class="cs-prose">
+        <p>
+          You can fake a chat app by polling an endpoint every second, but it's
+          wasteful, laggy, and doesn't scale — a thousand clients asking "anything
+          new?" on a loop is a thousand pointless requests. Real-time messaging wants
+          a persistent connection that pushes, not a client that keeps knocking.
+        </p>
+        <p>
+          DjangoChatify is the exercise of doing it properly: WebSockets through
+          Django Channels, with Redis as the channel layer so messages fan out to
+          the right clients instantly.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">Real-time isn't faster polling. It's not polling at all.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">What "production-ready" meant here.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>True push, not polling.</h3>
+          <p>Messages travel over WebSockets via Channels, so delivery is
+          instantaneous and the server isn't answering the same question on a loop.</p>
+        </div></li>
+        <li><div>
+          <h3>Containerised and reproducible.</h3>
+          <p>A full Docker Compose setup with a non-root container user, so "works on
+          my machine" and "works in prod" are the same command.</p>
+        </div></li>
+        <li><div>
+          <h3>Tested and gated.</h3>
+          <p>Unit and WebSocket tests plus a GitHub Actions pipeline with quality
+          checks, and a <code>/health/</code> endpoint watching database and Redis.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Redis is the switchboard.</h2>
+      <div class="cs-prose">
+        <p>
+          The React client holds a WebSocket to Django Channels; Redis is the channel
+          layer that routes a message to everyone in a room; Postgres persists the
+          history; Gunicorn and Docker package it for deployment.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Client</div>
+          <div class="cs-arch-block-name">React socket</div>
+        </div><div class="cs-arch-block-detail">Tailwind UI opens a WebSocket and renders messages as they arrive.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Consumer</div>
+          <div class="cs-arch-block-name">Django Channels</div>
+        </div><div class="cs-arch-block-detail">Async consumers accept connections and handle inbound messages.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Fan-out</div>
+          <div class="cs-arch-block-name">Redis layer</div>
+        </div><div class="cs-arch-block-detail">The channel layer broadcasts each message to every client in the room.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Persist</div>
+          <div class="cs-arch-block-name">Postgres</div>
+        </div><div class="cs-arch-block-detail">Messages stored with optimised models for history and replay.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Redis is the piece that makes it scale beyond a single process: without a
+          shared channel layer, two Django workers can't see each other's clients, so
+          a message sent to worker A never reaches a user on worker B.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">Sync Django doesn't <em>hold a connection open.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The friction was conceptual before it was technical: Django's model is
+          request-in, response-out, and a WebSocket is the opposite — a connection
+          that <strong>stays open and pushes both ways</strong>. Making that work
+          meant the async consumer stack (ASGI, not WSGI) and getting the Redis
+          channel layer configured so broadcasts actually reached other workers.
+        </p>
+        <p>
+          Once the connection lifecycle and the channel layer were right, everything
+          else — rooms, presence, history — was ordinary Django. The hard part was
+          the paradigm shift, and the tests exist to make sure it stays shifted.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">1</div><div class="cs-stat-label">Persistent socket per client — no polling</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">2</div><div class="cs-stat-label">Health signals watched — database and Redis</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">CI</div><div class="cs-stat-label">GitHub Actions gate with unit + WebSocket tests</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Operability</div>
+      <h2 class="cs-h">Built to actually run.</h2>
+      <div class="cs-prose">
+        <p>
+          The infra choices are the point as much as the chat: a non-root container,
+          a health-check endpoint, environment-driven config for
+          <code>DEBUG</code> and <code>ALLOWED_HOSTS</code>, and a CI pipeline that
+          won't let broken code merge. It's a small app deliberately wearing
+          production clothes, because that's the part worth practising.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Authenticate the socket handshake.</h3>
+          <p>Token auth on connect would tie every message to a real user and lock
+          down rooms properly.</p>
+        </div></li>
+        <li><div>
+          <h3>Add delivery and read receipts.</h3>
+          <p>Acknowledgements would make the real-time layer feel complete and
+          expose it to more interesting edge cases.</p>
+        </div></li>
+        <li><div>
+          <h3>Load-test the channel layer.</h3>
+          <p>Simulating many concurrent rooms would reveal where Redis and the
+          consumers need tuning before real scale.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's DjangoChatify. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/DjangoChatify" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FoodCorp Store KPI Analysis — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="FoodCorp KPI case study — a customer-focused KPI study across four UK stores using SQL, Databricks, and Tableau to recommend where marketing investment pays off." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-web)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 06 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Data at Scale · KPI · 2025</span>
+      </div>
+      <h1 class="cs-title">Which store<br><em>deserves the money?</em></h1>
+      <p class="cs-deck">
+        Four UK stores, one marketing budget, and a question that store size alone
+        can't answer. This study builds customer-focused KPIs with SQL and
+        Databricks, visualises them in Tableau, and lands on a defensible
+        recommendation: London — Leadenhall Street.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Individual analysis + group poster</dd></div>
+        <div><dt>Module</dt><dd>BUSI4369 · Data at Scale</dd></div>
+        <div><dt>Stack</dt><dd>SQL · SQLite · Databricks · Tableau</dd></div>
+        <div><dt>Status</dt><dd>Completed study</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 06 · four stores, four KPIs</div>
+      <div class="cs-cover-num">06</div>
+      <div class="cs-cover-quote">Retention, not footfall, is where marketing money compounds.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Big and busy isn't the same as <em>worth investing in.</em></h2>
+      <div class="cs-prose">
+        <p>
+          FoodCorp runs four stores across London, Birmingham, and Nottingham, and
+          the obvious way to pick a marketing target — whichever is biggest or
+          busiest — rewards traffic, not loyalty. A store can pull crowds and still
+          leak every new customer straight back out.
+        </p>
+        <p>
+          The better question is which store turns marketing spend into
+          <em>repeat, high-value customers</em>. Answering that meant measuring
+          behaviour over time, not a single snapshot.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">A customer you keep is worth more than three you acquire and lose.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — The KPIs</div>
+      <h2 class="cs-h">Four monthly measures of health.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Customer acquisition rate.</h3>
+          <p>The share of genuinely new customers each month — the top of the
+          funnel, and the one most easily mistaken for success.</p>
+        </div></li>
+        <li><div>
+          <h3>Repeat purchase rate.</h3>
+          <p>The percentage of customers who transact more than once in a month —
+          the clearest signal of whether people come back.</p>
+        </div></li>
+        <li><div>
+          <h3>Revenue per customer &amp; growth rate.</h3>
+          <p>Average monthly revenue per unique customer, and month-on-month growth
+          of the customer base — value and momentum together.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Transactions to dashboards.</h2>
+      <div class="cs-prose">
+        <p>
+          Raw transactions were loaded into a database, shaped into KPI views with
+          SQL, computed monthly per store in Databricks, and visualised in Tableau
+          for the store-by-store comparison.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Load</div>
+          <div class="cs-arch-block-name">Transactions</div>
+        </div><div class="cs-arch-block-detail">FoodCorp transaction data loaded into a SQLite database via Python.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Define</div>
+          <div class="cs-arch-block-name">SQL views</div>
+        </div><div class="cs-arch-block-detail">Each KPI expressed as a reusable SQL view with a documented formula.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Compute</div>
+          <div class="cs-arch-block-name">Databricks</div>
+        </div><div class="cs-arch-block-detail">Monthly, store-level KPI series calculated across the full period.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Visualise</div>
+          <div class="cs-arch-block-name">Tableau</div>
+        </div><div class="cs-arch-block-detail">Dashboards comparing acquisition, retention, revenue, and growth by store.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Defining KPIs as SQL views — for example, repeat rate as customers with
+          more than one transaction over total customers in the month — kept every
+          figure reproducible and auditable, which is the whole point of a KPI
+          document.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — The finding</div>
+      <h2 class="cs-h">Leadenhall Street <em>keeps its customers.</em></h2>
+      <div class="cs-prose">
+        <p>
+          London — Leadenhall Street stood out on the measure that compounds:
+          a repeat-purchase rate around 90%, paired with strong, stable revenue per
+          customer and positive growth momentum. Birmingham — Frederick Street had
+          acquisition peaks but weak retention — a leaky bucket — and the other
+          London and Nottingham stores trailed on loyalty.
+        </p>
+        <p>
+          So the recommendation was Leadenhall Street, precisely because a campaign
+          there is <strong>more likely to convert a new customer into a returning,
+          high-value one</strong> rather than a one-time visit.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">90.18%</div><div class="cs-stat-label">Repeat-purchase rate at the top store</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">£1.29M</div><div class="cs-stat-label">Total revenue analysed across the four stores</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">4</div><div class="cs-stat-label">Stores compared on four monthly KPIs</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Communicating it</div>
+      <h2 class="cs-h">A poster, a report, a recommendation.</h2>
+      <div class="cs-prose">
+        <p>
+          The analysis fed both an individual report and a group A1 poster, so the
+          same KPI story had to work as a detailed write-up and as a glanceable
+          summary. Tableau dashboards carried the trends; the recommendation
+          carried the conclusion. Keeping the KPI definitions in a shared document
+          meant everyone was arguing about the same numbers.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Add a cohort view.</h3>
+          <p>Tracking each month's new customers as a cohort would show retention
+          decay directly, rather than inferring it from monthly repeat rates.</p>
+        </div></li>
+        <li><div>
+          <h3>Model expected ROI, not just KPIs.</h3>
+          <p>Translating the KPI edge into a projected return on a fixed marketing
+          spend would make the recommendation quantitative, not comparative.</p>
+        </div></li>
+        <li><div>
+          <h3>Control for store size explicitly.</h3>
+          <p>Normalising KPIs against catchment or footfall would rule out size as
+          a hidden driver and strengthen the retention argument.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the KPI study. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/foodcorp-store-kpi-analysis" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

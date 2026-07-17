@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Statveil — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Statveil case study — a Solo-Leveling-inspired productivity RPG in Flutter where daily quests earn EXP, level a character, and a daily reset punishes missed tasks." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-fullstack)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 09 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Mobile · Flutter · 2025</span>
+      </div>
+      <h1 class="cs-title">Your to-do list,<br>as an <em>RPG.</em></h1>
+      <p class="cs-deck">
+        Statveil turns daily tasks into quests. Finish them and you earn EXP, level
+        a character, and grow five stats; skip them and a daily reset takes its
+        cut. A Solo-Leveling-inspired productivity app built in Flutter to run
+        anywhere — and a study in making motivation a loop.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — design &amp; Flutter build</dd></div>
+        <div><dt>Platforms</dt><dd>iOS · Android · web · desktop</dd></div>
+        <div><dt>Stack</dt><dd>Flutter · Dart · Material 3</dd></div>
+        <div><dt>Status</dt><dd>Open-source project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 09 · quest → EXP → level</div>
+      <div class="cs-cover-num">09</div>
+      <div class="cs-cover-quote">The streak is the point. The character is just how you feel it.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">A checklist has <em>no memory of yesterday.</em></h2>
+      <div class="cs-prose">
+        <p>
+          Plain to-do apps reset to zero every morning. Tick a box, it disappears,
+          and nothing accumulates — there's no sense of momentum, no cost to
+          skipping, nothing that makes today's effort feel connected to last week's.
+          Gamified habit apps exist, but most bolt points onto a list without a real
+          system underneath.
+        </p>
+        <p>
+          Statveil asks: what if completing tasks fed a character you actually cared
+          about — one that levels up when you show up and slips when you don't?
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">Rewards build habits. Consequences protect them.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Design rules</div>
+      <h2 class="cs-h">What makes the loop work.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Effort must map to reward.</h3>
+          <p>Quest difficulty sets the payoff — Easy 10 EXP, Medium 25, Hard 50,
+          Boss 100 — so a hard task feels worth more than three trivial ones.</p>
+        </div></li>
+        <li><div>
+          <h3>Missing has to cost something.</h3>
+          <p>The daily reset applies penalties for missed quests. Without a downside,
+          a streak is just a number; with one, it's a thing you protect.</p>
+        </div></li>
+        <li><div>
+          <h3>Run everywhere from one codebase.</h3>
+          <p>Flutter targets iOS, Android, web, and desktop, so the same character
+          follows the user across whatever device they're on.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">Features, models, services.</h2>
+      <div class="cs-prose">
+        <p>
+          The app is organised by feature — dashboard, quests — over a core of
+          models and services. A <code>Hunter</code> model holds the character; quest
+          services handle completion and EXP; a reset service enforces the daily
+          rollover.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Quests</div>
+          <div class="cs-arch-block-name">Daily tasks</div>
+        </div><div class="cs-arch-block-detail">Assigned quests with difficulty tiers, completed from the dashboard.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — EXP</div>
+          <div class="cs-arch-block-name">Reward engine</div>
+        </div><div class="cs-arch-block-detail">Completion grants tier-based EXP; totals accumulate toward the next level.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Hunter</div>
+          <div class="cs-arch-block-name">Character stats</div>
+        </div><div class="cs-arch-block-detail">STR, INT, AGI, VIT and WILL grow as the character levels up.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Reset</div>
+          <div class="cs-arch-block-name">Daily rollover</div>
+        </div><div class="cs-arch-block-detail">Automatic reset updates streaks and penalises missed quests.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Keeping the loop's rules in dedicated services rather than scattered
+          through the UI means the EXP curve, level thresholds, and reset penalties
+          are all tunable in one place — which matters a lot when the whole feel of
+          the app is a balancing act.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — The hard part</div>
+      <h2 class="cs-h">Balancing <em>encouragement against punishment.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The design tension is real: too generous and levelling is meaningless; too
+          punishing and one bad day wipes out a week, which just makes people quit.
+          The <strong>daily reset is the riskiest mechanic</strong> — it has to sting
+          enough to matter without being so harsh that a missed day feels like a
+          reason to abandon the app entirely.
+        </p>
+        <p>
+          Tiered EXP is the counterweight: because a Boss quest is worth ten Easy
+          ones, a user recovering from a slip can claw back progress with one
+          meaningful effort rather than grinding trivia.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">5</div><div class="cs-stat-label">Character stats — STR, INT, AGI, VIT, WILL</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">4</div><div class="cs-stat-label">Quest tiers from Easy (10) to Boss (100 EXP)</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">6</div><div class="cs-stat-label">Platform targets from a single Flutter codebase</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Making it feel like a game</div>
+      <h2 class="cs-h">Material 3, but make it a character sheet.</h2>
+      <div class="cs-prose">
+        <p>
+          The dashboard leads with the character and its stats, not a list — the
+          quests are how you level, but the screen is about who you're becoming. The
+          Solo-Leveling framing gives the progression a narrative spine, which is
+          what turns "I did my tasks" into "I levelled up." Material 3 keeps it
+          clean enough to live on a home screen.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Sync progress to the cloud.</h3>
+          <p>State lives on-device; a backend would let a character survive a
+          reinstall and follow the user across platforms for real.</p>
+        </div></li>
+        <li><div>
+          <h3>Soften the penalty curve.</h3>
+          <p>An early build punished misses too hard; a grace mechanic or streak
+          freeze keeps a bad day from becoming a quit.</p>
+        </div></li>
+        <li><div>
+          <h3>Let users author their own quests.</h3>
+          <p>Fixed quests limit the fit; custom quests with self-set difficulty
+          would make the loop match anyone's real life.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's Statveil. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/Statveil" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

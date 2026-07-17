@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AmazeBot — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="AmazeBot case study — a conversational chatbot wired to Hugging Face Blenderbot with a Django REST backend, request throttling, caching, and a React + Tailwind UI." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-llm)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 12 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Applied ML · Full-Stack · 2025</span>
+      </div>
+      <h1 class="cs-title">A chatbot, and the<br><em>plumbing that keeps it up.</em></h1>
+      <p class="cs-deck">
+        AmazeBot wraps Hugging Face's Blenderbot in a Django REST backend and a
+        React + Tailwind chat UI. The model is the easy part — the case study is
+        really about throttling, caching, and retry logic, the unglamorous work
+        that keeps a hosted-model app from falling over.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — full-stack build</dd></div>
+        <div><dt>Model</dt><dd>Hugging Face Blenderbot</dd></div>
+        <div><dt>Stack</dt><dd>Django REST · React · Tailwind</dd></div>
+        <div><dt>Status</dt><dd>Open-source project</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 12 · message → model → reply</div>
+      <div class="cs-cover-num">12</div>
+      <div class="cs-cover-quote">Calling a model is one line. Calling it reliably is the whole backend.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">The demo works. <em>The tenth user is where it breaks.</em></h2>
+      <div class="cs-prose">
+        <p>
+          Standing up a chatbot against a hosted model is a five-minute job — until
+          real traffic hits it. Then the external API's rate limits, cold responses,
+          and occasional failures turn a slick demo into a spinner. The interesting
+          engineering isn't the conversation; it's the layer that makes the
+          conversation dependable.
+        </p>
+        <p>
+          AmazeBot is built around that layer: a Django REST backend that throttles,
+          caches, and retries around Blenderbot so the React UI stays responsive.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">A model integration is a reliability problem wearing an AI costume.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">What the backend had to guarantee.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Protect the upstream model.</h3>
+          <p>Request throttling at roughly 10 requests/second stops a burst of
+          traffic — or a runaway client — from blowing the API budget.</p>
+        </div></li>
+        <li><div>
+          <h3>Don't pay twice for the same answer.</h3>
+          <p>Response caching returns repeated prompts instantly and cuts calls to
+          the external model.</p>
+        </div></li>
+        <li><div>
+          <h3>Fail softly.</h3>
+          <p>Error handling and retry logic absorb transient upstream failures so a
+          blip doesn't surface as a broken chat.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">A thin UI over a careful API.</h2>
+      <div class="cs-prose">
+        <p>
+          The React client posts a message to a single Django REST endpoint. The
+          backend checks throttle and cache, calls Blenderbot with retries, and
+          returns the reply over CORS to the frontend.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — UI</div>
+          <div class="cs-arch-block-name">React chat</div>
+        </div><div class="cs-arch-block-detail">Tailwind chat surface posts messages via Axios to the API.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Gate</div>
+          <div class="cs-arch-block-name">Throttle + cache</div>
+        </div><div class="cs-arch-block-detail">DRF throttling caps request rate; caching short-circuits repeats.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Call</div>
+          <div class="cs-arch-block-name">Blenderbot</div>
+        </div><div class="cs-arch-block-detail">Hugging Face inference wrapped in retry logic and error handling.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Return</div>
+          <div class="cs-arch-block-name">JSON reply</div>
+        </div><div class="cs-arch-block-detail">Response sent back over CORS to the client, ready for the next turn.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          Keeping the model call behind the REST boundary means the API key never
+          reaches the browser and every safeguard — rate limit, cache, retry — lives
+          in one place the frontend doesn't have to know about.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">The external API sets the <em>real</em> latency.</h2>
+      <div class="cs-prose">
+        <p>
+          Early on, response time and reliability were entirely at the mercy of the
+          hosted model — some calls were quick, some slow, some failed outright. The
+          fix wasn't a faster model, it was <strong>caching and retries</strong>:
+          repeated prompts stopped hitting the network at all, and transient errors
+          got a second attempt instead of a red bubble.
+        </p>
+        <p>
+          That reframed the project. AmazeBot is less "a chatbot" and more "a
+          well-behaved client for someone else's model" — which is the skill that
+          actually transfers to production AI work.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">10/s</div><div class="cs-stat-label">Request-rate ceiling protecting the upstream API</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">1</div><div class="cs-stat-label">REST endpoint the whole chat runs through</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">0</div><div class="cs-stat-label">API keys exposed to the browser</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Design</div>
+      <h2 class="cs-h">A conversation, nothing more.</h2>
+      <div class="cs-prose">
+        <p>
+          The interface is a single-column chat with Tailwind styling and honest
+          loading states, so the retry-and-cache machinery underneath stays
+          invisible. The user sees a smooth conversation; they never see the throttle
+          decision or the cache hit that made it feel instant.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Stream tokens over WebSockets.</h3>
+          <p>Streaming replies would replace the wait-then-appear pattern with
+          real-time text and make the bot feel far more alive.</p>
+        </div></li>
+        <li><div>
+          <h3>Persist conversation history.</h3>
+          <p>Storing turns per user would give the bot context across a session
+          instead of treating every message as isolated.</p>
+        </div></li>
+        <li><div>
+          <h3>Add authentication.</h3>
+          <p>JWT-based auth would tie throttling and history to real users rather
+          than anonymous traffic.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's AmazeBot. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/AmazeBot" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

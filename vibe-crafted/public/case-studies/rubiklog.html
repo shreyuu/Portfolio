@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rubiklog — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="Rubiklog case study — a Rubik's Cube speedsolving timer with computer-vision cube-state scanning, Django + React, and TensorFlow solve-time prediction." />
+  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/styles/globals.css">
+  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--cs-swatch: var(--swatch-cv)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../Portfolio.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 11 / 17</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Computer Vision · Full-Stack · 2025</span>
+      </div>
+      <h1 class="cs-title">A speedcube timer<br>that <em>can see the cube.</em></h1>
+      <p class="cs-deck">
+        Rubiklog is a Rubik's Cube solve tracker — a space-bar timer, real solving
+        statistics, and a webcam scanner that reads the physical cube's state into
+        a scramble. Django REST on the back, React on the front, OpenCV in between.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — full-stack &amp; CV</dd></div>
+        <div><dt>Discipline</dt><dd>Web app + color detection</dd></div>
+        <div><dt>Stack</dt><dd>Django · React · Postgres · OpenCV · TF</dd></div>
+        <div><dt>Status</dt><dd>Open-source, Docker-ready</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 11 · hold, release, solve</div>
+      <div class="cs-cover-num">11</div>
+      <div class="cs-cover-quote">Ao5 and Ao12 are the numbers that actually tell you if you're improving.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Timing is easy. <em>Logging honestly</em> is the useful part.</h2>
+      <div class="cs-prose">
+        <p>
+          Every speedcuber has a timer. What separates a toy from a training tool is
+          what happens around the timer: a precise hold-to-ready start, a scramble
+          you can trust, and rolling averages — Ao5, Ao12 — that show whether you're
+          actually getting faster or just remembering your best days.
+        </p>
+        <p>
+          Rubiklog set out to be the training tool, and then added the ambitious
+          bit: let the webcam read the real cube so entering a scrambled state
+          doesn't mean typing 54 stickers by hand.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">A timer measures a solve. A log measures a solver.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — Constraints</div>
+      <h2 class="cs-h">What the app had to nail.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>The timer has to feel native.</h3>
+          <p>Space-bar control with a hold-to-ready state and visual feedback,
+          because a laggy or ambiguous start ruins a solve time.</p>
+        </div></li>
+        <li><div>
+          <h3>Statistics that speedcubers trust.</h3>
+          <p>Best time, count, and correct Ao5 / Ao12 rolling averages — the metrics
+          the community actually uses to track progress.</p>
+        </div></li>
+        <li><div>
+          <h3>Scanning is a bonus, not a blocker.</h3>
+          <p>Manual scramble entry always works; the webcam scanner is an
+          accelerant that must never get in the way of just timing a solve.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Architecture</div>
+      <h2 class="cs-h">React front, Django core, CV on the side.</h2>
+      <div class="cs-prose">
+        <p>
+          A React client owns the timer and stats display; a Django REST backend
+          with Postgres persists solves; an OpenCV pipeline handles cube-state
+          detection; and a TensorFlow model experiments with predicting solve times.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">01 — Timer</div>
+          <div class="cs-arch-block-name">React client</div>
+        </div><div class="cs-arch-block-detail">Space-bar timer, hold-to-ready, scramble generator, dark mode.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">02 — Scan</div>
+          <div class="cs-arch-block-name">OpenCV</div>
+        </div><div class="cs-arch-block-detail">Webcam colour normalisation + recognition reads the cube's face state.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">03 — Store</div>
+          <div class="cs-arch-block-name">Django REST</div>
+        </div><div class="cs-arch-block-detail">Solves persisted to Postgres via DRF serializers, documented with Swagger.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">04 — Predict</div>
+          <div class="cs-arch-block-name">TensorFlow</div>
+        </div><div class="cs-arch-block-detail">A model service explores solve-time prediction from history.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The whole thing is containerised — <code>docker-compose up</code> brings
+          the app up — and configured for Render deploys, so the CV dependencies
+          don't turn setup into a yak-shave.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — What broke first</div>
+      <h2 class="cs-h">Colour is <em>a lie the lighting tells.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The cube scanner ran straight into the classic computer-vision headache:
+          a cube's red under warm light and its orange under cool light can land on
+          nearly the same raw pixel value. Naive colour thresholds misread faces the
+          moment the lighting changed, which for a scanner is a fatal flaw — one
+          wrong sticker invalidates the whole scramble.
+        </p>
+        <p>
+          That's exactly why <strong>manual entry stayed the reliable default</strong>
+          and colour normalisation became the focus of the vision work — reducing
+          the scan to relative colour relationships rather than absolute values.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">Ao5 / Ao12</div><div class="cs-stat-label">Rolling averages tracked per session</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">54</div><div class="cs-stat-label">Stickers the scanner reads to reconstruct a state</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">1</div><div class="cs-stat-label">Command to stand the whole stack up in Docker</div></div>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — Design</div>
+      <h2 class="cs-h">Out of the way while you solve.</h2>
+      <div class="cs-prose">
+        <p>
+          The timer screen is intentionally quiet — a big time, a scramble, and
+          nothing competing for attention mid-solve, with a dark mode for the
+          late-night practice sessions the audience actually lives in. Statistics and
+          history sit one step away, so the loop of solve-log-check-average stays
+          fast.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Detect stickers in a learned colour space.</h3>
+          <p>Training a small classifier on cube stickers under varied lighting
+          would beat hand-tuned thresholds and make the scanner trustworthy.</p>
+        </div></li>
+        <li><div>
+          <h3>Validate the scanned state before use.</h3>
+          <p>A quick solvability check would catch a misread cube before it becomes
+          an impossible scramble.</p>
+        </div></li>
+        <li><div>
+          <h3>Ground the prediction model in data.</h3>
+          <p>Solve-time prediction needs a real personal history to be meaningful;
+          it should ship only once the log has enough solves to learn from.</p>
+        </div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's Rubiklog. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/RubikLog" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

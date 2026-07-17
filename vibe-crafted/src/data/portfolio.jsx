@@ -164,6 +164,7 @@ export const PORTFOLIO = {
       ],
       stack: ["FastAPI", "OpenCV", "CNN", "PyTorch", "React"],
       href: "https://github.com/shreyuu/FENgine",
+      caseStudy: "case-studies/fengine.html",
     },
     {
       n: "03",
@@ -177,6 +178,7 @@ export const PORTFOLIO = {
       ],
       stack: ["FastAPI", "React", "TypeScript", "scikit-learn", "FinBERT"],
       href: "https://github.com/shreyuu/FinCastAI",
+      caseStudy: "case-studies/fincast-ai.html",
     },
     {
       n: "04",
@@ -190,6 +192,7 @@ export const PORTFOLIO = {
       ],
       stack: ["Python", "scikit-learn", "XGBoost", "LightGBM", "BERT", "Pandas"],
       href: "https://github.com/shreyuu/BFSI-NLP-Hackathon",
+      caseStudy: "case-studies/bfsi-sentiment.html",
     },
     {
       n: "05",
@@ -203,6 +206,7 @@ export const PORTFOLIO = {
       ],
       stack: ["Python", "Pandas", "scikit-learn", "PCA", "K-Means", "Matplotlib"],
       href: "https://github.com/shreyuu/retail-customer-segmentation",
+      caseStudy: "case-studies/retail-segmentation.html",
     },
     {
       n: "06",
@@ -216,6 +220,7 @@ export const PORTFOLIO = {
       ],
       stack: ["SQL", "Databricks", "Tableau", "Python", "Pandas"],
       href: "https://github.com/shreyuu/foodcorp-store-kpi-analysis",
+      caseStudy: "case-studies/foodcorp-kpi.html",
     },
     {
       n: "07",
@@ -229,6 +234,7 @@ export const PORTFOLIO = {
       ],
       stack: ["Python", "scikit-learn", "Pandas", "Matplotlib", "Joblib"],
       href: "https://github.com/shreyuu/business-risk-prediction-pipeline",
+      caseStudy: "case-studies/business-risk-pipeline.html",
     },
     {
       n: "08",
@@ -242,6 +248,7 @@ export const PORTFOLIO = {
       ],
       stack: ["Python", "NLTK", "Gensim", "NetworkX", "scikit-learn", "Matplotlib"],
       href: "https://github.com/shreyuu/bluesky-brand-intelligence",
+      caseStudy: "case-studies/bluesky-brand-intelligence.html",
     },
     {
       n: "09",
@@ -255,6 +262,7 @@ export const PORTFOLIO = {
       ],
       stack: ["Flutter", "Dart", "Material 3"],
       href: "https://github.com/shreyuu/Statveil",
+      caseStudy: "case-studies/statveil.html",
     },
     {
       n: "10",
@@ -268,6 +276,7 @@ export const PORTFOLIO = {
       ],
       stack: ["Python", "Jupyter", "timeit"],
       href: "https://github.com/shreyuu/brainfarts-and-benchmarks",
+      caseStudy: "case-studies/brainfarts-and-benchmarks.html",
     },
     {
       n: "11",
@@ -276,6 +285,7 @@ export const PORTFOLIO = {
         "A Rubik's Cube timer with computer-vision scramble detection — Django backend, React client, OpenCV pipeline.",
       stack: ["Django", "React", "Postgres", "OpenCV", "TensorFlow"],
       href: "https://github.com/shreyuu/RubikLog",
+      caseStudy: "case-studies/rubiklog.html",
     },
     {
       n: "12",
@@ -284,6 +294,7 @@ export const PORTFOLIO = {
         "Conversational chatbot wired to Hugging Face Blenderbot with a Django REST backend.",
       stack: ["Django", "React", "HF API", "REST"],
       href: "https://github.com/shreyuu/AmazeBot",
+      caseStudy: "case-studies/amazebot.html",
     },
     {
       n: "13",
@@ -292,6 +303,7 @@ export const PORTFOLIO = {
         "Real-time WebSocket chat app — channels, rooms, presence, containerised.",
       stack: ["Django Channels", "React", "WebSockets", "Postgres", "Docker"],
       href: "https://github.com/shreyuu/DjangoChatify",
+      caseStudy: "case-studies/djangochatify.html",
     },
     {
       n: "14",
@@ -300,6 +312,7 @@ export const PORTFOLIO = {
         "Real-time hand-sign detection with MediaPipe, audio feedback via gTTS.",
       stack: ["Python", "TensorFlow", "MediaPipe", "OpenCV", "gTTS"],
       href: "https://github.com/shreyuu/Hand-Gesture-Recognition",
+      caseStudy: "case-studies/hand-gesture-recognition.html",
     },
     {
       n: "15",
@@ -308,6 +321,7 @@ export const PORTFOLIO = {
         "CNN-based sitting/standing detector with a matplotlib evaluation report.",
       stack: ["Python", "TensorFlow", "CNN", "scikit-learn"],
       href: "https://github.com/shreyuu/ml-models",
+      caseStudy: "case-studies/posture-recognition.html",
     },
     {
       n: "16",
@@ -316,6 +330,7 @@ export const PORTFOLIO = {
         "Minimal expense tracker with a MERN-stack core and a focus on usable charts.",
       stack: ["React", "Express", "MongoDB", "Tailwind"],
       href: "https://github.com/shreyuu/expense-analytics-react",
+      caseStudy: "case-studies/expense-analytics.html",
     },
     {
       n: "17",
@@ -324,6 +339,7 @@ export const PORTFOLIO = {
         "Current-temperature web app backed by OpenWeatherMap.",
       stack: ["Django", "React", "Tailwind", "OWM"],
       href: "https://github.com/shreyuu/TempTracker",
+      caseStudy: "case-studies/temptracker.html",
     },
   ],
 };
