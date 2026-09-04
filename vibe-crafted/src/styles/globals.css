@@ -32,13 +32,14 @@
   --accent:     var(--sig-2);
   --accent-ink: #ffffff;
 
-  /* Domain channels — one per project class, drawn from the same ramp */
-  --ch-backend:  #2e3163;
-  --ch-llm:      #c42e63;
-  --ch-vision:   #1f6f78;
-  --ch-ml:       #7a2c63;
-  --ch-data:     #8a6208;
-  --ch-realtime: #b34410;
+  /* Domain channels — one per project class, six distinct tones so the
+     swatch alone identifies a channel. All clear 4.5:1 on --bg. */
+  --ch-vision:  #1f6f78;
+  --ch-ml:      #7a2c63;
+  --ch-data:    #8a6208;
+  --ch-llm:     #c42e63;
+  --ch-app:     #2e3163;
+  --ch-systems: #b34410;
 
   /* Type ramp — anchored to a 16px base, tightened at the top for mono */
   --t-display: clamp(50px, 12.5vw, 168px);
@@ -58,6 +59,7 @@
   --mono:    "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --section-pad: 112px;
+  --section-end: 64px;
   --spine-w: 78px;
 
   --ease: cubic-bezier(.2, .7, .2, 1);
@@ -86,12 +88,12 @@ html[data-theme="dark"] {
   --accent:     var(--sig-2);
   --accent-ink: #0a0f16;
 
-  --ch-backend:  #7b82dd;
-  --ch-llm:      #ff5c8a;
-  --ch-vision:   #3fb6c2;
-  --ch-ml:       #c874d6;
-  --ch-data:     #ffc15e;
-  --ch-realtime: #ff8a4c;
+  --ch-vision:  #3fb6c2;
+  --ch-ml:      #c874d6;
+  --ch-data:    #ffc15e;
+  --ch-llm:     #ff5c8a;
+  --ch-app:     #7b82dd;
+  --ch-systems: #ff8a4c;
 }
 
 /* Colour-only cross-fade on theme change — never layout */
@@ -107,7 +109,7 @@ html.theme-transition * {
 }
 
 @media (max-width: 720px) {
-  :root { --section-pad: 72px; }
+  :root { --section-pad: 72px; --section-end: 44px; }
 }
 
 /* ==========================================================================

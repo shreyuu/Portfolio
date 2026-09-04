@@ -105,7 +105,7 @@ export function ExperienceSection() {
       </div>
 
       <style>{`
-        .traj { padding: var(--section-pad) 0 80px; }
+        .traj { padding: var(--section-pad) 0 var(--section-end); }
 
         .traj__grid {
           display: grid;

@@ -10,14 +10,12 @@ import { PORTFOLIO } from "../data/portfolio.jsx";
 import { SectionHeader, ArrowUpRight } from "../components/primitives.jsx";
 
 const CHANNEL_TONE = {
-  LLM: "var(--ch-llm)",
-  Vision: "var(--ch-vision)",
-  ML: "var(--ch-ml)",
-  Data: "var(--ch-data)",
-  Realtime: "var(--ch-realtime)",
-  Web: "var(--ch-backend)",
-  App: "var(--ch-backend)",
-  Lab: "var(--ch-backend)",
+  Vision:  "var(--ch-vision)",
+  ML:      "var(--ch-ml)",
+  Data:    "var(--ch-data)",
+  LLM:     "var(--ch-llm)",
+  App:     "var(--ch-app)",
+  Systems: "var(--ch-systems)",
 };
 
 const tone = (d) => CHANNEL_TONE[d] || "var(--ink-mute)";
@@ -26,7 +24,9 @@ const tone = (d) => CHANNEL_TONE[d] || "var(--ink-mute)";
 function note(p) {
   if (p.highlights && p.highlights.length) return p.highlights[0];
   const first = p.blurb.split(". ")[0];
-  return first.length > 92 ? first.slice(0, 89) + "…" : first;
+  if (first.length <= 92) return first;
+  const cut = first.slice(0, 89);
+  return cut.slice(0, cut.lastIndexOf(" ")) + "…";
 }
 
 /* ── Detail drawer ───────────────────────────────────────────────────────── */
@@ -347,7 +347,7 @@ export function Projects({ onOpenProject }) {
       </div>
 
       <style>{`
-        .work { padding: var(--section-pad) 0 80px; }
+        .work { padding: var(--section-pad) 0 var(--section-end); }
 
         .work__filters {
           display: flex;

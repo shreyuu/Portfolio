@@ -92,7 +92,7 @@ export function Hero() {
 
       <style>{`
         .hero {
-          padding: 132px 0 72px;
+          padding: 132px 0 var(--section-end);
           position: relative;
         }
 

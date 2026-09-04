@@ -276,7 +276,7 @@ export const PORTFOLIO = {
     {
       n: "10",
       title: "Brainfarts & Benchmarks",
-      domain: "Lab",
+      domain: "Systems",
       blurb:
         "A public playground of curiosity-driven coding experiments — micro-benchmarks, 'why is this faster?' probes, and one-off scripts that exist purely because the question wouldn't go away.",
       highlights: [
@@ -311,7 +311,7 @@ export const PORTFOLIO = {
     {
       n: "13",
       title: "DjangoChatify",
-      domain: "Realtime",
+      domain: "Systems",
       blurb:
         "Real-time WebSocket chat app — channels, rooms, presence, containerised.",
       stack: ["Django Channels", "React", "WebSockets", "Postgres", "Docker"],
@@ -341,7 +341,7 @@ export const PORTFOLIO = {
     {
       n: "16",
       title: "Expense Analytics",
-      domain: "Web",
+      domain: "App",
       blurb:
         "Minimal expense tracker with a MERN-stack core and a focus on usable charts.",
       stack: ["React", "Express", "MongoDB", "Tailwind"],
@@ -351,7 +351,7 @@ export const PORTFOLIO = {
     {
       n: "17",
       title: "TempTracker",
-      domain: "Web",
+      domain: "App",
       blurb:
         "Current-temperature web app backed by OpenWeatherMap.",
       stack: ["Django", "React", "Tailwind", "OWM"],
