@@ -113,7 +113,6 @@ response_time: ~24h`}
         .out {
           padding: var(--section-pad) 0 40px;
           border-top: 1px solid var(--rule);
-          margin-top: 48px;
           background: var(--bg-raised);
         }
 

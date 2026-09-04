@@ -33,12 +33,12 @@
   --accent:     var(--sig-2);
   --accent-ink: #ffffff;
 
-  --ch-backend:  #2e3163;
-  --ch-llm:      #c42e63;
-  --ch-vision:   #1f6f78;
-  --ch-ml:       #7a2c63;
-  --ch-data:     #8a6208;
-  --ch-realtime: #b34410;
+  --ch-vision:  #1f6f78;
+  --ch-ml:      #7a2c63;
+  --ch-data:    #8a6208;
+  --ch-llm:     #c42e63;
+  --ch-app:     #2e3163;
+  --ch-systems: #b34410;
 
   --display: "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --sans:    "Instrument Sans", ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -71,12 +71,12 @@ html[data-theme="dark"] {
   --accent:     var(--sig-2);
   --accent-ink: #0a0f16;
 
-  --ch-backend:  #7b82dd;
-  --ch-llm:      #ff5c8a;
-  --ch-vision:   #3fb6c2;
-  --ch-ml:       #c874d6;
-  --ch-data:     #ffc15e;
-  --ch-realtime: #ff8a4c;
+  --ch-vision:  #3fb6c2;
+  --ch-ml:      #c874d6;
+  --ch-data:    #ffc15e;
+  --ch-llm:     #ff5c8a;
+  --ch-app:     #7b82dd;
+  --ch-systems: #ff8a4c;
 }
 
 /* ── Base ───────────────────────────────────────────────────────────────── */

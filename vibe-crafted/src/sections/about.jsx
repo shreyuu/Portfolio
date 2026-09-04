@@ -1,4 +1,4 @@
-// Profile + toolkit inventory
+// Profile + toolkit
 
 import React from "react";
 import { PORTFOLIO } from "../data/portfolio.jsx";
@@ -14,7 +14,7 @@ export function About() {
         <SectionHeader
           index="01"
           label="Profile"
-          n="Nottingham, UK"
+          n={p.location}
           title="An engineer who ships the measurement, not just the model."
         />
 
@@ -47,7 +47,7 @@ export function About() {
           </Reveal>
 
           {/* Standing conditions — the facts a hiring manager checks first,
-              pulled out of the prose so they can be read in three seconds. */}
+              lifted out of the prose so they read in three seconds. */}
           <Reveal delay={120}>
             <dl className="about__spec">
               {[
@@ -55,7 +55,6 @@ export function About() {
                 ["Available", "September 2026"],
                 ["Based", p.location],
                 ["Reading", "MSc Business Analytics, Nottingham"],
-                ["Focus", "Backends · applied ML · analytics"],
               ].map(([k, v]) => (
                 <div className="about__spec-row" key={k}>
                   <dt className="lbl">{k}</dt>
@@ -69,7 +68,7 @@ export function About() {
         {/* Toolkit */}
         <div className="about__tk">
           <Reveal>
-            <div className="sect-meta" style={{ marginBottom: 24 }}>
+            <div className="sect-meta">
               <span className="sect-meta__idx">01.2</span>
               <span className="sect-meta__name">Toolkit</span>
               <span className="sect-meta__n">n={toolCount}</span>
@@ -97,7 +96,7 @@ export function About() {
       </div>
 
       <style>{`
-        .about { padding: var(--section-pad) 0 72px; }
+        .about { padding: var(--section-pad) 0 var(--section-end); }
 
         .about__body {
           display: grid;
@@ -124,10 +123,9 @@ export function About() {
           display: flex;
           gap: 22px;
           flex-wrap: wrap;
-          margin-top: 28px;
+          margin-top: 26px;
         }
 
-        /* Spec block — a plate of standing facts */
         .about__spec {
           margin: 0;
           border-top: 1px solid var(--rule);
@@ -151,12 +149,15 @@ export function About() {
           color: var(--ink);
         }
 
-        .about__tk { margin-top: 96px; }
+        /* ── Toolkit ──────────────────────────────────────────────────── */
+
+        .about__tk { margin-top: 72px; }
 
         .tk-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 0 56px;
+          margin-top: 6px;
         }
 
         .tk-cat {
@@ -187,9 +188,14 @@ export function About() {
         }
 
         @media (max-width: 940px) {
-          .about__body { grid-template-columns: 1fr; gap: 36px; }
+          .about__body { grid-template-columns: 1fr; gap: 34px; }
           .tk-grid { grid-template-columns: 1fr; gap: 0; }
         }
+
+        @media (max-width: 620px) {
+          .tk-grid { grid-template-columns: 1fr; gap: 0; }
+        }
+
       `}</style>
     </section>
   );
