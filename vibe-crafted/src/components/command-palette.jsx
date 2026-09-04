@@ -6,10 +6,10 @@ import { PORTFOLIO } from "../data/portfolio.jsx";
 function buildCommands({ setTheme, theme, openProject, setOpen }) {
   const p = PORTFOLIO || {};
   const sections = [
-    { id: "top", label: "Hero", section: "Top" },
-    { id: "projects", label: "Projects", section: "Section" },
-    { id: "about", label: "About + Toolkit", section: "Section" },
-    { id: "experience", label: "Experience + Education", section: "Section" },
+    { id: "top", label: "Top", section: "Section" },
+    { id: "about", label: "About", section: "Section" },
+    { id: "projects", label: "Work", section: "Section" },
+    { id: "experience", label: "Trajectory", section: "Section" },
     { id: "contact", label: "Contact", section: "Section" },
   ];
 
@@ -38,7 +38,7 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
   const actionCmds = [
     {
       id: "theme-toggle",
-      icon: "◐",
+      icon: "TH",
       label: `Toggle theme — ${theme === "dark" ? "Light" : "Dark"}`,
       section: "Action",
       run: () => {
@@ -62,7 +62,7 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
     },
     {
       id: "open-github",
-      icon: "↗",
+      icon: "EXT",
       label: "Open GitHub profile",
       section: "Action",
       run: () => {
@@ -72,7 +72,7 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
     },
     {
       id: "open-linkedin",
-      icon: "↗",
+      icon: "EXT",
       label: "Open LinkedIn",
       section: "Action",
       run: () => {
@@ -82,8 +82,8 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
     },
     {
       id: "open-cv",
-      icon: "↗",
-      label: "Open CV / Résumé",
+      icon: "EXT",
+      label: "Open CV",
       section: "Action",
       run: () => {
         try {

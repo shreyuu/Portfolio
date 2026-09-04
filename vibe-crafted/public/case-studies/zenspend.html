@@ -5,17 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ZenSpend — Case Study · Shreyash Meshram</title>
   <meta name="description" content="ZenSpend case study — designing a privacy-first AI expense coach that runs Llama locally so financial data never leaves the machine." />
-  <meta name="theme-color" content="#ebe8e1" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#e9eef4" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0a0f16" media="(prefers-color-scheme: dark)" />
 
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23161513'/><text x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='%23ebe8e1'>s</text></svg>" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%230a0f16'/><path d='M6 42 L17 42 L23 18 L32 54 L41 10 L47 42 L58 42' fill='none' stroke='%23ff5c8a' stroke-width='5' stroke-linecap='square' stroke-linejoin='miter'/></svg>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@300;400;500&family=Neue+Haas+Grotesk+Text+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="../src/styles/globals.css">
-  <link rel="stylesheet" href="../src/styles/print.css" media="print">
+  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112,100..800&family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&display=swap" rel="stylesheet">
 
   <style>
     /* ── Case-study layout overrides ─────────────────────────────────────── */
@@ -72,11 +69,11 @@
     }
     .cs-eyebrow .dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: var(--swatch-llm);
+      background: var(--cs-ch);
     }
 
     h1.cs-title {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-size: clamp(48px, 7vw, 96px);
       line-height: 0.96;
       letter-spacing: -0.03em;
@@ -87,7 +84,7 @@
     h1.cs-title em { font-style: italic; }
 
     .cs-deck {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-size: clamp(20px, 2.4vw, 26px);
       line-height: 1.45;
       color: var(--ink-soft);
@@ -110,7 +107,7 @@
       margin-bottom: 8px;
     }
     .cs-meta-grid dd {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-style: italic;
       font-size: 18px;
       line-height: 1.3;
@@ -122,7 +119,7 @@
     .cs-cover {
       margin: 64px 0 80px;
       height: 360px;
-      background: var(--swatch-llm);
+      background: var(--cs-ch);
       position: relative;
       overflow: hidden;
       border-radius: 0;
@@ -137,7 +134,7 @@
     .cs-cover-num {
       position: absolute;
       right: 32px; bottom: -28px;
-      font-family: var(--serif);
+      font-family: var(--display);
       font-style: italic;
       font-size: clamp(180px, 22vw, 320px);
       color: white;
@@ -157,7 +154,7 @@
       position: absolute;
       left: 32px; bottom: 32px;
       max-width: 56%;
-      font-family: var(--serif);
+      font-family: var(--display);
       font-style: italic;
       font-size: clamp(20px, 2.4vw, 32px);
       line-height: 1.25;
@@ -180,7 +177,7 @@
     }
 
     h2.cs-h {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-size: clamp(28px, 4vw, 48px);
       line-height: 1.05;
       letter-spacing: -0.02em;
@@ -191,7 +188,7 @@
     h2.cs-h em { font-style: italic; }
 
     .cs-prose p {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-weight: 300;
       font-size: 19px;
       line-height: 1.65;
@@ -215,7 +212,7 @@
       padding: 40px 0;
       border-top: 1px solid var(--ink);
       border-bottom: 1px solid var(--ink);
-      font-family: var(--serif);
+      font-family: var(--display);
       font-style: italic;
       font-weight: 300;
       font-size: clamp(28px, 3.4vw, 42px);
@@ -243,7 +240,7 @@
     }
     .cs-stat:last-child { border-right: 0; }
     .cs-stat-n {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-style: italic;
       font-size: clamp(40px, 6vw, 72px);
       line-height: 1;
@@ -284,7 +281,7 @@
       color: var(--accent);
     }
     .cs-arch-block-name {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-style: italic;
       font-size: 22px;
       line-height: 1.1;
@@ -335,7 +332,7 @@
       color: var(--accent);
     }
     .cs-lessons h3 {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-size: 24px;
       line-height: 1.2;
       letter-spacing: -0.015em;
@@ -344,7 +341,7 @@
       margin: 0 0 8px;
     }
     .cs-lessons p {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-weight: 300;
       font-size: 16px;
       line-height: 1.55;
@@ -360,7 +357,7 @@
       border-top: 1px solid var(--rule-soft);
     }
     .cs-footer h2 {
-      font-family: var(--serif);
+      font-family: var(--display);
       font-style: italic;
       font-size: clamp(36px, 5vw, 64px);
       line-height: 1.05;
@@ -396,12 +393,23 @@
       .cs-stat:last-child { border-bottom: 0; }
     }
   </style>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("portfolio_theme");
+        if (t !== "light" && t !== "dark") {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
 </head>
-<body>
+<body style="--cs-ch: var(--ch-llm)">
   <!-- ── Top bar ────────────────────────────────────────────────────────── -->
   <div class="cs-topbar">
     <div class="cs-topbar-inner">
-      <a href="../Portfolio.html" class="cs-back">
+      <a href="../index.html" class="cs-back">
         <span class="arr">←</span> Back to portfolio
       </a>
       <div class="cs-meta">Case Study · 01 / 17</div>
@@ -668,10 +676,10 @@
         <a href="https://github.com/shreyuu/ZenSpend" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">
           View repository ↗
         </a>
-        <a href="../Portfolio.html#contact" class="cs-cta cs-cta--ghost">
+        <a href="../index.html#contact" class="cs-cta cs-cta--ghost">
           Get in touch
         </a>
-        <a href="../Portfolio.html" class="cs-cta cs-cta--ghost">
+        <a href="../index.html" class="cs-cta cs-cta--ghost">
           ← Back to portfolio
         </a>
       </div>
