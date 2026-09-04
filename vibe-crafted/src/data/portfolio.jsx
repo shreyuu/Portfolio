@@ -139,6 +139,23 @@ export const PORTFOLIO = {
   // Equalised cards: no `featured`, no `kind`, no `year`. Just title, blurb, stack, href, optional highlights.
   projects: [
     {
+      // Numbered 00: current work, ahead of the shipped 01—17 series (whose
+      // case studies are a self-contained "NN / 17" set).
+      n: "00",
+      title: "Identifying feature drift using variable importance and MCR",
+      domain: "ML",
+      status: "MSc 2026",
+      blurb:
+        "MSc dissertation, University of Nottingham. Detecting feature drift by watching how a model uses its variables, rather than waiting for accuracy to fall — three detectors built and scored against the standard drift-detection baselines.",
+      highlights: [
+        "Three detectors: SHAP/permutation importance shift, Random Forest vote-dominance, and an MCR/Rashomon-set monitor",
+        "Benchmarked against DDM, ADWIN, Page–Hinkley and a KS test on the driftDatasets concept-drift streams",
+        "Scored on detection delay, false-alarm rate, and lead time before performance degrades",
+      ],
+      stack: ["Python", "scikit-learn", "SHAP", "River"],
+      href: "https://github.com/shreyuu/UoN-Business-Analytics/tree/main/Dissertation",
+    },
+    {
       n: "01",
       title: "ZenSpend",
       domain: "LLM",
