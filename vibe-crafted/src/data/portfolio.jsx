@@ -141,6 +141,7 @@ export const PORTFOLIO = {
     {
       n: "01",
       title: "ZenSpend",
+      domain: "LLM",
       blurb:
         "Privacy-first, AI-powered expense tracker. FastAPI backend with LangChain and pgvector, running a local Llama via Ollama so financial data never leaves the machine.",
       highlights: [
@@ -155,6 +156,7 @@ export const PORTFOLIO = {
     {
       n: "02",
       title: "FENgine",
+      domain: "Vision",
       blurb:
         "Chess-board OCR pipeline that turns a photograph into a FEN string and replayable PGN. Perspective correction with OpenCV, piece classification via a small CNN.",
       highlights: [
@@ -169,6 +171,7 @@ export const PORTFOLIO = {
     {
       n: "03",
       title: "FinCast AI",
+      domain: "ML",
       blurb:
         "Market-analysis platform blending technical indicators, an SVM price predictor, and FinBERT-driven news sentiment — all wired into a TypeScript React dashboard.",
       highlights: [
@@ -183,6 +186,7 @@ export const PORTFOLIO = {
     {
       n: "04",
       title: "BFSI Sentiment Analysis",
+      domain: "ML",
       blurb:
         "End-to-end NLP solution classifying banking & insurance news headlines as positive, negative, or neutral. Traditional ML, gradient-boosted ensembles, and BERT compared on the same pipeline.",
       highlights: [
@@ -197,6 +201,7 @@ export const PORTFOLIO = {
     {
       n: "05",
       title: "Retail Customer Segmentation",
+      domain: "Data",
       blurb:
         "Clustered 3,000 retail customers from six months of loyalty-card data into five interpretable segments — Core Grocery, Tobacco Convenience, Cashpoint Users, Drinks & Tobacco, Lottery-Focused.",
       highlights: [
@@ -211,6 +216,7 @@ export const PORTFOLIO = {
     {
       n: "06",
       title: "FoodCorp Store KPI Analysis",
+      domain: "Data",
       blurb:
         "Customer-focused KPI study comparing four UK retail stores. SQL views, Databricks notebooks, and Tableau dashboards measuring acquisition, retention, revenue, and growth — recommending London Leadenhall Street for further investment.",
       highlights: [
@@ -225,6 +231,7 @@ export const PORTFOLIO = {
     {
       n: "07",
       title: "Business Risk Prediction Pipeline",
+      domain: "ML",
       blurb:
         "Full predictive-analytics workflow for a Foundational Business Analytics module: data prep, exploratory analysis, model training, calibration, and explainable decision-tree visualisation.",
       highlights: [
@@ -239,6 +246,7 @@ export const PORTFOLIO = {
     {
       n: "08",
       title: "Bluesky Brand Intelligence",
+      domain: "Data",
       blurb:
         "Comparative analytics of Wired vs The Verge on Bluesky: collection, cleaning, sentiment, LDA topic modelling, keyword networks, micro-influencer scoring, and a brand perceptual map.",
       highlights: [
@@ -253,6 +261,7 @@ export const PORTFOLIO = {
     {
       n: "09",
       title: "Statveil",
+      domain: "App",
       blurb:
         "Solo-Leveling-inspired productivity gamification app in Flutter. Track daily quests, level up character stats (STR, INT, AGI, VIT, WILL), maintain streaks, and survive a daily reset that punishes missed quests.",
       highlights: [
@@ -267,6 +276,7 @@ export const PORTFOLIO = {
     {
       n: "10",
       title: "Brainfarts & Benchmarks",
+      domain: "Lab",
       blurb:
         "A public playground of curiosity-driven coding experiments — micro-benchmarks, 'why is this faster?' probes, and one-off scripts that exist purely because the question wouldn't go away.",
       highlights: [
@@ -281,6 +291,7 @@ export const PORTFOLIO = {
     {
       n: "11",
       title: "Rubiklog",
+      domain: "Vision",
       blurb:
         "A Rubik's Cube timer with computer-vision scramble detection — Django backend, React client, OpenCV pipeline.",
       stack: ["Django", "React", "Postgres", "OpenCV", "TensorFlow"],
@@ -290,6 +301,7 @@ export const PORTFOLIO = {
     {
       n: "12",
       title: "AmazeBot",
+      domain: "LLM",
       blurb:
         "Conversational chatbot wired to Hugging Face Blenderbot with a Django REST backend.",
       stack: ["Django", "React", "HF API", "REST"],
@@ -299,6 +311,7 @@ export const PORTFOLIO = {
     {
       n: "13",
       title: "DjangoChatify",
+      domain: "Realtime",
       blurb:
         "Real-time WebSocket chat app — channels, rooms, presence, containerised.",
       stack: ["Django Channels", "React", "WebSockets", "Postgres", "Docker"],
@@ -308,6 +321,7 @@ export const PORTFOLIO = {
     {
       n: "14",
       title: "Hand Gesture Recognition",
+      domain: "Vision",
       blurb:
         "Real-time hand-sign detection with MediaPipe, audio feedback via gTTS.",
       stack: ["Python", "TensorFlow", "MediaPipe", "OpenCV", "gTTS"],
@@ -317,6 +331,7 @@ export const PORTFOLIO = {
     {
       n: "15",
       title: "Posture Recognition",
+      domain: "Vision",
       blurb:
         "CNN-based sitting/standing detector with a matplotlib evaluation report.",
       stack: ["Python", "TensorFlow", "CNN", "scikit-learn"],
@@ -326,6 +341,7 @@ export const PORTFOLIO = {
     {
       n: "16",
       title: "Expense Analytics",
+      domain: "Web",
       blurb:
         "Minimal expense tracker with a MERN-stack core and a focus on usable charts.",
       stack: ["React", "Express", "MongoDB", "Tailwind"],
@@ -335,6 +351,7 @@ export const PORTFOLIO = {
     {
       n: "17",
       title: "TempTracker",
+      domain: "Web",
       blurb:
         "Current-temperature web app backed by OpenWeatherMap.",
       stack: ["Django", "React", "Tailwind", "OWM"],

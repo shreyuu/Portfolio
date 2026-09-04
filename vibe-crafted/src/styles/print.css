@@ -18,7 +18,6 @@
     --rule: #111111 !important;
     --rule-soft: rgba(0, 0, 0, 0.18) !important;
     --accent: #111111 !important;
-    --grain-op: 0 !important;
   }
 
   html, body {
@@ -28,14 +27,27 @@
   }
 
   /* Strip page chrome */
-  body::before,                         /* grain */
+  body::before,                         /* graph-paper ground */
   .scroll-progress,
+  .spine,
   nav, .nav,
   .twk-panel,
   .cmdk-backdrop, .cmdk-shell,
-  .pdx-backdrop, .pdx-panel {
+  .pdx-backdrop, .pdx {
     display: none !important;
   }
+
+  /* The spine is gone on paper, so its gutter goes too */
+  .wrap {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: none !important;
+  }
+
+  /* Modules are collapsed on screen; print them all */
+  details { display: block !important; }
+  details > summary { display: none !important; }
+  details > ul { margin-top: 0 !important; }
 
   /* Hide visual flourishes */
   .reveal, .mask > span {

@@ -1,7 +1,7 @@
 // App shell — theme management + tweaks + command palette + project detail overlay
 
 import React from "react";
-import { Nav, ScrollProgress } from "./components/nav.jsx";
+import { Nav, ScrollProgress, Spine } from "./components/nav.jsx";
 import { CommandPalette } from "./components/command-palette.jsx";
 import {
   useTweaks,
@@ -18,34 +18,27 @@ import { Contact } from "./sections/contact.jsx";
 import { inject } from "@vercel/analytics";
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "accent": "#d94a1f",
-  "accentDark": "#ff6b3d",
+  "accent": "#c42e63",
+  "accentDark": "#ff5c8a",
   "density": "comfortable",
-  "fontPairing": "fraunces_mono",
+  "fontPairing": "instrument",
   "theme": "light"
 }/*EDITMODE-END*/;
 
 function applyFontPairing(pairing) {
   const root = document.documentElement;
+  const MARTIAN = '"Martian Mono", ui-monospace, "SF Mono", Menlo, monospace';
+  const INSTRUMENT = '"Instrument Sans", ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif';
   const pairs = {
-    fraunces_mono: {
-      serif: '"Fraunces", "Times New Roman", serif',
-      sans: '"Neue Haas Grotesk Text Pro", ui-sans-serif, -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif',
-      mono: '"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace',
-    },
-    serif_only: {
-      serif: '"Fraunces", "Times New Roman", serif',
-      sans: '"Fraunces", "Times New Roman", serif',
-      mono: '"JetBrains Mono", ui-monospace, Menlo, monospace',
-    },
-    mono_only: {
-      serif: '"JetBrains Mono", ui-monospace, Menlo, monospace',
-      sans: '"JetBrains Mono", ui-monospace, Menlo, monospace',
-      mono: '"JetBrains Mono", ui-monospace, Menlo, monospace',
-    },
+    // Display mono + a real reading face — the default
+    instrument: { display: MARTIAN, sans: INSTRUMENT, mono: MARTIAN },
+    // Every word on the instrument, labels included
+    all_mono:   { display: MARTIAN, sans: MARTIAN, mono: MARTIAN },
+    // Quieter: sans everywhere but the measured values
+    all_sans:   { display: INSTRUMENT, sans: INSTRUMENT, mono: MARTIAN },
   };
-  const pair = pairs[pairing] || pairs.fraunces_mono;
-  root.style.setProperty("--serif", pair.serif);
+  const pair = pairs[pairing] || pairs.instrument;
+  root.style.setProperty("--display", pair.display);
   root.style.setProperty("--sans", pair.sans);
   root.style.setProperty("--mono", pair.mono);
 }
@@ -125,6 +118,7 @@ export function App() {
     <>
       <a href="#main" className="skip-link mono">Skip to content</a>
       <ScrollProgress />
+      <Spine />
       <Nav theme={theme} setTheme={setTheme} openCmdK={() => setCmdkOpen(true)} />
 
       <main id="main">
@@ -165,9 +159,9 @@ export function App() {
           label="Font pairing"
           value={values.fontPairing}
           options={[
-            { value: "fraunces_mono", label: "Serif + Mono" },
-            { value: "serif_only", label: "All-Serif" },
-            { value: "mono_only", label: "All-Mono" },
+            { value: "instrument", label: "Instrument" },
+            { value: "all_mono", label: "All-Mono" },
+            { value: "all_sans", label: "All-Sans" },
           ]}
           onChange={(v) => setTweak("fontPairing", v)}
         />
