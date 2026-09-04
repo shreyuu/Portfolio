@@ -104,6 +104,9 @@ export function ProjectDetail({ project, onClose }) {
                   style={{ background: tone(project.domain) }}
                 />
                 {project.domain} · {project.n}
+                {project.status && (
+                  <span className="pdx__status">{project.status}</span>
+                )}
               </span>
               <button onClick={onClose} className="lbl pdx__close" aria-label="Close">
                 Close ✕
@@ -195,6 +198,15 @@ export function ProjectDetail({ project, onClose }) {
           vertical-align: 0;
         }
 
+        .pdx__status {
+          margin-left: 10px;
+          padding: 2px 6px;
+          border: 1px solid var(--accent);
+          color: var(--accent);
+          font-size: 8.5px;
+          letter-spacing: 0.14em;
+        }
+
         .pdx__close { color: var(--ink); transition: color .2s ease; }
         .pdx__close:hover { color: var(--accent); }
 
@@ -284,7 +296,7 @@ export function Projects({ onOpenProject }) {
           index="02"
           label="Selected work"
           n={`n=${projects.length}`}
-          title="Seventeen runs, each one shipped."
+          title="Eighteen runs, seventeen shipped."
           kicker="Pick a channel to narrow the list, or open a row for the full write-up and source."
         />
 
@@ -327,7 +339,10 @@ export function Projects({ onOpenProject }) {
                 style={{ "--tone": tone(p.domain) }}
               >
                 <span className="row__n">{p.n}</span>
-                <span className="row__title">{p.title}</span>
+                <span className="row__title">
+                  {p.title}
+                  {p.status && <span className="row__status">{p.status}</span>}
+                </span>
                 <span className="row__chan">
                   <span className="row__dot" />
                   {p.domain}
@@ -448,12 +463,28 @@ export function Projects({ onOpenProject }) {
 
         .row--item:hover .row__go { color: var(--tone); transform: translate(2px, -2px); }
         .row--item:hover .row__title { color: var(--tone); }
+        .row--item:hover .row__status { color: var(--accent); }
 
         .row__n {
           font-family: var(--mono);
           font-variation-settings: "wdth" 82, "wght" 500;
           font-size: 10.5px;
           color: var(--ink-mute);
+        }
+
+        .row__status {
+          display: inline-block;
+          margin-left: 10px;
+          padding: 2px 6px;
+          border: 1px solid var(--accent);
+          color: var(--accent);
+          font-family: var(--mono);
+          font-variation-settings: "wdth" 82, "wght" 500;
+          font-size: 8.5px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          vertical-align: 2px;
+          white-space: nowrap;
         }
 
         .row__title {

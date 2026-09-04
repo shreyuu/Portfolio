@@ -64,7 +64,7 @@ export function Hero() {
           <Reveal delay={620}>
             <div className="hero__cta">
               <a href="#projects" className="stamp stamp--solid">
-                <span>17 results</span>
+                <span>{p.projects.length} results</span>
                 <ArrowUpRight size={12} />
               </a>
               <a href="#contact" className="stamp">
