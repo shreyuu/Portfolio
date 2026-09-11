@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Identifying Feature Drift — Case Study · Shreyash Meshram</title>
+  <meta name="description" content="MSc dissertation case study — detecting concept drift by watching which features a model relies on, and finding that whether drift is visible at all depends on what the statistic is computed from." />
+  <meta name="theme-color" content="#e9eef4" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0a0f16" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%230a0f16'/><path d='M6 42 L17 42 L23 18 L32 54 L41 10 L47 42 L58 42' fill='none' stroke='%23ff5c8a' stroke-width='5' stroke-linecap='square' stroke-linejoin='miter'/></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112,100..800&family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="case-study.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("portfolio_theme");
+        if (t !== "light" && t !== "dark") {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
+</head>
+<body style="--cs-ch: var(--ch-ml)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="../index.html" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Case Study · 00 — Dissertation</div>
+    </div>
+  </div>
+
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <div class="cs-eyebrow">
+        <span class="dot"></span>
+        <span>Research · MSc dissertation · 2026</span>
+      </div>
+      <h1 class="cs-title">Importance moves first.<br>But only if you <em>refit.</em></h1>
+      <p class="cs-deck">
+        Models on live data go stale when the relationship between features and
+        outcome changes — and we usually find out by watching accuracy fall, which
+        reports the damage only once it has been done. Feature-importance monitoring
+        promises an earlier warning. My MSc dissertation asked when that promise
+        actually holds, and found the answer turns on a measurement decision almost
+        nobody states out loud.
+      </p>
+
+      <dl class="cs-meta-grid">
+        <div><dt>Role</dt><dd>Solo — design, code &amp; write-up</dd></div>
+        <div><dt>Context</dt><dd>MSc Business Analytics, University of Nottingham</dd></div>
+        <div><dt>Stack</dt><dd>Python · scikit-learn · SHAP · River</dd></div>
+        <div><dt>Status</dt><dd>Submitted 3 Sep 2026</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="cs-wrap">
+    <div class="cs-cover">
+      <div class="cs-cover-tag">Fig. 00 · frozen vs. refitted attribution</div>
+      <div class="cs-cover-num">00</div>
+      <div class="cs-cover-quote">A frozen explanation stays honest about the model, and goes quiet about the world.</div>
+    </div>
+  </div>
+
+  <main class="cs-wrap">
+    <section class="cs-section">
+      <div class="cs-section-num">§ 01 — The problem</div>
+      <h2 class="cs-h">Error monitoring is a <em>smoke alarm in the ashes.</em></h2>
+      <div class="cs-prose">
+        <p>
+          The standard way to notice that a deployed model has gone wrong is to
+          watch its error rate. Detectors like DDM and ADWIN do this well, but they
+          share a structural limitation: error only rises after the model has
+          already started making bad calls. By the time the alarm fires, harm has
+          accumulated.
+        </p>
+        <p>
+          A recent line of work proposes watching <strong>variable importance</strong>
+          instead — the intuition being that the features a model leans on should
+          reorganise before its accuracy visibly slips. It is a compelling story.
+          The dissertation set out to test whether it survives contact with a
+          benchmark where the ground truth is known.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">The question isn't which importance measure you use. It's what you compute it from.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 02 — The core argument</div>
+      <h2 class="cs-h">A frozen model <em>cannot see</em> conditional drift.</h2>
+      <div class="cs-prose">
+        <p>
+          Real concept drift means <code>P(y | X)</code> moves while <code>P(X)</code>
+          holds still — the inputs look the same, but what they imply about the
+          outcome has changed. That framing makes the limitation of label-free
+          monitoring precise rather than merely suspected.
+        </p>
+        <p>
+          Any statistic computed from a <strong>frozen</strong> deployed model and
+          unlabelled inputs is a function of the input distribution and a fixed set
+          of trees. If the input distribution isn't moving, that statistic has
+          nothing to move in response to. It cannot systematically reveal a change
+          in the conditional relationship, because it never observes the
+          conditional relationship at all.
+        </p>
+        <p>
+          Refitting on a recent window changes what is being measured. It stops
+          describing the deployed model and starts describing the reliance structure
+          the <em>current</em> concept supports. That is the instrument. It is also
+          expensive, because it needs labels — which is the honest cost buried in
+          the result.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 03 — Experimental design</div>
+      <h2 class="cs-h">Two arms: exact ground truth, and a real stream.</h2>
+      <div class="cs-prose">
+        <p>
+          A single benchmark can't separate "the signal didn't move" from "the signal
+          couldn't have moved." So the study runs two arms that answer different
+          halves of the question.
+        </p>
+      </div>
+
+      <div class="cs-arch">
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">Arm A — Harness</div>
+          <div class="cs-arch-block-name">Boolean ground truth</div>
+        </div><div class="cs-arch-block-detail">A synthetic Boolean stream where all ten two-feature subsets are exhaustively enumerated at every timestep, so which features suffice to determine the label is known exactly, not estimated.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">Arm B — Benchmark</div>
+          <div class="cs-arch-block-name">Rotating hyperplane</div>
+        </div><div class="cs-arch-block-detail">200,000 instances × 10 features, cut into 200 windows of 1,000. The generator holds P(X) stationary by construction while P(y | X) rotates.</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">Signals</div>
+          <div class="cs-arch-block-name">S1 – S4</div>
+        </div><div class="cs-arch-block-detail">Refitted SHAP departure, the same departure on the frozen model, ensemble vote dominance, and exact sufficient-subset structure (harness only).</div></div>
+        <div class="cs-arch-block"><div>
+          <div class="cs-arch-block-tag">Discipline</div>
+          <div class="cs-arch-block-name">Null bands &amp; controls</div>
+        </div><div class="cs-arch-block-detail">Every signal calibrated against a bootstrap null band, converted to alarms by a three-window persistence rule, and tested under permutation negative controls.</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The null band matters more than it sounds. Without it, "the importance
+          moved" is unfalsifiable — importance always moves a bit. Bootstrapping
+          window 0 a hundred times gives a band for how much movement is just
+          sampling noise: <code>0.1874</code> for the refitted signal,
+          <code>0.2162</code> for the frozen one. Only sustained excursions above
+          that band count as alarms.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 04 — Results</div>
+      <h2 class="cs-h">Seven windows of warning — and two silences.</h2>
+      <div class="cs-prose">
+        <p>
+          On the rotating hyperplane, the refitted SHAP signal crossed its band at
+          <strong>window 1</strong> and stayed there. The deployed model's accuracy
+          didn't fall measurably below its out-of-bag reference of
+          <code>0.8330</code> until <strong>window 8</strong>. That is an observed
+          lead of seven windows — roughly seven thousand instances of warning before
+          the damage was visible in the error rate.
+        </p>
+        <p>
+          The frozen SHAP signal and vote dominance raised <strong>no sustained
+          alarm at any window</strong>. That silence is the result, not a bug: it is
+          exactly what §&nbsp;02 predicts of a label-free statistic under a
+          stationary input distribution.
+        </p>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat"><div class="cs-stat-n">7</div><div class="cs-stat-label">Windows of lead — alarm at 1, degradation at 8</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">0.417</div><div class="cs-stat-label">Largest refitted importance swing, vs 0.035 frozen</div></div>
+        <div class="cs-stat"><div class="cs-stat-n">200k</div><div class="cs-stat-label">Benchmark instances across 200 windows</div></div>
+      </div>
+
+      <div class="cs-prose">
+        <p>
+          The Boolean harness sharpened it into something stranger. As feature
+          <code>D</code> became <em>strictly necessary</em> to determine the label,
+          refitted attribution tracked it from <code>0.154</code> up to
+          <code>0.500</code> — while frozen attribution on the same data fell to
+          <code>0.025</code>. The frozen explainer didn't merely fail to react.
+          <strong>It moved in the opposite direction to the truth.</strong>
+        </p>
+        <p>
+          And throughout that reorganisation, a refitted model kept perfect accuracy.
+          The set of sufficient feature pairs contracted from six to three, the
+          reliance structure rebuilt itself underneath — and any accuracy-based
+          detector watching would have seen a flat line the whole way.
+        </p>
+      </div>
+    </section>
+
+    <p class="cs-pullquote">The explanation stayed accurate about the model, and grew steadily less informative about the world.</p>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 05 — What I refused to claim</div>
+      <h2 class="cs-h">The results that <em>don't</em> flatter the thesis.</h2>
+      <div class="cs-prose">
+        <p>
+          It would have been easy to write this up as "SHAP beats error monitoring."
+          It doesn't, and saying so was the more interesting piece of work.
+        </p>
+      </div>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>It ties with DDM. It does not beat it.</h3>
+          <p>DDM also alarmed at window 1. No claim of earlier detection is
+          available, and the tie is stated explicitly rather than framed away.
+          ADWIN alarmed at window 14 — after degradation was already measurable.</p>
+        </div></li>
+        <li><div>
+          <h3>It is not label-free.</h3>
+          <p>Refitting needs labels for the window it fits on, so this approach does
+          nothing for the delayed-label problem that motivates most unsupervised
+          drift detection. What it buys is earlier warning <em>once</em> labels
+          arrive.</p>
+        </div></li>
+        <li><div>
+          <h3>The lead rests on a 0.0030 margin.</h3>
+          <p>Accuracy at window 8 sits three thousandths below the degradation
+          threshold. A shift of about that size moves the degradation point to
+          window 9 and every lead time with it. All timings are single-run point
+          estimates on one stream realisation.</p>
+        </div></li>
+        <li><div>
+          <h3>No MCR interval was ever estimated.</h3>
+          <p>The title carries MCR, and the honest scope is narrower: no Rashomon
+          set is enumerated under a loss tolerance anywhere in the work. The
+          harness enumerates exact sufficient subsets instead. Stating that
+          plainly mattered more than keeping the stronger-sounding framing.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 06 — Negative controls</div>
+      <h2 class="cs-h">Making sure the alarm meant something.</h2>
+      <div class="cs-prose">
+        <p>
+          A detector that fires on a rotating hyperplane is only interesting if it
+          stays quiet on the same data with the drift destroyed. Under permutation,
+          the refitted SHAP alarm moved from window 1 to window 106 — the signal
+          followed the structure, not the noise.
+        </p>
+        <p>
+          The controls also embarrassed a baseline, which is worth reporting.
+          ADWIN was silent in all three permuted error streams, as it should be.
+          <strong>DDM alarmed in two of three</strong> — so on this stream it is not
+          cleanly separated from its own negative control. Because the permutation
+          procedures differ between the candidate signals and the baselines, these
+          outcomes order the methods qualitatively and estimate no false-positive
+          rate. That limitation is stated rather than papered over.
+        </p>
+      </div>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 07 — What I'd do differently</div>
+      <h2 class="cs-h">Three things, next time.</h2>
+      <ul class="cs-lessons">
+        <li><div>
+          <h3>Replicate across streams and seeds.</h3>
+          <p>Every timing here is a single run. Repeating across stream
+          realisations would turn point estimates into distributions and let the
+          lead time carry a confidence interval instead of a caveat.</p>
+        </div></li>
+        <li><div>
+          <h3>Vary the window length.</h3>
+          <p>One window length resolves the degradation point to about one window,
+          which is precisely where the 0.0030 margin bites. A sweep would separate
+          the finding from the measurement grid.</p>
+        </div></li>
+        <li><div>
+          <h3>Pin the platform, not just the versions.</h3>
+          <p>Verifying on Linux x86-64 with identical library versions shifted the
+          out-of-bag reference from 0.8330 to 0.8320 and moved a reported first
+          response by one step — scikit-learn's compiled tree splitter differs
+          across architectures. Combinatorial results reproduced exactly; anything
+          floating-point did not. Reproducibility appendices should say which
+          machine.</p>
+        </div></li>
+      </ul>
+    </section>
+
+    <section class="cs-section">
+      <div class="cs-section-num">§ 08 — The takeaway</div>
+      <h2 class="cs-h">Observability is a design decision.</h2>
+      <div class="cs-prose">
+        <p>
+          The finding worth carrying out of this isn't that a SHAP-based signal
+          gives seven windows of warning on one benchmark. It's that whether
+          concept drift is observable through variable importance <em>at all</em>
+          depends on what the statistic is computed from — and that choice is
+          usually made implicitly, by whichever library is convenient.
+        </p>
+        <p>
+          If you monitor a frozen model's explanations and see nothing, that is not
+          evidence your model is healthy. It may be evidence that you built an
+          instrument which cannot detect the thing you are afraid of.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-wrap">
+      <h2>That's the dissertation. Want to talk shop?</h2>
+      <div class="cs-cta-row">
+        <a href="https://github.com/shreyuu/UoN-Business-Analytics/tree/main/Dissertation" target="_blank" rel="noreferrer" class="cs-cta cs-cta--solid">View repository ↗</a>
+        <a href="../index.html#contact" class="cs-cta cs-cta--ghost">Get in touch</a>
+        <a href="../index.html" class="cs-cta cs-cta--ghost">← Back to portfolio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -154,6 +154,7 @@ export const PORTFOLIO = {
       ],
       stack: ["Python", "scikit-learn", "SHAP", "River"],
       href: "https://github.com/shreyuu/UoN-Business-Analytics/tree/main/Dissertation",
+      caseStudy: "case-studies/feature-drift-mcr.html",
     },
     {
       n: "01",
