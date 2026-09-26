@@ -25,9 +25,15 @@ export function Hero() {
     return () => clearInterval(id);
   }, []);
 
-  const timeStr = time.toLocaleTimeString("en-GB", {
-    hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London",
-  });
+  // The zone label comes from Intl too, so it reads BST in summer and GMT in
+  // winter instead of a hard-coded suffix that is wrong half the year.
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit", minute: "2-digit", hour12: false,
+    timeZone: "Europe/London", timeZoneName: "short",
+  }).formatToParts(time);
+  const part = (type) => parts.find((x) => x.type === type)?.value ?? "";
+  const timeStr = `${part("hour")}:${part("minute")}`;
+  const zone = part("timeZoneName");
 
   return (
     <section id="top" data-screen-label="Hero" className="hero">
@@ -40,7 +46,7 @@ export function Hero() {
           </span>
           <span className="lbl">{p.location}</span>
           <span className="lbl">MSc Business Analytics · 25—26</span>
-          <span className="lbl hero__strip-t">{timeStr} BST</span>
+          <span className="lbl hero__strip-t">{timeStr} {zone}</span>
         </div>
 
         {/* Nameplate. Mono at display size is conventionally wrong — the even
