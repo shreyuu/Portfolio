@@ -65,7 +65,7 @@ const About = () => {
           ))}
         </motion.div>
         <motion.a
-          href="/Shreyash-Meshram-Resume.pdf"
+          href="/resources/Shreyash-Meshram-CV.pdf"
           download
           className="inline-flex items-center gap-2 text-white font-medium text-sm bg-purple-600 px-4 py-2 rounded hover:bg-purple-700 transition"
           variants={fadeInUp}

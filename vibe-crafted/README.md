@@ -86,7 +86,8 @@ vibe-crafted/
 ├── vercel.json                # SPA rewrite → /index.html
 ├── public/                    # copied verbatim to dist/
 │   ├── og-image.png           # 1200×630 social preview
-│   ├── Shreyash-Meshram-Resume.pdf
+│   ├── resources/
+│   │   └── Shreyash-Meshram-CV.pdf
 │   ├── robots.txt
 │   ├── sitemap.xml
 │   └── case-studies/
@@ -127,7 +128,7 @@ Almost every content change goes in **[`src/data/portfolio.jsx`](src/data/portfo
 | --- | --- |
 | `name`, `role`, `location` | Nav, hero, footer |
 | `email`, `github`, `linkedin` | Contact section, command-palette actions |
-| `resume` | CV links. Path relative to the site root (`./Shreyash-Meshram-Resume.pdf`). |
+| `resume` | CV links. Path relative to the site root (`./resources/Shreyash-Meshram-CV.pdf`). |
 | `tagline`, `intro`, `about[]` | Profile copy |
 | `skills[]` | `{ label, items[] }` toolkit groups |
 | `experience[]` | Work log |
@@ -345,4 +346,4 @@ Because `vite.config.js` sets `base: "./"`, `dist/` is fully relative and also w
 - Email: [shreyashmeshram0031@gmail.com](mailto:shreyashmeshram0031@gmail.com)
 - GitHub: [github.com/shreyuu](https://github.com/shreyuu)
 - LinkedIn: [linkedin.com/in/shreyuu](https://www.linkedin.com/in/shreyuu/)
-- CV: [`/Shreyash-Meshram-Resume.pdf`](public/Shreyash-Meshram-Resume.pdf)
+- CV: [`/resources/Shreyash-Meshram-CV.pdf`](public/resources/Shreyash-Meshram-CV.pdf)

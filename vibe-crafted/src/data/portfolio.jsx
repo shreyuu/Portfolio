@@ -7,7 +7,7 @@ export const PORTFOLIO = {
   email: "shreyashmeshram0031@gmail.com",
   github: "https://github.com/shreyuu",
   linkedin: "https://www.linkedin.com/in/shreyuu/",
-  resume: "./Shreyash-Meshram-Resume.pdf",
+  resume: "./resources/Shreyash-Meshram-CV.pdf",
 
   tagline:
     "I build scalable backends, thoughtful interfaces, and applied-ML systems that solve actual problems.",
