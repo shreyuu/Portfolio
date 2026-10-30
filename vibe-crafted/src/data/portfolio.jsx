@@ -13,18 +13,18 @@ export const PORTFOLIO = {
     "I build scalable backends, thoughtful interfaces, and applied-ML systems that solve actual problems.",
 
   intro:
-    "Full-stack developer pursuing an MSc in Business Analytics at the University of Nottingham. I obsess over systems that are fast, correct, and a pleasure to use — from FastAPI services to React frontends to ML pipelines that ship.",
+    "Full-stack developer with an MSc in Business Analytics from the University of Nottingham. I obsess over systems that are fast, correct, and a pleasure to use — from FastAPI services to React frontends to ML pipelines that ship.",
 
   about: [
     "I work across product and infrastructure — backend services, ML pipelines, and the interfaces sitting on top. The projects I keep coming back to mix a real user need with enough technical depth to keep me curious: chess-board OCR, privacy-first expense tracking, BFSI sentiment pipelines, retail customer segmentation.",
-    "Right now I'm at Nottingham deepening data-at-scale and predictive-analytics work, and writing applied-AI experiments in evenings. I care about craft — well-labelled endpoints, honest loading states, tests that actually run — and I'm open to part-time and graduate roles where that mindset is welcome.",
+    "I've just finished an MSc in Business Analytics at Nottingham, where I deepened data-at-scale and predictive-analytics work. I care about craft — well-labelled endpoints, honest loading states, tests that actually run — and I'm open to full-time roles where that mindset is welcome.",
   ],
 
   experience: [
     {
       role: "Python Developer Intern",
       company: "Arohi Softwares",
-      period: "Aug 2024 — Feb 2025",
+      period: "Aug 2024 – Feb 2025",
       duration: "7 mo",
       blurb:
         "Built responsive Django UIs, integrated REST APIs, and owned schema design across a cross-functional Agile team.",
@@ -37,7 +37,7 @@ export const PORTFOLIO = {
     {
       role: "Software Developer Intern",
       company: "NerdTech",
-      period: "Mar 2024 — Apr 2024",
+      period: "Mar 2024 – Apr 2024",
       duration: "2 mo",
       blurb:
         "Shipped client software with a user-centric focus. Cut runtime errors through systematic debugging and test coverage.",
@@ -50,7 +50,7 @@ export const PORTFOLIO = {
     {
       role: "ML with AI (Python) Trainee",
       company: "Knowledge Solutions India",
-      period: "Dec 2021 — Feb 2022",
+      period: "Dec 2021 – Feb 2022",
       duration: "3 mo",
       blurb:
         "Deployed an ML pipeline for a Heart Disease Predictor using scikit-learn and Pandas.",
@@ -66,7 +66,7 @@ export const PORTFOLIO = {
     {
       school: "University of Nottingham",
       degree: "MSc, Business Analytics",
-      period: "Sep 2025 — Sep 2026",
+      period: "Sep 2025 – Sep 2026",
       place: "Jubilee Campus, Nottingham, UK",
       notes: [
         "Data at Scale: Management, Processing & Visualisation",
@@ -82,7 +82,7 @@ export const PORTFOLIO = {
     {
       school: "Sandip Institute of Technology & Research Centre",
       degree: "BE, Computer Engineering",
-      period: "2022 — 2025",
+      period: "2022 – 2025",
       place: "Nashik, Maharashtra, India",
       notes: [
         "Data Structures & Algorithms · Design & Analysis of Algorithms",
@@ -102,7 +102,7 @@ export const PORTFOLIO = {
     {
       school: "Sandip Polytechnic",
       degree: "Diploma, Computer Engineering",
-      period: "2019 — 2022",
+      period: "2019 – 2022",
       place: "Nashik, India",
       notes: [
         "Programming in C · OOP · Java · Advance Java · Python",

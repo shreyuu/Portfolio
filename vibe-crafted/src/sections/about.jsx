@@ -1,4 +1,4 @@
-// Profile + toolkit
+// About + toolkit
 
 import React from "react";
 import { PORTFOLIO } from "../data/portfolio.jsx";
@@ -9,11 +9,11 @@ export function About() {
   const toolCount = p.skills.reduce((n, c) => n + c.items.length, 0);
 
   return (
-    <section id="about" data-screen-label="Profile" className="about">
+    <section id="about" data-screen-label="About" className="about">
       <div className="wrap">
         <SectionHeader
           index="01"
-          label="Profile"
+          label="About"
           n={p.location}
           title="An engineer who ships the measurement, not just the model."
         />
@@ -51,10 +51,10 @@ export function About() {
           <Reveal delay={120}>
             <dl className="about__spec">
               {[
-                ["Status", "Open to part-time & graduate roles"],
-                ["Available", "September 2026"],
+                ["Status", "Open to full-time roles"],
+                ["Available", "Now"],
                 ["Based", p.location],
-                ["Reading", "MSc Business Analytics, Nottingham"],
+                ["Degree", "MSc Business Analytics, Nottingham (2026)"],
               ].map(([k, v]) => (
                 <div className="about__spec-row" key={k}>
                   <dt className="lbl">{k}</dt>
@@ -144,6 +144,7 @@ export function About() {
 
         .about__spec dd {
           margin: 0;
+          text-wrap: balance;
           font-size: 13.5px;
           line-height: 1.5;
           color: var(--ink);

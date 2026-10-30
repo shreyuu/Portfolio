@@ -134,6 +134,10 @@ const __TWEAKS_STYLE = `
   .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
 `;
 
+// The host protocol trusts any parent window, so it only runs in dev builds.
+// In production the panel renders nothing and nothing is posted to '*'.
+const editHostEnabled = () => import.meta.env.DEV;
+
 // ── useTweaks ───────────────────────────────────────────────────────────────
 // Single source of truth for tweak values. setTweak persists via the host
 // (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
@@ -141,9 +145,15 @@ function useTweaks(defaults) {
   const [values, setValues] = React.useState(defaults);
   const setTweak = React.useCallback((key, val) => {
     setValues((prev) => ({ ...prev, [key]: val }));
-    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+    if (editHostEnabled()) {
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+    }
   }, []);
   return [values, setTweak];
+}
+
+function TweaksPanel(props) {
+  return editHostEnabled() ? <TweaksPanelHost {...props} /> : null;
 }
 
 // ── TweaksPanel ─────────────────────────────────────────────────────────────
@@ -153,7 +163,7 @@ function useTweaks(defaults) {
 // The close button posts __edit_mode_dismissed so the host's toolbar toggle
 // flips off in lockstep; the host echoes __deactivate_edit_mode back which
 // is what actually hides the panel.
-function TweaksPanel({ title = 'Tweaks', children }) {
+function TweaksPanelHost({ title = 'Tweaks', children }) {
   const [open, setOpen] = React.useState(false);
   const dragRef = React.useRef(null);
   const offsetRef = React.useRef({ x: 16, y: 16 });

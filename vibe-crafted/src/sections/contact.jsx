@@ -1,36 +1,41 @@
-// Signal out — contact + footer
+// Contact + footer
 
 import React from "react";
 import { PORTFOLIO } from "../data/portfolio.jsx";
-import { Reveal, ArrowUpRight } from "../components/primitives.jsx";
+import { Reveal, ArrowUpRight, Download } from "../components/primitives.jsx";
+import { copyText } from "../lib/clipboard.js";
+import { announce } from "../lib/announce.js";
+
+const COPY_RESET_MS = 1800;
+
+const COPY_LABEL = { idle: "Copy", copied: "✓", failed: "Retry" };
 
 export function Contact() {
   const p = PORTFOLIO;
-  const [copied, setCopied] = React.useState(false);
+  // idle → copied | failed → idle. A refused clipboard is reported, not swallowed.
+  const [copyState, setCopyState] = React.useState("idle");
 
   const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(p.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch (e) {
-      // Clipboard unavailable (insecure context, denied permission) — the
-      // address is on screen and selectable, so there is nothing to recover.
-    }
+    const ok = await copyText(p.email);
+    setCopyState(ok ? "copied" : "failed");
+    announce(ok
+      ? "Email address copied"
+      : `Couldn't copy the address. Use Write email, or it is ${p.email}.`);
+    window.setTimeout(() => setCopyState("idle"), COPY_RESET_MS);
   };
 
   return (
-    <section id="contact" data-screen-label="Signal out" className="out">
+    <section id="contact" data-screen-label="Contact" className="out">
       <div className="wrap">
         <div className="sect-meta" style={{ marginBottom: 30 }}>
           <span className="sect-meta__idx">04</span>
-          <span className="sect-meta__name">Signal out</span>
+          <span className="sect-meta__name">Contact</span>
           <span className="sect-meta__n">Replies within ~24h</span>
         </div>
 
         <Reveal>
           <h2 className="display out__head">
-            Send me
+            Send me{" "}
             <br />
             something<span style={{ color: "var(--accent)" }}>.</span>
           </h2>
@@ -40,23 +45,30 @@ export function Contact() {
           <Reveal delay={120}>
             <div>
               <p className="out__lede">
-                I&rsquo;m looking for full-stack and AI engineering roles starting
-                September 2026, and I&rsquo;m open to part-time work before then.
+                I&rsquo;m looking for full-stack and AI engineering roles, and
+                I&rsquo;m available to start now.
                 Hiring, building something, or just want to argue about
                 evaluation metrics — either way, write.
               </p>
 
-              <button onClick={copyEmail} className="stamp stamp--solid out__mail">
-                <span>{copied ? "Copied to clipboard" : p.email}</span>
-                <span className="out__mail-hint">{copied ? "✓" : "Copy"}</span>
-              </button>
+              {/* Copy for the desk, mailto for the phone in your hand */}
+              <div className="out__actions">
+                <button onClick={copyEmail} className="stamp stamp--solid out__mail">
+                  <span>{copyState === "copied" ? "Copied to clipboard" : p.email}</span>
+                  <span className="out__mail-hint">{COPY_LABEL[copyState]}</span>
+                </button>
+                <a href={`mailto:${p.email}`} className="stamp out__write">
+                  <span>Write email</span>
+                  <ArrowUpRight size={12} />
+                </a>
+              </div>
 
               <dl className="out__spec">
                 {[
                   { label: "GitHub", val: "shreyuu", href: p.github },
                   { label: "LinkedIn", val: "in/shreyuu", href: p.linkedin },
                   { label: "Based in", val: p.location, href: null },
-                  { label: "CV", val: "Download PDF", href: p.resume },
+                  { label: "CV", val: "Download PDF", href: p.resume, download: true },
                 ].map((x) => (
                   <div className="out__spec-row" key={x.label}>
                     <dt className="lbl">{x.label}</dt>
@@ -66,9 +78,10 @@ export function Contact() {
                           href={x.href}
                           target={x.href.startsWith("http") ? "_blank" : undefined}
                           rel="noreferrer"
+                          download={x.download || undefined}
                           className="u-link"
                         >
-                          {x.val} <ArrowUpRight size={10} />
+                          {x.val} {x.download ? <Download size={10} /> : <ArrowUpRight size={10} />}
                         </a>
                       ) : (
                         <span>{x.val}</span>
@@ -92,7 +105,7 @@ export function Contact() {
   - full_stack_engineer
   - ai_engineer
   - applied_ml
-start_date: 2026-09
+start_date: immediate
 location:
   - nottingham_uk
   - remote
@@ -138,6 +151,12 @@ response_time: ~24h`}
           max-width: 48ch;
         }
 
+        .out__actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
         .out__mail {
           font-size: 12px;
           letter-spacing: 0.04em;
@@ -146,7 +165,7 @@ response_time: ~24h`}
         }
 
         .out__mail-hint {
-          font-size: 9.5px;
+          font-size: var(--t-micro);
           letter-spacing: 0.16em;
           text-transform: uppercase;
           opacity: 0.7;
@@ -184,6 +203,9 @@ response_time: ~24h`}
           background: var(--bg-sunk);
         }
 
+        /* --ink-mute is 4.17:1 on --bg-sunk; the softer ink clears 4.5:1 */
+        .out__yml-bar .lbl { color: var(--ink-soft); }
+
         .out__yml-body {
           margin: 0;
           padding: 18px 16px 20px;
@@ -212,6 +234,7 @@ response_time: ~24h`}
 
         @media (max-width: 520px) {
           .out__mail { width: 100%; justify-content: space-between; }
+          .out__write { width: 100%; justify-content: space-between; }
         }
       `}</style>
     </section>

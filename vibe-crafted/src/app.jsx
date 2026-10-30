@@ -52,6 +52,26 @@ function applyDensity(density) {
   }
 }
 
+// Storage can throw (SecurityError) when the browser blocks site data — the
+// theme is a convenience, so fall back to not persisting it.
+const THEME_KEY = "portfolio_theme";
+
+function readSavedTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY);
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveTheme(theme) {
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch (e) {
+    /* storage unavailable — keep the in-memory choice */
+  }
+}
+
 function Analytics() {
   React.useEffect(() => {
     inject({ framework: "react" });
@@ -67,7 +87,7 @@ export function App() {
   // Order: saved choice > what the pre-paint script already applied
   // (which itself respects prefers-color-scheme) > light.
   const [theme, setThemeState] = React.useState(() => {
-    const saved = localStorage.getItem("portfolio_theme");
+    const saved = readSavedTheme();
     if (saved === "light" || saved === "dark") return saved;
     const applied = document.documentElement.getAttribute("data-theme");
     if (applied === "light" || applied === "dark") return applied;
@@ -84,7 +104,7 @@ export function App() {
       window.setTimeout(() => root.classList.remove("theme-transition"), 360);
     }
     setThemeState(nextTheme);
-    localStorage.setItem("portfolio_theme", nextTheme);
+    saveTheme(nextTheme);
   }, [theme]);
 
   // Apply theme attribute
@@ -113,6 +133,8 @@ export function App() {
 
   // Project detail overlay (lifted up so palette can open it)
   const [activeProject, setActiveProject] = React.useState(null);
+  // Stable, so the drawer's focus effect doesn't re-run on every App render
+  const closeProject = React.useCallback(() => setActiveProject(null), []);
 
   return (
     <>
@@ -131,7 +153,7 @@ export function App() {
 
       <ProjectDetail
         project={activeProject}
-        onClose={() => setActiveProject(null)}
+        onClose={closeProject}
       />
 
       <CommandPalette
@@ -187,6 +209,9 @@ export function App() {
           onChange={setTheme}
         />
       </TweaksPanel>
+
+      {/* The one polite live region; src/lib/announce.js writes into it */}
+      <p id="sr-status" className="sr-only" role="status" aria-live="polite" aria-atomic="true" />
 
       <Analytics />
     </>

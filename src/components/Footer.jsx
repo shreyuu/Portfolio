@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { send, init } from '@emailjs/browser';
 
+// Caps are enforced in the submit handler too — maxLength alone is bypassable.
+// The real abuse controls (allowed origins, rate limit, reCAPTCHA) live in the
+// EmailJS dashboard, since the public key ships in the bundle by design.
+const MAX_LENGTH = { name: 100, email: 254, message: 5000 };
+
 const Footer = () => {
   const [copied, setCopied] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '', company: '' });
   const [sending, setSending] = useState(false);
   const [formStatus, setFormStatus] = useState('');
 
@@ -54,6 +59,26 @@ const Footer = () => {
       setFormStatus('✗ Message must be at least 10 characters.');
       return;
     }
+    if (trimmedName.length > MAX_LENGTH.name) {
+      setFormStatus(`✗ Name must be at most ${MAX_LENGTH.name} characters.`);
+      return;
+    }
+    if (trimmedEmail.length > MAX_LENGTH.email) {
+      setFormStatus(`✗ Email must be at most ${MAX_LENGTH.email} characters.`);
+      return;
+    }
+    if (trimmedMessage.length > MAX_LENGTH.message) {
+      setFormStatus(`✗ Message must be at most ${MAX_LENGTH.message} characters.`);
+      return;
+    }
+
+    // Honeypot: humans never see this field, so a value means a bot. Pretend
+    // success so the bot has no signal to adapt to.
+    if (formData.company) {
+      setFormStatus('✓ Message sent successfully!');
+      setFormData({ name: '', email: '', message: '', company: '' });
+      return;
+    }
 
     setSending(true);
     setFormStatus('');
@@ -67,15 +92,15 @@ const Footer = () => {
         EMAIL_SERVICE_ID,
         EMAIL_TEMPLATE_ID,
         {
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
         },
         EMAIL_PUBLIC_KEY
       );
 
       setFormStatus('✓ Message sent successfully!');
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', message: '', company: '' });
       setTimeout(() => {
         setShowForm(false);
         setFormStatus('');
@@ -122,6 +147,7 @@ const Footer = () => {
               placeholder="Your name"
               value={formData.name}
               onChange={handleFormChange}
+              maxLength={MAX_LENGTH.name}
               required
               className="w-full bg-gray-800 text-white px-3 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
@@ -131,6 +157,7 @@ const Footer = () => {
               placeholder="Your email"
               value={formData.email}
               onChange={handleFormChange}
+              maxLength={MAX_LENGTH.email}
               required
               className="w-full bg-gray-800 text-white px-3 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
@@ -139,10 +166,24 @@ const Footer = () => {
               placeholder="Your message"
               value={formData.message}
               onChange={handleFormChange}
+              maxLength={MAX_LENGTH.message}
               required
               rows="3"
               className="w-full bg-gray-800 text-white px-3 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
             />
+            <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
+              <label>
+                Leave this field empty
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleFormChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </label>
+            </div>
             <button
               type="submit"
               disabled={sending}

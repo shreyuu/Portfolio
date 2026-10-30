@@ -6,6 +6,42 @@
    cold ground, hot signal, graph-paper grid, everything on a tick.
    ========================================================================== */
 
+/* ==========================================================================
+   Fonts — self-hosted latin subsets (OFL). Same files Google Fonts served,
+   minus two render-blocking hops; public/fonts is shared with the case
+   studies, which declare the same faces in case-study.css.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Martian Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-stretch: 75% 112%;
+  font-display: swap;
+  src: url("/fonts/martian-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("/fonts/instrument-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: italic;
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("/fonts/instrument-sans-italic-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   /* Ground — cool graph paper, not cream. Blue-tinted like plot furniture. */
   --bg:        #e9eef4;
@@ -50,7 +86,8 @@
   --t-body:    16px;
   --t-small:   14px;
   --t-caption: 12px;
-  --t-label:   10.5px;
+  --t-label:   11px;
+  --t-micro:   11px;   /* floor for tags, counts, chips and kbd hints */
 
   /* Two families. Mono carries both extremes of the scale: the 168px
      nameplate and the 10.5px instrument label. */
@@ -140,6 +177,9 @@ body {
 ::selection { background: var(--accent); color: var(--accent-ink); }
 
 a { color: inherit; }
+
+/* Keeps a lone word off the last line of a paragraph */
+p { text-wrap: pretty; }
 
 button {
   font: inherit;
@@ -326,16 +366,20 @@ body::before {
 
 .stamp > * { position: relative; z-index: 1; }
 
-.stamp:hover { color: var(--bg); border-color: var(--ink); }
-.stamp:hover::before { transform: scaleX(1); }
-
 .stamp--hot { border-color: var(--accent); color: var(--accent); }
 .stamp--hot::before { background: var(--accent); }
-.stamp--hot:hover { color: var(--accent-ink); }
 
 .stamp--solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .stamp--solid::before { background: var(--accent); }
-.stamp--solid:hover { color: var(--accent-ink); border-color: var(--accent); }
+
+/* Hover only where a pointer can actually hover — on touch a tap would leave
+   the fill stuck on after the finger lifts. */
+@media (hover: hover) and (pointer: fine) {
+  .stamp:hover { color: var(--bg); border-color: var(--ink); }
+  .stamp:hover::before { transform: scaleX(1); }
+  .stamp--hot:hover { color: var(--accent-ink); }
+  .stamp--solid:hover { color: var(--accent-ink); border-color: var(--accent); }
+}
 
 /* ==========================================================================
    Tag — stack chips. Hairline, square, quiet.
@@ -344,7 +388,7 @@ body::before {
 .tag {
   font-family: var(--mono);
   font-variation-settings: "wdth" 85, "wght" 400;
-  font-size: 9.5px;
+  font-size: var(--t-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 4px 7px;
@@ -372,10 +416,12 @@ body::before {
   transition: color 250ms ease, background-size 250ms var(--ease);
 }
 
-.u-link:hover {
-  color: var(--accent);
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-size: 100% 2px;
+@media (hover: hover) and (pointer: fine) {
+  .u-link:hover {
+    color: var(--accent);
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-size: 100% 2px;
+  }
 }
 
 /* ==========================================================================
@@ -445,7 +491,7 @@ body::before {
 .spine__evt-lbl {
   font-family: var(--mono);
   font-variation-settings: "wdth" 78, "wght" 500;
-  font-size: 8.5px;
+  font-size: var(--t-micro);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   writing-mode: vertical-rl;
@@ -478,7 +524,7 @@ body::before {
 .spine__head-val {
   font-family: var(--mono);
   font-variation-settings: "wdth" 80, "wght" 700;
-  font-size: 9px;
+  font-size: var(--t-micro);
   letter-spacing: 0.04em;
   color: var(--accent);
   background: var(--bg);
@@ -537,6 +583,24 @@ html.js .mask > span {
 
 html.js .mask.in > span { transform: none; }
 
+/* Narrows each real space between masked words back to the 0.26em gap the
+   headline was set with: + 0.06em for the mask's negative margin, + 0.03em
+   because Martian Mono's space is that much narrower than 1ch at wdth 82. */
+.mask-text { word-spacing: calc(0.35em - 1ch); }
+
+/* Visually hidden, still read by screen readers (live region, extra labels) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ==========================================================================
    Skip link
    ========================================================================== */
@@ -563,15 +627,30 @@ html.js .mask.in > span { transform: none; }
    prefers-reduced-motion
    ========================================================================== */
 
+/* Fewer and gentler, not none: nothing travels, but colour and opacity
+   still fade briefly, so hover, selection and open/close keep their
+   feedback. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property: color, background-color, border-color, opacity, fill, stroke !important;
+    transition-duration: 150ms !important;
     scroll-behavior: auto !important;
   }
   html.js .reveal { opacity: 1 !important; transform: none !important; }
   html.js .mask > span { transform: none !important; }
+
+  /* Sweeping fills become fades */
+  .stamp::before,
+  .row--item::before { transform: none !important; opacity: 0; }
+  .stamp:hover::before,
+  .row--item:hover::before,
+  .row--item:focus-visible::before { opacity: 1; }
+
+  /* The drawer snaps, but still ends a transform transition so its content
+     is released after closing */
+  .pdx { transition-property: transform !important; transition-duration: 1ms !important; }
 }
 
 /* ==========================================================================
@@ -645,7 +724,7 @@ html.js .mask.in > span { transform: none; }
 .cmdk-item .cmdk-kbd {
   font-family: var(--mono);
   font-variation-settings: "wdth" 82, "wght" 500;
-  font-size: 9px;
+  font-size: var(--t-micro);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-mute);
@@ -660,7 +739,7 @@ html.js .mask.in > span { transform: none; }
 .cmdk-item[aria-selected="true"] .cmdk-icon,
 .cmdk-item[aria-selected="true"] .cmdk-kbd,
 .cmdk-item:hover .cmdk-icon,
-.cmdk-item:hover .cmdk-kbd { color: var(--accent-ink); opacity: 0.75; }
+.cmdk-item:hover .cmdk-kbd { color: var(--accent-ink); }
 
 .cmdk-empty {
   padding: 26px 22px;

@@ -1,6 +1,6 @@
 # Shreyash Meshram — Portfolio
 
-**Live:** [shreyuu.vercel.app](https://shreyuu.vercel.app/) · **Stack:** React 18 + Vite 5 + plain CSS · **Deploy:** Vercel
+**Live:** [www.shreyash.codes](https://www.shreyash.codes/) · **Stack:** React 18 + Vite 5 + plain CSS · **Deploy:** Vercel
 
 The personal portfolio of Shreyash Meshram, a full-stack and applied-AI engineer (MSc Business Analytics, University of Nottingham). It is a single-page React app with 18 standalone case-study pages. Nearly all content comes from one data file.
 
@@ -296,7 +296,7 @@ The type ramp runs from `--t-display` (`clamp(50px, 12.5vw, 168px)`) down to `--
 
 All of this is in `index.html`:
 
-- Title, description, canonical URL (`https://shreyuu.vercel.app/`)
+- Title, description, canonical URL (`https://www.shreyash.codes/`)
 - Open Graph and Twitter `summary_large_image` tags pointing at `/og-image.png` (1200×630)
 - A `schema.org/Person` JSON-LD block (name, job title, alumni of, sameAs links)
 - `theme-color` for both colour schemes

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Not found · Shreyash Meshram</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#e9eef4" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0a0f16" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- Served for any missing path at any depth, so every URL is root-absolute -->
+  <link rel="stylesheet" href="/case-studies/case-study.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("portfolio_theme");
+        if (t !== "light" && t !== "dark") {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
+</head>
+<body style="--cs-ch: var(--ch-llm)">
+  <div class="cs-topbar">
+    <div class="cs-topbar-inner">
+      <a href="/" class="cs-back"><span class="arr">←</span> Back to portfolio</a>
+      <div class="cs-meta">Status · 404</div>
+    </div>
+  </div>
+
+  <main class="cs-hero">
+    <div class="cs-wrap">
+      <h1 class="cs-title">No reading at <br><em>this address.</em></h1>
+      <p class="cs-deck">
+        The page you asked for isn&rsquo;t here. The link may be out of date,
+        or the address has a typo.
+      </p>
+      <div class="cs-cta-row">
+        <a href="/" class="cs-cta cs-cta--solid">Go to the portfolio</a>
+        <a href="/#projects" class="cs-cta cs-cta--ghost">See the projects</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

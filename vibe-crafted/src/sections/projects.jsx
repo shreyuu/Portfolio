@@ -8,6 +8,7 @@
 import React from "react";
 import { PORTFOLIO } from "../data/portfolio.jsx";
 import { SectionHeader, ArrowUpRight } from "../components/primitives.jsx";
+import { lockScroll } from "../lib/scroll-lock.js";
 
 const CHANNEL_TONE = {
   Vision:  "var(--ch-vision)",
@@ -36,9 +37,25 @@ export function ProjectDetail({ project, onClose }) {
   const lastFocused = React.useRef(null);
   const open = !!project;
 
+  // The last project stays rendered until the panel has slid out, so closing
+  // doesn't flash an empty sheet. `shown` clears on the transform's end.
+  const [shown, setShown] = React.useState(project);
+  React.useEffect(() => {
+    if (project) setShown(project);
+  }, [project]);
+  const view = project || shown;
+
+  const onTransitionEnd = (e) => {
+    if (open || e.target !== e.currentTarget) return;
+    if (e.propertyName && e.propertyName !== "transform") return;
+    setShown(null);
+  };
+
+  const openN = project ? project.n : null;
+
   React.useEffect(() => {
     if (!open) return;
-    document.body.style.overflow = "hidden";
+    const unlock = lockScroll();
     lastFocused.current = document.activeElement;
 
     const focusables = () =>
@@ -68,20 +85,22 @@ export function ProjectDetail({ project, onClose }) {
 
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = "";
+      unlock();
       window.removeEventListener("keydown", onKey);
-      if (lastFocused.current && lastFocused.current.focus) lastFocused.current.focus();
+      // Back to whatever opened the drawer; if that was the page itself (the
+      // palette opened from nowhere), land on the project's own row.
+      const back = lastFocused.current;
+      if (back && back !== document.body && back.isConnected) back.focus();
+      else document.querySelector(`[data-project="${openN}"]`)?.focus();
     };
-  }, [open, onClose]);
+  }, [open, openN, onClose]);
 
   return (
     <>
+      {/* Pointer-only dismiss; the Close button and Escape cover keyboards */}
       <div
-        role="button"
-        tabIndex={open ? 0 : -1}
-        aria-label="Close dialog"
+        aria-hidden="true"
         onClick={onClose}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClose(); }}
         className="pdx-backdrop"
         style={{ opacity: open ? 1 : 0, pointerEvents: open ? "auto" : "none" }}
       />
@@ -91,21 +110,23 @@ export function ProjectDetail({ project, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-hidden={!open}
-        aria-label={project ? `${project.title} details` : undefined}
+        inert={open ? undefined : ""}
+        aria-label={view ? `${view.title} details` : undefined}
         className="pdx"
         style={{ transform: open ? "translateX(0)" : "translateX(100%)" }}
+        onTransitionEnd={onTransitionEnd}
       >
-        {project && (
+        {view && (
           <>
             <div className="pdx__bar">
               <span className="lbl">
                 <span
                   className="pdx__dot"
-                  style={{ background: tone(project.domain) }}
+                  style={{ background: tone(view.domain) }}
                 />
-                {project.domain} · {project.n}
-                {project.status && (
-                  <span className="pdx__status">{project.status}</span>
+                {view.domain} · {view.n}
+                {view.status && (
+                  <span className="pdx__status">{view.status}</span>
                 )}
               </span>
               <button onClick={onClose} className="lbl pdx__close" aria-label="Close">
@@ -114,18 +135,18 @@ export function ProjectDetail({ project, onClose }) {
             </div>
 
             <div className="pdx__body">
-              <h3 className="display pdx__title">{project.title}</h3>
-              <p className="pdx__blurb">{project.blurb}</p>
+              <h2 className="display pdx__title">{view.title}</h2>
+              <p className="pdx__blurb">{view.blurb}</p>
 
-              {project.highlights && project.highlights.length > 0 && (
+              {view.highlights && view.highlights.length > 0 && (
                 <>
                   <div className="lbl pdx__lbl">What it does</div>
                   <ul className="pdx__list">
-                    {project.highlights.map((h) => (
+                    {view.highlights.map((h) => (
                       <li key={h}>
                         <span
                           className="pdx__bullet"
-                          style={{ background: tone(project.domain) }}
+                          style={{ background: tone(view.domain) }}
                         />
                         {h}
                       </li>
@@ -136,15 +157,15 @@ export function ProjectDetail({ project, onClose }) {
 
               <div className="lbl pdx__lbl">Stack</div>
               <div className="pdx__tags">
-                {project.stack.map((s) => <span className="tag" key={s}>{s}</span>)}
+                {view.stack.map((s) => <span className="tag" key={s}>{s}</span>)}
               </div>
 
               <div className="pdx__actions">
-                <a href={project.href} target="_blank" rel="noreferrer" className="stamp stamp--solid">
+                <a href={view.href} target="_blank" rel="noreferrer" className="stamp stamp--solid">
                   <span>Source</span><ArrowUpRight size={12} />
                 </a>
-                {project.caseStudy && (
-                  <a href={project.caseStudy} target="_blank" rel="noreferrer" className="stamp">
+                {view.caseStudy && (
+                  <a href={view.caseStudy} target="_blank" rel="noreferrer" className="stamp">
                     <span>Case study</span><ArrowUpRight size={12} />
                   </a>
                 )}
@@ -203,7 +224,7 @@ export function ProjectDetail({ project, onClose }) {
           padding: 2px 6px;
           border: 1px solid var(--accent);
           color: var(--accent);
-          font-size: 8.5px;
+          font-size: var(--t-micro);
           letter-spacing: 0.14em;
         }
 
@@ -332,10 +353,13 @@ export function Projects({ onOpenProject }) {
         <ul className="work__rows">
           {rows.map((p) => (
             <li key={p.n}>
+              {/* Named by its own content (number, title, channel, note); the
+                  stack tags repeat in the drawer, so they stay out of the name. */}
               <button
                 className="row row--item"
                 onClick={() => handleOpen(p)}
-                aria-label={`Open ${p.title} details`}
+                aria-haspopup="dialog"
+                data-project={p.n}
                 style={{ "--tone": tone(p.domain) }}
               >
                 <span className="row__n">{p.n}</span>
@@ -348,11 +372,11 @@ export function Projects({ onOpenProject }) {
                   {p.domain}
                 </span>
                 <span className="row__note">{note(p)}</span>
-                <span className="row__stack">
+                <span className="row__stack" aria-hidden="true">
                   {p.stack.slice(0, 3).map((s) => <span className="tag" key={s}>{s}</span>)}
                   {p.stack.length > 3 && <span className="lbl row__more">+{p.stack.length - 3}</span>}
                 </span>
-                <span className="row__go"><ArrowUpRight size={13} /></span>
+                <span className="row__go" aria-hidden="true"><ArrowUpRight size={13} /></span>
               </button>
             </li>
           ))}
@@ -379,7 +403,7 @@ export function Projects({ onOpenProject }) {
           border: 1px solid var(--rule-soft);
           font-family: var(--mono);
           font-variation-settings: "wdth" 85, "wght" 500;
-          font-size: 10.5px;
+          font-size: var(--t-label);
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: var(--ink-mute);
@@ -393,14 +417,15 @@ export function Projects({ onOpenProject }) {
         }
 
         .chan-btn__n {
-          font-size: 9px;
-          opacity: .65;
+          font-size: var(--t-micro);
           padding-left: 3px;
           border-left: 1px solid currentColor;
           margin-left: 2px;
         }
 
-        .chan-btn:hover { color: var(--ink); border-color: var(--ink); }
+        @media (hover: hover) and (pointer: fine) {
+          .chan-btn:hover { color: var(--ink); border-color: var(--ink); }
+        }
 
         .chan-btn.on {
           color: var(--bg);
@@ -411,9 +436,11 @@ export function Projects({ onOpenProject }) {
         /* Rows */
         .work__rows { list-style: none; margin: 0; padding: 0; }
 
+        /* Each row is its own grid, so the stack column is a fixed width that
+           fits the widest three 11px tags plus the +n count (316px). */
         .row {
           display: grid;
-          grid-template-columns: 40px minmax(120px, 0.9fr) 104px minmax(0, 1.35fr) 268px 26px;
+          grid-template-columns: 40px minmax(120px, 0.9fr) 104px minmax(0, 1.35fr) 320px 26px;
           gap: 18px;
           align-items: center;
           width: 100%;
@@ -424,7 +451,7 @@ export function Projects({ onOpenProject }) {
         .row--head {
           font-family: var(--mono);
           font-variation-settings: "wdth" 85, "wght" 500;
-          font-size: 9.5px;
+          font-size: var(--t-micro);
           letter-spacing: 0.16em;
           text-transform: uppercase;
           color: var(--ink-mute);
@@ -453,22 +480,22 @@ export function Projects({ onOpenProject }) {
           transition: transform .28s var(--ease);
         }
 
-        .row--item:hover,
-        .row--item:focus-visible {
-          background: var(--bg-raised);
-        }
-
-        .row--item:hover::before,
+        .row--item:focus-visible { background: var(--bg-raised); }
         .row--item:focus-visible::before { transform: scaleY(1); }
 
-        .row--item:hover .row__go { color: var(--tone); transform: translate(2px, -2px); }
-        .row--item:hover .row__title { color: var(--tone); }
-        .row--item:hover .row__status { color: var(--accent); }
+        /* Hover only with a real pointer; on touch it would stay lit after a tap */
+        @media (hover: hover) and (pointer: fine) {
+          .row--item:hover { background: var(--bg-raised); }
+          .row--item:hover::before { transform: scaleY(1); }
+          .row--item:hover .row__go { color: var(--tone); transform: translate(2px, -2px); }
+          .row--item:hover .row__title { color: var(--tone); }
+          .row--item:hover .row__status { color: var(--accent); }
+        }
 
         .row__n {
           font-family: var(--mono);
           font-variation-settings: "wdth" 82, "wght" 500;
-          font-size: 10.5px;
+          font-size: var(--t-label);
           color: var(--ink-mute);
         }
 
@@ -480,7 +507,7 @@ export function Projects({ onOpenProject }) {
           color: var(--accent);
           font-family: var(--mono);
           font-variation-settings: "wdth" 82, "wght" 500;
-          font-size: 8.5px;
+          font-size: var(--t-micro);
           letter-spacing: 0.14em;
           text-transform: uppercase;
           vertical-align: 2px;
@@ -501,7 +528,7 @@ export function Projects({ onOpenProject }) {
           gap: 7px;
           font-family: var(--mono);
           font-variation-settings: "wdth" 85, "wght" 500;
-          font-size: 9.5px;
+          font-size: var(--t-micro);
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--ink-soft);
@@ -527,7 +554,7 @@ export function Projects({ onOpenProject }) {
           justify-content: flex-end;
           overflow: hidden;
         }
-        .row__more { font-size: 9px; color: var(--ink-mute); }
+        .row__more { font-size: var(--t-micro); color: var(--ink-mute); }
 
         .row__go {
           color: var(--ink-mute);

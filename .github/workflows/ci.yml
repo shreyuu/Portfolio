@@ -6,6 +6,10 @@ on:
     pull_request:
         branches: [main]
 
+# Least privilege: this workflow only reads the repo.
+permissions:
+    contents: read
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -15,25 +19,22 @@ jobs:
                 node-version: [16.x, 18.x]
 
         steps:
-            - uses: actions/checkout@v3
+            # Actions pinned to commit SHAs (tags are mutable).
+            - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
 
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
 
+            # npm ci only: installs exactly what the lockfile pins, and fails if
+            # package.json and the lockfile disagree instead of resolving fresh.
             - name: Install dependencies
               run: |
                   node -v
                   npm -v
-                  echo "Attempting npm ci..."
-                  if npm ci; then
-                    echo "npm ci succeeded"
-                  else
-                    echo "npm ci failed — running npm install (legacy-peer-deps) as fallback"
-                    npm install --legacy-peer-deps --no-audit --prefer-offline
-                  fi
+                  npm ci
 
             - name: Dump npm debug log (if any)
               if: failure()
@@ -53,14 +54,3 @@ jobs:
 
             - name: Build
               run: npm run build
-
-            - name: Run Vercel Speed Insights
-              if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
-              env:
-                  SPEED_INSIGHTS_TOKEN: ${{ secrets.SPEED_INSIGHTS_TOKEN }}
-              run: |
-                  if [ -z "$SPEED_INSIGHTS_TOKEN" ]; then
-                    echo "⚠️ SPEED_INSIGHTS_TOKEN is not set. Skipping Speed Insights upload."
-                    exit 0
-                  fi
-                  npx --yes @vercel/speed-insights@latest --url "https://shreyash-meshram.vercel.app" --upload --token "$SPEED_INSIGHTS_TOKEN"
