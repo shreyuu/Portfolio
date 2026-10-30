@@ -16,7 +16,10 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [16.x, 18.x]
+                # Node 24 matches local dev and the Vercel project. It bundles npm 11,
+                # which writes package-lock.json; npm 10 (Node 18-22) disagrees about
+                # optional peer deps (yaml under tailwindcss) and fails `npm ci`.
+                node-version: [24.x]
 
         steps:
             # Actions pinned to commit SHAs (tags are mutable).
