@@ -2,7 +2,7 @@
 
 import React from "react";
 import { PORTFOLIO } from "../data/portfolio.jsx";
-import { Reveal, ArrowUpRight } from "../components/primitives.jsx";
+import { ArrowDown } from "../components/primitives.jsx";
 
 /**
  * Every figure here is real and carries its provenance. A number without a
@@ -11,9 +11,9 @@ import { Reveal, ArrowUpRight } from "../components/primitives.jsx";
  */
 const RACK = [
   { value: "−40", unit: "%",  label: "API p50 latency",  source: "Arohi Softwares · query batching", tone: "var(--sig-2)" },
-  { value: "97",  unit: "%",  label: "Piece classifier", source: "FENgine · validation set",         tone: "var(--sig-3)" },
+  { value: "~97", unit: "%",  label: "Piece classifier", source: "FENgine · validation set",         tone: "var(--sig-3)" },
   { value: "89",  unit: "%",  label: "Recall",           source: "Heart disease · 5-fold CV",        tone: "var(--sig-4)" },
-  { value: "1.29",unit: "M",  label: "Txns analysed",    source: "FoodCorp KPI · £, 4 stores",       tone: "var(--sig-0)" },
+  { value: "£1.29", unit: "M", label: "Txn value analysed", source: "FoodCorp KPI · 4 stores",       tone: "var(--sig-0)" },
 ];
 
 export function Hero() {
@@ -41,11 +41,12 @@ export function Hero() {
 
         {/* Instrument header strip */}
         <div className="hero__strip">
+          <span className="lbl" style={{ color: "var(--ink)" }}>{p.role}</span>
           <span className="lbl" style={{ color: "var(--ink)" }}>
             <span className="hero__live" /> Available
           </span>
           <span className="lbl">{p.location}</span>
-          <span className="lbl">MSc Business Analytics · 25—26</span>
+          <span className="lbl">MSc Business Analytics · 2026</span>
           <span className="lbl hero__strip-t">{timeStr} {zone}</span>
         </div>
 
@@ -53,47 +54,45 @@ export function Hero() {
             advance widths make big words airy and strange. That strangeness is
             the point: it reads as stamped output, not lettering. */}
         <h1 className="hero__name display">
-          <span className="hero__line" style={{ "--i": 0 }}>Shreyash</span>
+          {/* The trailing space keeps the two block lines one name for screen
+              readers and copy-paste; it is invisible at the line end. */}
+          <span className="hero__line" style={{ "--i": 0 }}>Shreyash </span>
           <span className="hero__line" style={{ "--i": 1 }}>
             Meshra<span style={{ color: "var(--accent)" }}>m</span>
           </span>
         </h1>
 
-        {/* Thesis */}
+        {/* Thesis. Visible from the first paint: the nameplate's calibration
+            is the fold's one authored moment, and the calls to action should
+            never wait on it. */}
         <div className="hero__thesis">
-          <Reveal delay={520}>
-            <p className="hero__lede">
-              I build systems that <em>measure things</em> — backends that answer fast,
-              models that answer honestly, and interfaces that show their working.
-            </p>
-          </Reveal>
-          <Reveal delay={620}>
-            <div className="hero__cta">
-              <a href="#projects" className="stamp stamp--solid">
-                <span>{p.projects.length} results</span>
-                <ArrowUpRight size={12} />
-              </a>
-              <a href="#contact" className="stamp">
-                <span>Get in touch</span>
-              </a>
-            </div>
-          </Reveal>
+          <p className="hero__lede">
+            I build systems that <em>measure things</em> — backends that answer fast,
+            models that answer honestly, and interfaces that show their working.
+          </p>
+          <div className="hero__cta">
+            <a href="#projects" className="stamp stamp--solid">
+              <span>See the {p.projects.length} projects</span>
+              <ArrowDown size={12} />
+            </a>
+            <a href="#contact" className="stamp">
+              <span>Get in touch</span>
+            </a>
+          </div>
         </div>
 
         {/* Measurement rack */}
-        <Reveal delay={720}>
-          <div className="rack" role="list" aria-label="Selected measured results">
-            {RACK.map((r) => (
-              <div className="readout" role="listitem" key={r.label}>
-                <div className="readout__v" style={{ color: r.tone }}>
-                  {r.value}<span className="readout__u">{r.unit}</span>
-                </div>
-                <div className="readout__l">{r.label}</div>
-                <div className="readout__s">{r.source}</div>
+        <div className="rack" role="list" aria-label="Selected measured results">
+          {RACK.map((r) => (
+            <div className="readout" role="listitem" key={r.label}>
+              <div className="readout__v" style={{ color: r.tone }}>
+                {r.value}<span className="readout__u">{r.unit}</span>
               </div>
-            ))}
-          </div>
-        </Reveal>
+              <div className="readout__l">{r.label}</div>
+              <div className="readout__s">{r.source}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <style>{`
@@ -223,7 +222,7 @@ export function Hero() {
         .readout__l {
           font-family: var(--mono);
           font-variation-settings: "wdth" 88, "wght" 500;
-          font-size: 10.5px;
+          font-size: var(--t-label);
           letter-spacing: 0.14em;
           text-transform: uppercase;
           color: var(--ink);
@@ -231,7 +230,7 @@ export function Hero() {
         }
 
         .readout__s {
-          font-size: 11.5px;
+          font-size: var(--t-caption);
           line-height: 1.45;
           color: var(--ink-mute);
         }

@@ -155,7 +155,7 @@ export function ExperienceSection() {
         .entry__org {
           font-family: var(--mono);
           font-variation-settings: "wdth" 86, "wght" 500;
-          font-size: 11.5px;
+          font-size: var(--t-caption);
           letter-spacing: 0.04em;
           color: var(--accent);
           margin-bottom: 12px;

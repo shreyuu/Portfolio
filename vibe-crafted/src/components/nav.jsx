@@ -2,7 +2,8 @@
 
 import React from "react";
 import { PORTFOLIO } from "../data/portfolio.jsx";
-import { ArrowUpRight } from "./primitives.jsx";
+import { Download } from "./primitives.jsx";
+import { lockScroll } from "../lib/scroll-lock.js";
 
 // Vertical event labels are ~64px tall and centred on their mark, so the
 // plotting band is inset top and bottom to keep the first and last readable.
@@ -10,11 +11,56 @@ const SPINE_PAD = 56;
 
 const SECTIONS = [
   { id: "top",        label: "Origin" },
-  { id: "about",      label: "Profile" },
+  { id: "about",      label: "About" },
   { id: "projects",   label: "Work" },
   { id: "experience", label: "Trajectory" },
-  { id: "contact",    label: "Signal out" },
+  { id: "contact",    label: "Contact" },
 ];
+
+// The spine is only displayed from this width up (see `.spine` in
+// globals.css); below it the recorder has nothing to draw into.
+const SPINE_QUERY = "(min-width: 1180px)";
+
+/**
+ * Has the recorder gone quiet enough to stop drawing until the next scroll?
+ *
+ * `buf` is the rolling window of the last N pen positions (−1…1, newest last)
+ * and `pen` is the current pen offset. Returning true pauses the rAF loop: the
+ * canvas keeps its last frame, and the next scroll event starts it again.
+ *
+ * TODO(you): decide what "settled" means. Each sample carries ±0.025 of
+ * deliberate noise, so the trace never reads exactly zero. Returning false
+ * keeps today's behaviour (draw every frame while the spine is visible).
+ */
+function hasTraceSettled(buf, pen) {
+  return false;
+}
+
+// Scroll position as 0–100, read at most once per frame
+function useScrollPercent() {
+  const [pct, setPct] = React.useState(0);
+  React.useEffect(() => {
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      setPct(max > 0 ? (h.scrollTop / max) * 100 : 0);
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(read);
+    };
+    read();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, []);
+  return pct;
+}
 
 /**
  * Spine — the page's signature.
@@ -25,58 +71,64 @@ const SECTIONS = [
  * movement through the page. Section boundaries are annotated at their true
  * document offsets, and the playhead reads out how far through you are.
  *
+ * The recorder only runs while it can be seen: from SPINE_QUERY up, in a
+ * visible tab, and (once hasTraceSettled says so) only while you scroll.
  * Under prefers-reduced-motion the trace is not recorded at all — the axis,
  * the events, and the numeric readout carry the same information statically.
  */
 export function Spine() {
   const canvasRef = React.useRef(null);
-  const [pct, setPct] = React.useState(0);
+  const sectionTops = React.useRef([]);
+  const pct = useScrollPercent();
   const [marks, setMarks] = React.useState([]);
   const [activeId, setActiveId] = React.useState("top");
 
-  // Measure where each section actually sits in the document
+  // Measure where each section actually sits in the document, again whenever
+  // the page changes height (fonts settling, a module list opening).
   React.useEffect(() => {
     const measure = () => {
       const docH = document.documentElement.scrollHeight;
-      setMarks(
-        SECTIONS.map((s) => {
-          const el = document.getElementById(s.id);
-          if (!el) return null;
-          const top = el.getBoundingClientRect().top + window.scrollY;
-          return { ...s, at: Math.min(1, Math.max(0, top / docH)) };
-        }).filter(Boolean)
-      );
+      const found = SECTIONS.map((s) => {
+        const el = document.getElementById(s.id);
+        return el ? { ...s, top: el.getBoundingClientRect().top + window.scrollY } : null;
+      }).filter(Boolean);
+      sectionTops.current = found;
+      setMarks(found.map((s) => ({ ...s, at: Math.min(1, Math.max(0, s.top / docH)) })));
     };
     measure();
-    const t = setTimeout(measure, 700); // after fonts settle
+    const main = document.getElementById("main");
+    const ro = typeof ResizeObserver !== "undefined" && main ? new ResizeObserver(measure) : null;
+    ro?.observe(main);
     window.addEventListener("resize", measure);
     return () => {
-      clearTimeout(t);
+      ro?.disconnect();
       window.removeEventListener("resize", measure);
     };
   }, []);
 
-  // Which section is currently under the top third of the viewport
+  // Which section is under the top third of the viewport — from the cached
+  // offsets, so scrolling costs no layout reads.
   React.useEffect(() => {
-    const onScroll = () => {
+    let raf = 0;
+    const read = () => {
+      raf = 0;
       const line = window.scrollY + window.innerHeight * 0.3;
       let current = SECTIONS[0].id;
-      for (const s of SECTIONS) {
-        const el = document.getElementById(s.id);
-        if (el && el.getBoundingClientRect().top + window.scrollY <= line) current = s.id;
+      for (const s of sectionTops.current) {
+        if (s.top <= line) current = s.id;
       }
       setActiveId(current);
-
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      setPct(max > 0 ? (h.scrollTop / max) * 100 : 0);
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(read);
+    };
+    read();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
     };
   }, []);
 
@@ -86,12 +138,14 @@ export function Spine() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const wide = window.matchMedia(SPINE_QUERY);
 
     const N = 160;
     const buf = new Array(N).fill(0);
     let lastY = window.scrollY;
     let pen = 0; // the pen has inertia — it ramps toward the signal and decays
     let raf = 0;
+    let running = false;
     let w = 0;
     let h = 0;
 
@@ -169,13 +223,40 @@ export function Spine() {
       ctx.stroke();
       ctx.globalAlpha = 1;
 
+      if (hasTraceSettled(buf, pen)) {
+        running = false; // idle: hold the last frame until the next scroll
+        return;
+      }
       raf = requestAnimationFrame(frame);
     };
-    raf = requestAnimationFrame(frame);
+
+    const start = () => {
+      if (running || !wide.matches || document.hidden) return;
+      running = true;
+      raf = requestAnimationFrame(frame);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+    const onVisibility = () => (document.hidden ? stop() : start());
+    const onWidth = () => {
+      if (!wide.matches) return stop();
+      resize();
+      start();
+    };
+
+    window.addEventListener("scroll", start, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
+    wide.addEventListener("change", onWidth);
+    start();
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
       window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", start);
+      document.removeEventListener("visibilitychange", onVisibility);
+      wide.removeEventListener("change", onWidth);
     };
   }, []);
 
@@ -204,21 +285,7 @@ export function Spine() {
 
 // Fallback progress bar for viewports too narrow for the spine
 export function ScrollProgress() {
-  const [pct, setPct] = React.useState(0);
-  React.useEffect(() => {
-    const onScroll = () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      setPct(max > 0 ? (h.scrollTop / max) * 100 : 0);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
+  const pct = useScrollPercent();
   return (
     <div className="scroll-progress" aria-hidden="true">
       <div className="scroll-progress__fill" style={{ width: `${pct}%` }} />
@@ -231,7 +298,7 @@ export function ThemeToggle({ theme, setTheme }) {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      aria-label={`${isDark ? "Dark" : "Light"} theme, switch to ${isDark ? "light" : "dark"}`}
       className="lbl nav-toggle"
       style={{
         display: "inline-flex",
@@ -261,6 +328,14 @@ export function ThemeToggle({ theme, setTheme }) {
 export function Nav({ theme, setTheme, openCmdK }) {
   const [scrolled, setScrolled] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const burgerRef = React.useRef(null);
+
+  // Escape and the burger hand focus back to the burger; a menu link does not,
+  // so the browser can carry focus on to the section it jumps to.
+  const closeMenu = React.useCallback((restoreFocus) => {
+    setMenuOpen(false);
+    if (restoreFocus) burgerRef.current?.focus();
+  }, []);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -269,16 +344,21 @@ export function Nav({ theme, setTheme, openCmdK }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // While the menu covers the page, the page behind it is inert so Tab cannot
+  // wander into content the reader can't see.
   React.useEffect(() => {
     if (!menuOpen) return;
-    document.body.style.overflow = "hidden";
-    const onKey = (e) => e.key === "Escape" && setMenuOpen(false);
+    const main = document.getElementById("main");
+    const unlock = lockScroll();
+    main?.setAttribute("inert", "");
+    const onKey = (e) => e.key === "Escape" && closeMenu(true);
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = "";
+      unlock();
+      main?.removeAttribute("inert");
       window.removeEventListener("keydown", onKey);
     };
-  }, [menuOpen]);
+  }, [menuOpen, closeMenu]);
 
   const items = [
     { href: "#about", label: "About" },
@@ -331,7 +411,8 @@ export function Nav({ theme, setTheme, openCmdK }) {
           <button
             type="button"
             onClick={openCmdK}
-            aria-label="Open command palette"
+            aria-label="Query, open the command palette"
+            aria-keyshortcuts="Meta+K Control+K"
             className="lbl cmdk-trigger"
             style={{
               display: "inline-flex", alignItems: "center", gap: 9,
@@ -344,22 +425,23 @@ export function Nav({ theme, setTheme, openCmdK }) {
             <span className="mono" style={{
               padding: "1px 5px",
               border: "1px solid var(--rule-soft)",
-              fontSize: 9,
+              fontSize: "var(--t-micro)",
               color: "var(--ink)",
               fontVariationSettings: '"wdth" 80, "wght" 500',
             }}>⌘K</span>
           </button>
 
-          <a href={PORTFOLIO.resume} className="stamp" style={{ padding: "9px 13px" }}>
+          <a href={PORTFOLIO.resume} download className="stamp" aria-label="CV, download PDF" style={{ padding: "9px 13px" }}>
             <span>CV</span>
-            <ArrowUpRight size={11} />
+            <Download size={11} />
           </a>
 
           <ThemeToggle theme={theme} setTheme={setTheme} />
 
           <button
             type="button"
-            onClick={() => setMenuOpen((v) => !v)}
+            ref={burgerRef}
+            onClick={() => (menuOpen ? closeMenu(true) : setMenuOpen(true))}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
@@ -413,7 +495,7 @@ export function Nav({ theme, setTheme, openCmdK }) {
             <li key={it.href}>
               <a
                 href={it.href}
-                onClick={() => setMenuOpen(false)}
+                onClick={() => closeMenu(false)}
                 className="display"
                 tabIndex={menuOpen ? 0 : -1}
                 style={{
@@ -431,7 +513,7 @@ export function Nav({ theme, setTheme, openCmdK }) {
                   transition: `transform 380ms cubic-bezier(.2,.7,.2,1) ${70 + i * 55}ms, opacity 320ms ease ${70 + i * 55}ms`,
                 }}
               >
-                <span className="lbl" style={{ color: "var(--accent)", fontSize: 10 }}>
+                <span className="lbl" style={{ color: "var(--accent)", fontSize: "var(--t-micro)" }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 {it.label}
@@ -441,7 +523,8 @@ export function Nav({ theme, setTheme, openCmdK }) {
         </ul>
         <a
           href={PORTFOLIO.resume}
-          onClick={() => setMenuOpen(false)}
+          download
+          onClick={() => closeMenu(false)}
           className="stamp stamp--hot"
           tabIndex={menuOpen ? 0 : -1}
           style={{
@@ -451,8 +534,8 @@ export function Nav({ theme, setTheme, openCmdK }) {
             transition: "opacity 340ms ease 330ms",
           }}
         >
-          <span>Download CV</span>
-          <ArrowUpRight size={12} />
+          <span>Download CV (PDF)</span>
+          <Download size={12} />
         </a>
       </div>
 
@@ -472,7 +555,7 @@ export function Nav({ theme, setTheme, openCmdK }) {
         }
 
         .nav-plate__sub {
-          font-size: 8.5px;
+          font-size: var(--t-micro);
           letter-spacing: 0.14em;
           white-space: nowrap;
         }

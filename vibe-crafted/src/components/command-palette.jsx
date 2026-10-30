@@ -2,8 +2,15 @@
 
 import React from "react";
 import { PORTFOLIO } from "../data/portfolio.jsx";
+import { copyText } from "../lib/clipboard.js";
+import { announce } from "../lib/announce.js";
+import { lockScroll } from "../lib/scroll-lock.js";
 
-function buildCommands({ setTheme, theme, openProject, setOpen }) {
+// How long a result (e.g. "Email address copied") stays in the footer before
+// the palette closes itself.
+const NOTICE_MS = 900;
+
+function buildCommands({ setTheme, theme, openProject, setOpen, notify }) {
   const p = PORTFOLIO || {};
   const sections = [
     { id: "top", label: "Top", section: "Section" },
@@ -35,49 +42,18 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
     },
   }));
 
+  // Contact actions lead: they are what a visitor most often opens the
+  // palette to do, so they sit above navigation and the project list.
   const actionCmds = [
-    {
-      id: "theme-toggle",
-      icon: "TH",
-      label: `Toggle theme — ${theme === "dark" ? "Light" : "Dark"}`,
-      section: "Action",
-      run: () => {
-        setTheme(theme === "dark" ? "light" : "dark");
-        setOpen(false);
-      },
-    },
     {
       id: "copy-email",
       icon: "@",
       label: "Copy email address",
       section: "Action",
       run: async () => {
-        try {
-          await navigator.clipboard.writeText(p.email || "");
-        } catch (e) {
-          console.error("Failed to copy email:", e);
-        }
-        setOpen(false);
-      },
-    },
-    {
-      id: "open-github",
-      icon: "EXT",
-      label: "Open GitHub profile",
-      section: "Action",
-      run: () => {
-        window.open(p.github, "_blank", "noopener");
-        setOpen(false);
-      },
-    },
-    {
-      id: "open-linkedin",
-      icon: "EXT",
-      label: "Open LinkedIn",
-      section: "Action",
-      run: () => {
-        window.open(p.linkedin, "_blank", "noopener");
-        setOpen(false);
+        const ok = await copyText(p.email || "");
+        notify(ok ? "Email address copied" : `Couldn't copy. The address is ${p.email}`);
+        window.setTimeout(() => setOpen(false), NOTICE_MS);
       },
     },
     {
@@ -94,20 +70,57 @@ function buildCommands({ setTheme, theme, openProject, setOpen }) {
         setOpen(false);
       },
     },
+    {
+      id: "open-linkedin",
+      icon: "EXT",
+      label: "Open LinkedIn",
+      section: "Action",
+      run: () => {
+        window.open(p.linkedin, "_blank", "noopener");
+        setOpen(false);
+      },
+    },
+    {
+      id: "open-github",
+      icon: "EXT",
+      label: "Open GitHub profile",
+      section: "Action",
+      run: () => {
+        window.open(p.github, "_blank", "noopener");
+        setOpen(false);
+      },
+    },
+    {
+      id: "theme-toggle",
+      icon: "TH",
+      label: `Toggle theme — ${theme === "dark" ? "Light" : "Dark"}`,
+      section: "Action",
+      run: () => {
+        setTheme(theme === "dark" ? "light" : "dark");
+        setOpen(false);
+      },
+    },
   ];
 
-  return [...navCmds, ...projectCmds, ...actionCmds];
+  return [...actionCmds, ...navCmds, ...projectCmds];
 }
 
 export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) {
   const [query, setQuery] = React.useState("");
   const [selectedIdx, setSelectedIdx] = React.useState(0);
+  const [notice, setNotice] = React.useState("");
   const inputRef = React.useRef(null);
   const listRef = React.useRef(null);
+  const shellRef = React.useRef(null);
+
+  const notify = React.useCallback((message) => {
+    setNotice(message);
+    announce(message);
+  }, []);
 
   const commands = React.useMemo(
-    () => buildCommands({ setTheme, theme, openProject, setOpen }),
-    [theme, openProject, setTheme, setOpen]
+    () => buildCommands({ setTheme, theme, openProject, setOpen, notify }),
+    [theme, openProject, setTheme, setOpen, notify]
   );
 
   const filtered = React.useMemo(() => {
@@ -123,16 +136,23 @@ export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) 
     setSelectedIdx(0);
   }, [query, open]);
 
-  // Focus input on open
+  // Focus the input on open; on close, hand focus back to whatever opened the
+  // palette, unless a command has already moved it (e.g. into a project).
   React.useEffect(() => {
-    if (open) {
-      setQuery("");
-      // delay so transition starts
-      requestAnimationFrame(() => inputRef.current?.focus());
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!open) return;
+    const opener = document.activeElement;
+    setQuery("");
+    setNotice("");
+    const unlock = lockScroll();
+    // delay so transition starts
+    const raf = requestAnimationFrame(() => inputRef.current?.focus());
+    return () => {
+      cancelAnimationFrame(raf);
+      unlock();
+      const active = document.activeElement;
+      const paletteHadFocus = !active || active === document.body || shellRef.current?.contains(active);
+      if (paletteHadFocus && opener instanceof HTMLElement && opener.isConnected) opener.focus();
+    };
   }, [open]);
 
   // Global ⌘K / Ctrl+K listener
@@ -175,20 +195,23 @@ export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) 
 
   return (
     <>
+      {/* Pointer-only dismiss; keyboard users have Escape. Inert while closed
+          so neither the backdrop nor the hidden input sits in the tab order. */}
       <div
         className={`cmdk-backdrop${open ? " open" : ""}`}
-        role="button"
-        tabIndex={0}
-        aria-label="Close command palette"
+        aria-hidden="true"
+        inert={open ? undefined : ""}
         onClick={() => setOpen(false)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setOpen(false);
-          }
-        }}
       />
-      <div className={`cmdk-shell${open ? " open" : ""}`} role="dialog" aria-modal="true" aria-label="Command palette">
+      <div
+        ref={shellRef}
+        className={`cmdk-shell${open ? " open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+        aria-hidden={!open}
+        inert={open ? undefined : ""}
+      >
         <input
           ref={inputRef}
           className="cmdk-input"
@@ -243,12 +266,18 @@ export function CommandPalette({ open, setOpen, theme, setTheme, openProject }) 
         <div className="mono" style={{
           padding: "10px 24px",
           borderTop: "1px solid var(--rule-soft)",
-          fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase",
+          fontSize: "var(--t-micro)", letterSpacing: "0.16em", textTransform: "uppercase",
           color: "var(--ink-mute)",
           display: "flex", justifyContent: "space-between", gap: 12,
         }}>
-          <span>↑ ↓ Navigate · ↵ Select · ESC Close</span>
-          <span>{filtered.length} result{filtered.length === 1 ? "" : "s"}</span>
+          {notice ? (
+            <span style={{ color: "var(--ink)" }}>{notice}</span>
+          ) : (
+            <>
+              <span>↑ ↓ Navigate · ↵ Select · ESC Close</span>
+              <span>{filtered.length} result{filtered.length === 1 ? "" : "s"}</span>
+            </>
+          )}
         </div>
       </div>
     </>

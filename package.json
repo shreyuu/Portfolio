@@ -18,7 +18,7 @@
     },
     "scripts": {
         "start": "craco start",
-        "build": "craco build",
+        "build": "INLINE_RUNTIME_CHUNK=false craco build",
         "test": "craco test",
         "test:coverage": "craco test --coverage --watchAll=false",
         "eject": "react-scripts eject",
@@ -27,8 +27,7 @@
         "format": "prettier --write \"src/**/*.{js,jsx,css,md}\"",
         "analyze": "source-map-explorer 'build/static/js/*.js'",
         "lighthouse": "lhci autorun",
-        "prepare": "husky install",
-        "speed-insights": "npx --yes @vercel/speed-insights@latest --url https://shreyash-meshram.vercel.app --upload --token $SPEED_INSIGHTS_TOKEN"
+        "prepare": "husky install"
     },
     "eslintConfig": {
         "extends": [

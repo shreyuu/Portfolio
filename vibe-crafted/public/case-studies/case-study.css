@@ -10,6 +10,37 @@
    Each page sets its channel on <body>, e.g. style="--cs-ch: var(--ch-vision)".
    ========================================================================== */
 
+/* Self-hosted fonts — the same files and faces as src/styles/globals.css */
+@font-face {
+  font-family: "Martian Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-stretch: 75% 112%;
+  font-display: swap;
+  src: url("../fonts/martian-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("../fonts/instrument-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: italic;
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("../fonts/instrument-sans-italic-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --bg:        #e9eef4;
   --bg-raised: #f2f5f9;
@@ -43,6 +74,10 @@
   --display: "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --sans:    "Instrument Sans", ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --mono:    "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Type floor, mirrored from src/styles/globals.css */
+  --t-label: 11px;
+  --t-micro: 11px;
 
   --ease: cubic-bezier(.2, .7, .2, 1);
   --cs-ch: var(--accent);
@@ -98,6 +133,9 @@ body {
 
 a { color: inherit; }
 
+/* Keeps a lone word off the last line of a paragraph */
+p { text-wrap: pretty; }
+
 ::selection { background: var(--accent); color: var(--accent-ink); }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -147,7 +185,7 @@ body::before {
 .cs-meta {
   font-family: var(--mono);
   font-variation-settings: "wdth" 88, "wght" 500;
-  font-size: 10.5px;
+  font-size: var(--t-label);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-mute);
@@ -173,7 +211,7 @@ body::before {
 .cs-eyebrow {
   font-family: var(--mono);
   font-variation-settings: "wdth" 88, "wght" 500;
-  font-size: 10.5px;
+  font-size: var(--t-label);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-mute);
@@ -223,7 +261,7 @@ h1.cs-title {
 .cs-meta-grid .k {
   font-family: var(--mono);
   font-variation-settings: "wdth" 88, "wght" 500;
-  font-size: 9.5px;
+  font-size: var(--t-micro);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-mute);
@@ -245,7 +283,9 @@ h1.cs-title {
   margin: 44px 0;
   padding: 34px;
   background: var(--cs-ch);
-  color: #fff;
+  /* Ink on a signal colour: white in light, the ground in dark (the dark
+     channel colours are too bright to carry white text). */
+  color: var(--accent-ink);
   position: relative;
   overflow: hidden;
   display: grid;
@@ -258,10 +298,9 @@ h1.cs-title {
 .cs-cover-tag {
   font-family: var(--mono);
   font-variation-settings: "wdth" 85, "wght" 500;
-  font-size: 10px;
+  font-size: var(--t-micro);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  opacity: 0.82;
 }
 
 .cs-cover-tag { grid-column: 1; grid-row: 1; }
@@ -309,7 +348,7 @@ h1.cs-title {
 .cs-stat-label {
   font-family: var(--mono);
   font-variation-settings: "wdth" 88, "wght" 500;
-  font-size: 9.5px;
+  font-size: var(--t-micro);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--ink-mute);
@@ -324,7 +363,7 @@ h1.cs-title {
 .cs-section-num {
   font-family: var(--mono);
   font-variation-settings: "wdth" 82, "wght" 700;
-  font-size: 10.5px;
+  font-size: var(--t-label);
   letter-spacing: 0.1em;
   color: var(--cs-ch);
   display: block;
@@ -338,23 +377,25 @@ h2.cs-h,
   font-size: clamp(22px, 2.6vw, 32px);
   line-height: 1.12;
   letter-spacing: -0.03em;
+  text-wrap: balance;
   margin: 0 0 20px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--rule-soft);
 }
 
+/* Measured in em, not ch: a ch is the wide "0", so 66ch ran ~95 characters */
 .cs-prose p {
   font-size: 16px;
   line-height: 1.72;
   color: var(--ink-soft);
-  max-width: 66ch;
+  max-width: 34em;
   margin: 0 0 18px;
 }
 
 .cs-prose strong { color: var(--ink); font-weight: 600; }
 
 .cs-prose ul, .cs-prose ol {
-  max-width: 66ch;
+  max-width: 34em;
   padding-left: 0;
   list-style: none;
   margin: 0 0 18px;
@@ -432,7 +473,7 @@ h2.cs-h,
 .cs-arch-block-tag {
   font-family: var(--mono);
   font-variation-settings: "wdth" 85, "wght" 400;
-  font-size: 9.5px;
+  font-size: var(--t-micro);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-mute);
@@ -478,7 +519,7 @@ h2.cs-h,
   top: 18px;
   font-family: var(--mono);
   font-variation-settings: "wdth" 82, "wght" 700;
-  font-size: 10.5px;
+  font-size: var(--t-label);
   letter-spacing: 0.1em;
   color: var(--cs-ch);
 }
@@ -501,7 +542,7 @@ h2.cs-h,
   text-decoration: none;
   font-family: var(--mono);
   font-variation-settings: "wdth" 88, "wght" 500;
-  font-size: 10.5px;
+  font-size: var(--t-label);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink);
@@ -537,7 +578,7 @@ h2.cs-h,
   flex-wrap: wrap;
   font-family: var(--mono);
   font-variation-settings: "wdth" 88, "wght" 500;
-  font-size: 10px;
+  font-size: var(--t-micro);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--ink-mute);
